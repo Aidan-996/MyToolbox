@@ -62,6 +62,16 @@
 
 > 💡 卸载：选中已安装的工具，点"卸载"即可恢复原始配置。
 
+#### 验证安装效果
+
+打开目标 AI 工具，输入 `Ua` 后回车，如果回复"**Ua 已经准备好随时待命**"即表示提示词已成功加载：
+
+<p align="center">
+  <img src="docs/screenshots/claude-code-demo.png" width="640" alt="Ua 已经准备好随时待命" />
+</p>
+
+之后就可以用大白话向 AI 分配任务，提示词会自动触发对应的技能模板。
+
 ### 系统要求
 
 - Windows 10 1809+ / Windows 11
@@ -148,6 +158,16 @@ This tool is provided in compliance with applicable laws and regulations. By usi
 5. Restart the AI tool to apply
 
 > 💡 To uninstall: select the tool and click "Remove" to restore original config.
+
+#### Verify Installation
+
+Open your AI tool and type `Ua` — if it replies **"Ua is ready and standing by"**, the prompt is loaded correctly:
+
+<p align="center">
+  <img src="docs/screenshots/claude-code-demo.png" width="640" alt="Ua is ready" />
+</p>
+
+After that, you can give the AI tasks in plain language — the prompt automatically routes to the right skill template.
 
 ### Requirements
 
