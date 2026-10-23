@@ -33,30 +33,6 @@
 
 ---
 
-## 支持的 AI 工具 (Supported Tools)
-
-| 工具               | 注入路径 (相对用户目录)                             | Skills |
-| ------------------ | --------------------------------------------------- | :----: |
-| Claude Code        | `.claude\CLAUDE.md`                                 |   OK   |
-| Codex (OpenAI)     | `.codex\AGENTS.md`                                  |   OK   |
-| Gemini CLI         | `.gemini\GEMINI.md`                                 |        |
-| Grok Build         | `.grok\AGENTS.md`                                   |        |
-| ZCode (Z.ai)       | `.zcode\AGENTS.md`                                  |   OK   |
-| DeepSeek Harness   | `.dsh\AGENTS.md`                                    |   OK   |
-| OpenCode           | `.config\opencode\AGENTS.md`                        |        |
-| Hermes             | `.hermes\SOUL.md`                                   |        |
-| MiniMax Code       | `.minimax\AGENTS.md`                                |        |
-| Cursor             | `.cursor\rules\Ua.mdc`                              |        |
-| VS Code (Copilot)  | `.copilot\copilot-instructions.md`                  |        |
-| Devin Desktop      | `.codeium\windsurf\memories\global_rules.md`        |        |
-| CodeBuddy          | `.codebuddy\CODEBUDDY.md`                           |   OK   |
-| WorkBuddy          | *(本地提示词位置待确认)*                            |        |
-| 豆包 (Doubao)      | *(无本地提示词文件)*                                |        |
-
-> 路径以上游官方文档为准，若上游调整请在 issue 中反馈。
-
----
-
 ## 使用方法 (Usage)
 
 1. 从 [Releases](https://github.com/freyrswift/UaStation/releases) 下载最新的
