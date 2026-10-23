@@ -14,11 +14,8 @@
 一键为 AI 编程工具安装提示词和技能的 Windows 原生工具。
 
 <p align="center">
-  <img src="docs/screenshots/main-editor.png" width="380" alt="主界面" />
-  <img src="docs/screenshots/inject-dialog.png" width="280" alt="安装弹窗" />
-  <img src="docs/screenshots/settings-menu.png" width="160" alt="设置菜单" />
+  <img src="docs/screenshots/main-editor.png" width="460" alt="主界面" />
 </p>
-
 ### ⚠️ 禁止商用声明
 
 > **本工具完全免费、开源，禁止任何形式的商业使用。**
@@ -104,11 +101,8 @@ MIT License，详见 [LICENSE](LICENSE)。
 A lightweight Windows tool for installing prompts and skills into AI coding tools.
 
 <p align="center">
-  <img src="docs/screenshots/main-editor.png" width="380" alt="Main Interface" />
-  <img src="docs/screenshots/inject-dialog.png" width="280" alt="Install Dialog" />
-  <img src="docs/screenshots/settings-menu.png" width="160" alt="Settings Menu" />
+  <img src="docs/screenshots/main-editor.png" width="460" alt="主界面" />
 </p>
-
 ### ⚠️ Anti-Commercial Notice
 
 > **This tool is completely free and open source. Commercial use is strictly prohibited.**
