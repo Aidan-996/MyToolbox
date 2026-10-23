@@ -9,9 +9,19 @@
 一键为 AI 编程工具安装提示词和技能的 Windows 原生工具。
 
 <p align="center">
-  <img src="docs/screenshots/main-editor.png" width="420" alt="主界面 - 编辑器" />
-  <img src="docs/screenshots/inject-dialog.png" width="320" alt="安装弹窗" />
+  <img src="docs/screenshots/main-editor.png" width="380" alt="主界面" />
+  <img src="docs/screenshots/inject-dialog.png" width="280" alt="安装弹窗" />
+  <img src="docs/screenshots/settings-menu.png" width="160" alt="设置菜单" />
 </p>
+
+### ⚠️ 禁止商用声明
+
+> **本工具完全免费、开源，禁止任何形式的商业使用。**
+>
+> 严禁对本工具进行出售、倒卖、打包收费、捆绑销售或以任何方式向他人收取费用。
+> 如果你是花钱购买的，**你被骗了，请立即要求退款并举报卖家**。
+>
+> 违反本声明的行为将保留依法追究的权利。
 
 ### 法律声明
 
@@ -74,9 +84,19 @@ MIT License，详见 [LICENSE](LICENSE)。
 A lightweight Windows tool for installing prompts and skills into AI coding tools.
 
 <p align="center">
-  <img src="docs/screenshots/main-editor.png" width="420" alt="Main Interface - Editor" />
-  <img src="docs/screenshots/inject-dialog.png" width="320" alt="Install Dialog" />
+  <img src="docs/screenshots/main-editor.png" width="380" alt="Main Interface" />
+  <img src="docs/screenshots/inject-dialog.png" width="280" alt="Install Dialog" />
+  <img src="docs/screenshots/settings-menu.png" width="160" alt="Settings Menu" />
 </p>
+
+### ⚠️ Anti-Commercial Notice
+
+> **This tool is completely free and open source. Commercial use is strictly prohibited.**
+>
+> It is forbidden to sell, resell, bundle, or charge for this tool in any way.
+> If you paid money for it, **you were scammed — demand a refund and report the seller immediately**.
+>
+> The author reserves the right to pursue legal action against violators.
 
 ### Legal Notice
 
