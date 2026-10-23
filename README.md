@@ -82,6 +82,17 @@ msbuild Ua.slnx /p:Configuration=Release /p:Platform=x64
 
 [![Star History Chart](https://api.star-history.com/svg?repos=freyrswift/UaStation&type=Date)](https://star-history.com/#freyrswift/UaStation&Date)
 
+### 交流反馈
+
+遇到问题或有建议？扫码加入 QQ 群：
+
+<p align="center">
+  <img src="docs/screenshots/qq-group.jpg" width="280" alt="QQ群：535041466" />
+</p>
+
+<p align="center">
+  QQ群号：<strong>535041466</strong> | <a href="https://qm.qq.com/q/3XsJIxaZde">点击加入</a>
+</p>
 ### 许可证
 
 MIT License，详见 [LICENSE](LICENSE)。
@@ -161,6 +172,17 @@ Requires Visual Studio 2022+ with C++ Desktop Development workload.
 
 [![Star History Chart](https://api.star-history.com/svg?repos=freyrswift/UaStation&type=Date)](https://star-history.com/#freyrswift/UaStation&Date)
 
+### Community
+
+Questions or feedback? Join our QQ Group:
+
+<p align="center">
+  <img src="docs/screenshots/qq-group.jpg" width="280" alt="QQ Group: 535041466" />
+</p>
+
+<p align="center">
+  QQ Group: <strong>535041466</strong> | <a href="https://qm.qq.com/q/3XsJIxaZde">Join</a>
+</p>
 ### License
 
 MIT License. See [LICENSE](LICENSE).
