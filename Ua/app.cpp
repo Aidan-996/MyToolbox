@@ -335,6 +335,9 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM l
                 {
                     g_disclaimer = false;
                     InvalidateRect(hWnd, nullptr, FALSE);
+                    // 免责声明确认后才检查更新和同步
+                    CheckUpdates(hWnd);
+                    SyncPrompts(hWnd);
                 }
                 return 0;
             }
@@ -654,13 +657,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
     if (promptsEmpty)
         MessageBoxW(hWnd, T(S_WARN_PROMPTS_EMPTY), L"Ua", MB_ICONWARNING);
 
-    // 后台异步检查更新；完成后会 PostMessage(kMsgUpdateReady) 让 UI 重绘
-    CheckUpdates(hWnd);
-
-    // 后台异步同步 prompts\ 文件夹；有新文件时 kMsgSyncReady 会弹 toast
-    SyncPrompts(hWnd);
-
-    // 每次启动都弹免责声明
+    // 每次启动都弹免责声明；更新检查在用户点"我已了解"后触发
     g_disclaimer = true;
 
     MSG msg;

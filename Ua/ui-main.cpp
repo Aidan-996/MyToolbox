@@ -303,7 +303,7 @@ void Render(HWND hWnd)
         Fill(bar, Ov(0.04f), 0.f);
         wchar_t buf[64];
         _snwprintf_s(buf, _TRUNCATE, L"v%s", T(S_VERSION));
-        Text(buf, g_fLabel.Get(), R(kPad, kH - kStatusH, kW - kPad, kH), C(P.sub), DWRITE_TEXT_ALIGNMENT_CENTER);
+        Text(buf, g_fLabel.Get(), R(kPad, kH - kStatusH, kW - kPad, kH), C(P.sub), DWRITE_TEXT_ALIGNMENT_TRAILING);
     }
 
     if (!g_toast.empty())
