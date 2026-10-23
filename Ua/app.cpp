@@ -173,6 +173,11 @@ static void DialogCommand(HWND hWnd, int b)
     case kDlgInstall:
     case kDlgUninstall:
         {
+            if (b == kDlgUninstall)
+            {
+                int result = MessageBoxW(hWnd, T(S_CONFIRM_UNINSTALL), L"Ua", MB_YESNO | MB_ICONQUESTION);
+                if (result != IDYES) return;
+            }
             bool ok = b == kDlgInstall ? Install(i, err) : Uninstall(i, err);
             g_state[i] = ScanState(i);
             if (ok)

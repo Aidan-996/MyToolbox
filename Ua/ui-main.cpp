@@ -297,6 +297,15 @@ void Render(HWND hWnd)
     if (g_disclaimer)
         DrawDisclaimer();
 
+    // 底部状态栏
+    {
+        D2D1_RECT_F bar = R(0, kH - kStatusH, kW, kH);
+        Fill(bar, Ov(0.04f), 0.f);
+        wchar_t buf[64];
+        _snwprintf_s(buf, _TRUNCATE, L"v%s", T(S_VERSION));
+        Text(buf, g_fLabel.Get(), R(kPad, kH - kStatusH, kW - kPad, kH), C(P.sub), DWRITE_TEXT_ALIGNMENT_CENTER);
+    }
+
     if (!g_toast.empty())
     {
         D2D1_RECT_F t = R(kPad + 40, kH - kPad - 40, kW - kPad - 40, kH - kPad - 8);

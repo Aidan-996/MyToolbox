@@ -15,6 +15,7 @@ inline constexpr float kPad = 14.f;
 inline constexpr float kTop = 68.f;            // 内容区起始 y
 inline constexpr float kCardH = 48.f;
 inline constexpr float kGap = 8.f;
+inline constexpr float kStatusH = 18.f;    // 底部状态栏高度
 inline constexpr UINT  kTimerToast = 1;
 inline constexpr UINT  kTimerApplyUpdate = 2;
 inline constexpr int   kCmdTopmost = 1001;
@@ -105,6 +106,8 @@ enum Str {
     S_SYNC_CHECKING, S_SYNC_UPDATED, S_PROMPTS_UPDATED_COUNT,
     S_TRAY_SHOW, S_TRAY_TOOLTIP,
     S_UPDATE_DOWNLOADING, S_UPDATE_READY, S_UPDATE_FAILED, S_UPDATE_BTN,
+    S_STATUS_INSTALLED, S_STATUS_SKILLS,
+    S_CONFIRM_UNINSTALL,
     S_COUNT
 };
 
@@ -202,6 +205,9 @@ inline const wchar_t* const kStr[][2] = {
     /* S_UPDATE_READY */             { L"\u4E0B\u8F7D\u5B8C\u6210\uFF0C\u5373\u5C06\u91CD\u542F", L"Download complete, restarting..." },
     /* S_UPDATE_FAILED */            { L"\u4E0B\u8F7D\u66F4\u65B0\u5931\u8D25",       L"Update download failed" },
     /* S_UPDATE_BTN */               { L"\u7ACB\u5373\u66F4\u65B0",                   L"Update Now" },
+    /* S_STATUS_INSTALLED */          { L"\u5DF2\u5B89\u88C5",                       L"installed" },
+    /* S_STATUS_SKILLS */             { L"\u6280\u80FD",                             L"skills" },
+    /* S_CONFIRM_UNINSTALL */         { L"\u786E\u8BA4\u5378\u8F7D\uFF1F\u8FD9\u5C06\u6062\u590D\u539F\u59CB\u914D\u7F6E\u6587\u4EF6\u3002", L"Confirm uninstall? This will restore the original config file." },
 };
 
 inline const wchar_t* T(Str s)

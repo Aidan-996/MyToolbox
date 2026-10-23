@@ -14,3 +14,17 @@ Ua/icon-build/
 *.ipdb
 *.log
 *.tmp
+
+# VS IDE
+.vs/
+
+# Build intermediates
+Ua/Ua/
+*.obj
+*.res
+*.tlog
+*.recipe
+*.iobj
+*.ipdb
+*.lastbuildstate
+*.FileListAbsolute.txt
