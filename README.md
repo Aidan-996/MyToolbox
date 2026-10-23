@@ -98,31 +98,6 @@ Ua/
    └─ skills/                  // SKILL.md 源文件
 ```
 
-主要模块职责:
-
-- **`config.h`** — 只读的编译期数据：UI 常量、调色板、字符串表、工具与
-  Skill 清单。所有 `.cpp` 共享。
-- **`state.cpp`** — 单一全局状态结构 `g_state`，承载当前标签、hover
-  目标、主题、语言、置顶/自启等运行时信息。
-- **`inject.cpp`** — 核心注入逻辑：读取目标 AI 工具的配置文件，用
-  标记块包裹并写入提示词；卸载时按标记块精确回退；Skill 释放到对应
-  `skills/<name>/SKILL.md`。
-- **`ui.cpp`** — Direct2D + DirectWrite 直接绘制整个界面：tab、列表、
-  卡片、悬停、设置菜单、Skill 管理面板、关于面板、免责声明。
-- **`app.cpp`** — `WinMain`、窗口类注册、消息循环、更新检查线程。
-
----
-
-## 致谢 (Credits)
-
-本项目内嵌了来自多个开源项目的图标、Skills 和提示词模板。特别感谢:
-
-- `lobehub/lobe-icons` — 大部分 AI 工具 Logo
-- `vscode-icons/vscode-icons` — VS Code Logo
-- `dslsdzc/rev-skills` — 21 个逆向 skill
-- `Masriyan/Claude-Code-CyberSecurity-Skill` — 7 个网络安全 skill
-- `farion1231/cc-switch` — 注入引擎设计思路
-
 ---
 
 ## 许可证 (License)
