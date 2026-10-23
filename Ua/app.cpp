@@ -482,8 +482,14 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM l
         }
         return 0;
     case kMsgUpdateReady:
-        // 后台更新检查完成，重绘关于卡片
+        // 后台更新检查完成
         InvalidateRect(hWnd, nullptr, FALSE);
+        // 全自动更新：有新版本直接下载
+        if (UpdateAvailable())
+        {
+            ShowToast(hWnd, T(S_UPDATE_DOWNLOADING));
+            DownloadUpdate(hWnd);
+        }
         return 0;
     case kMsgUpdateDownloaded:
         // 后台下载更新完成；wParam=1 成功 / 0 失败
