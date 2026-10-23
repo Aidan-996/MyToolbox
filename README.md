@@ -23,8 +23,6 @@
 - **15 款主流 AI 编程工具**一键注入：覆盖 Claude Code、Codex、Cursor、
   Gemini CLI、DeepSeek Harness、Grok Build、OpenCode、VS Code Copilot、
   Devin Desktop 等。
-- **40 个安全研究 Skills 内嵌**：全部作为资源打包进单个 EXE，离线可用，
-  按需释放到目标工具的 `skills/` 目录。
 - **中英双语界面** (Simplified Chinese / English)：启动时跟随系统语言，
   也可在设置菜单切换。
 - **深浅色主题** (Dark / Light)：跟随系统或手动固定。
@@ -56,45 +54,6 @@
 | 豆包 (Doubao)      | *(无本地提示词文件)*                                |        |
 
 > 路径以上游官方文档为准，若上游调整请在 issue 中反馈。
-
----
-
-## 内嵌的 Skills (40 个)
-
-> Skills 为 Markdown 格式的"任务型提示词包"，供 Claude Code 等支持
-> skill 机制的工具加载。注入后在目标工具启动时自动生效。
-
-**逆向工程 (Reverse Engineering)**
-`reverse-engineering` · `re-angr` · `re-deobfuscate` · `re-packer-id` ·
-`re-patching` · `re-unpack` · `re-shellcode` · `re-crash-triage` ·
-`ida-reverse` · `radare2` · `re-frida`
-
-**游戏安全 (Game Security)**
-`re-anti-cheat` · `re-game` · `re-console` · `cheat-engine` ·
-`unity-game-research` · `dma-attack`
-
-**内核与底层 (Kernel / Low-level)**
-`re-kernel` · `re-hypervisor` · `re-ebpf`
-
-**漏洞挖掘与利用 (Vulnerability & Exploit)**
-`re-exploit` · `re-fuzzing` · `re-pwn` · `exploit-development` ·
-`re-evasion`
-
-**恶意代码分析 (Malware Analysis)**
-`malware-analysis` · `process-injection-detect` · `threat-hunting`
-
-**软件破解与保护 (Licensing / DRM)**
-`re-license` · `re-keygen` · `re-drm` · `softseep` ·
-`client-license-validation-bypass`
-
-**移动端 (Mobile)**
-`apkseep` · `apk-reverse` · `mobile-security`
-
-**Web / 红队 / AI 安全**
-`web-security` · `red-team-ops` · `ai-llm-security` ·
-`mcp-js-reverse-playbook`
-
-Skills 的具体来源与原始许可证见 [NOTICES.md](NOTICES.md)。
 
 ---
 
@@ -180,8 +139,7 @@ Ua/
 
 ## 致谢 (Credits)
 
-本项目内嵌了来自多个开源项目的图标、Skills 和提示词模板。完整的来源、
-许可证和修改说明见 **[NOTICES.md](NOTICES.md)**。特别感谢:
+本项目内嵌了来自多个开源项目的图标、Skills 和提示词模板。特别感谢:
 
 - `lobehub/lobe-icons` — 大部分 AI 工具 Logo
 - `vscode-icons/vscode-icons` — VS Code Logo
@@ -195,4 +153,4 @@ Ua/
 
 本项目本体以 **MIT License** 发布，详见 [LICENSE](LICENSE)。
 
-内嵌的第三方素材分别遵循其原始许可证，详见 [NOTICES.md](NOTICES.md)。
+
