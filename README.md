@@ -1,5 +1,10 @@
 ﻿# Ua Toolbox
 
+[![Release](https://img.shields.io/github/v/release/freyrswift/UaStation?style=flat-square)](https://github.com/freyrswift/UaStation/releases)
+[![License](https://img.shields.io/github/license/freyrswift/UaStation?style=flat-square)](LICENSE)
+[![Stars](https://img.shields.io/github/stars/freyrswift/UaStation?style=flat-square)](https://github.com/freyrswift/UaStation)
+[![Downloads](https://img.shields.io/github/downloads/freyrswift/UaStation/total?style=flat-square)](https://github.com/freyrswift/UaStation/releases)
+
 [中文](#ua-toolbox-中文) | [English](#ua-toolbox-english)
 
 ---
@@ -72,6 +77,10 @@ msbuild Ua.slnx /p:Configuration=Release /p:Platform=x64
 ```
 
 需要 Visual Studio 2022+，含 C++ 桌面开发工作负载。
+
+### Star History
+
+[![Star History Chart](https://api.star-history.com/svg?repos=freyrswift/UaStation&type=Date)](https://star-history.com/#freyrswift/UaStation&Date)
 
 ### 许可证
 
@@ -147,6 +156,10 @@ msbuild Ua.slnx /p:Configuration=Release /p:Platform=x64
 ```
 
 Requires Visual Studio 2022+ with C++ Desktop Development workload.
+
+### Star History
+
+[![Star History Chart](https://api.star-history.com/svg?repos=freyrswift/UaStation&type=Date)](https://star-history.com/#freyrswift/UaStation&Date)
 
 ### License
 
