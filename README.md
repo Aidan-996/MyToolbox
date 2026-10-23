@@ -1,107 +1,85 @@
-﻿# Ua AI Toolbox
+﻿# Ua Toolbox
 
-一键为各个 AI 编程工具注入提示词和技能 (Skills) 的 Windows 原生工具。
-
----
-
-> ## ⚠️ 仅供学习与授权安全研究使用
->
-> 本工具的本质是对各 AI 编程工具的**本地客户端配置文件**做自动化编辑，
-> 不涉及任何对网络服务、他人系统的攻击。所注入的提示词和 Skills 内容
-> 覆盖安全研究方向 (逆向、漏洞挖掘、渗透测试、游戏安全等)，
-> **仅应在授权范围内的实验环境中使用**。
->
-> 使用者应自行确保所有操作符合所在地区法律法规。作者和贡献者不对任何
-> 滥用后果承担责任。
->
-> 本工具完全免费、开源。**如你是花钱买的，请立即退款**。
+[中文](#ua-toolbox-中文) | [English](#ua-toolbox-english)
 
 ---
 
-## 功能特性 (Features)
+## Ua Toolbox 中文
 
-- **15 款主流 AI 编程工具**一键注入：覆盖 Claude Code、Codex、Cursor、
-  Gemini CLI、DeepSeek Harness、Grok Build、OpenCode、VS Code Copilot、
-  Devin Desktop 等。
-- **中英双语界面** (Simplified Chinese / English)：启动时跟随系统语言，
-  也可在设置菜单切换。
-- **深浅色主题** (Dark / Light)：跟随系统或手动固定。
-- **启动免责声明**：每次启动都显示一次免责声明，必须确认后才进入主界面。
-- **自动更新检查**：静默检查 GitHub Releases，可在"关于"面板里查看。
-- **单文件、免安装**：一个 EXE，没有安装包，没有外部依赖，没有释放
-  dll 到用户目录。
+一键为 AI 编程工具安装提示词和技能的 Windows 原生工具。
 
----
+### 功能特性
 
-## 使用方法 (Usage)
+- **15 款主流 AI 编程工具**一键安装提示词
+- **中英双语界面**：可在设置菜单切换
+- **深浅色主题**：跟随系统或手动固定
+- **自动更新检查**：静默检查 GitHub Releases
+- **单文件、免安装**：一个 EXE，无外部依赖
 
-1. 从 [Releases](https://github.com/freyrswift/UaStation/releases) 下载最新的
-   `Ua.exe`。
-2. 双击运行 (**无需安装、无需管理员权限**)。
-3. 阅读并接受启动时的免责声明。
-4. 在列表里选择你用的 AI 编程工具 (如 Claude Code)。
-5. 在弹出的面板中选择一份内置提示词模板，点"注入"。
-6. 可选: 在 "Skills 管理" 中按需挑选 Skills 注入到支持的工具。
-7. 重启目标 AI 工具 (或在同一会话里重新加载)，注入内容即刻生效。
+### 使用方法
 
-卸载: 在列表中选中已注入的工具，点"卸载"，Ua 会把该工具配置文件恢复到
-注入前的原始内容。
+1. 从 [Releases](https://github.com/freyrswift/UaStation/releases) 下载 `Ua.exe`
+2. 双击运行（无需安装、无需管理员权限）
+3. 选择 AI 编程工具（如 Claude Code）
+4. 选择提示词模板，点"安装"
+5. 重启目标 AI 工具，即刻生效
 
----
+卸载：选中已安装的工具，点"卸载"即可恢复原始配置。
 
-## 系统要求 (Requirements)
+### 系统要求
 
-- Windows 10 1809 (build 17763) 或更高 / Windows 11
+- Windows 10 1809+ / Windows 11
 - x64 架构
-- 无需 .NET、无需 VC++ Redistributable (使用静态 CRT 链接)
 
----
-
-## 构建方法 (Build)
-
-### 依赖
-
-- Visual Studio 2022 (17.8+)，含"使用 C++ 的桌面开发"工作负载
-- Windows 11 SDK (10.0.22621 或更高)
-- 平台工具集 v143
-
-### 命令行构建
+### 构建方法
 
 ```powershell
-# 在仓库根目录
 msbuild Ua.slnx /p:Configuration=Release /p:Platform=x64
 ```
 
-构建产物位于 `Ua\x64\Release\Ua.exe`。
+需要 Visual Studio 2022+，含 C++ 桌面开发工作负载。
 
-### 从 IDE 构建
+### 许可证
 
-直接用 Visual Studio 打开 `Ua.slnx`，选 `Release | x64`，F7 编译。
-
----
-
-## 项目结构 (Project Layout)
-
-```
-Ua/
-├─ Ua.slnx                     // 解决方案
-└─ Ua/
-   ├─ Ua.vcxproj               // 项目文件
-   ├─ Ua.rc / Resource.h       // 资源 (图标、SVG、Skills、提示词)
-   ├─ framework.h / targetver.h
-   ├─ config.h                 // 常量、枚举、翻译表、工具与 skill 清单
-   ├─ state.h / state.cpp      // 全局运行时状态 (主题、语言、hover 等)
-   ├─ inject.h / inject.cpp    // 注入引擎 (标记块、幂等覆盖、备份恢复)
-   ├─ ui.h / ui.cpp            // 窗口绘制、hit-test、交互
-   ├─ app.cpp                  // 程序入口与消息循环
-   ├─ icons/                   // Logo SVG 源文件
-   └─ skills/                  // SKILL.md 源文件
-```
+MIT License，详见 [LICENSE](LICENSE)。
 
 ---
 
-## 许可证 (License)
+## Ua Toolbox English
 
-本项目本体以 **MIT License** 发布，详见 [LICENSE](LICENSE)。
+A lightweight Windows tool for installing prompts and skills into AI coding tools.
 
+### Features
 
+- **15 AI coding tools** supported with one-click prompt installation
+- **CN/EN bilingual interface**
+- **Dark/Light/System theme**
+- **Auto-update check** via GitHub Releases
+- **Single exe, zero dependencies**
+
+### Usage
+
+1. Download `Ua.exe` from [Releases](https://github.com/freyrswift/UaStation/releases)
+2. Double-click to run (no installer, no admin required)
+3. Select an AI tool (e.g. Claude Code)
+4. Choose a prompt template and click "Install"
+5. Restart the AI tool to apply
+
+To uninstall: select the tool and click "Remove" to restore original config.
+
+### Requirements
+
+- Windows 10 1809+ / Windows 11
+- x64
+
+### Build
+
+```powershell
+msbuild Ua.slnx /p:Configuration=Release /p:Platform=x64
+```
+
+Requires Visual Studio 2022+ with C++ Desktop Development workload.
+
+### License
+
+MIT License. See [LICENSE](LICENSE).
