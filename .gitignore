@@ -1,0 +1,16 @@
+﻿# Build output
+Ua/x64/
+Ua/*.user
+Ua/*.vcxproj.filters
+
+# Backups
+Ua/backup-before-split/
+Ua/backup-ui-split/
+Ua/icon-build/
+
+# Temp
+*.pdb
+*.iobj
+*.ipdb
+*.log
+*.tmp
