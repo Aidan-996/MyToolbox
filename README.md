@@ -8,6 +8,11 @@
 
 一键为 AI 编程工具安装提示词和技能的 Windows 原生工具。
 
+<p align="center">
+  <img src="docs/screenshots/main-editor.png" width="420" alt="主界面 - 编辑器" />
+  <img src="docs/screenshots/inject-dialog.png" width="320" alt="安装弹窗" />
+</p>
+
 ### 法律声明
 
 本工具依据中华人民共和国相关法律法规发布，使用本工具即表示您同意以下条款：
@@ -24,11 +29,16 @@
 
 ### 功能特性
 
-- **15 款主流 AI 编程工具**一键安装提示词
-- **中英双语界面**：可在设置菜单切换
-- **深浅色主题**：跟随系统或手动固定
-- **自动更新检查**：静默检查 GitHub Releases
-- **单文件、免安装**：一个 EXE，无外部依赖
+| 特性 | 说明 |
+|------|------|
+| 🔧 一键安装 | 选择 AI 工具 → 选择提示词 → 点击安装，三步搞定 |
+| 🤖 15 款 AI 工具 | Claude Code、Codex、Cursor、Gemini CLI、VS Code 等主流工具全覆盖 |
+| 🔍 智能检测 | 自动识别电脑中已安装的 AI 工具，未安装的自动灰显 |
+| 📝 8 套提示词模板 | 专家模式 / 开发工程 / 写作润色，按需选择 |
+| 🌐 中英双语 | 界面和提示词均支持中英文切换 |
+| 🎨 深浅主题 | 跟随系统或手动切换，Win11 支持 Mica 效果 |
+| 🔄 自动更新 | 静默检查新版本，一键下载安装 |
+| 📦 单文件运行 | 1 MB 的 exe，无需安装，无任何依赖 |
 
 ### 使用方法
 
@@ -38,7 +48,7 @@
 4. 选择提示词模板，点"安装"
 5. 重启目标 AI 工具，即刻生效
 
-卸载：选中已安装的工具，点"卸载"即可恢复原始配置。
+> 💡 卸载：选中已安装的工具，点"卸载"即可恢复原始配置。
 
 ### 系统要求
 
@@ -63,27 +73,37 @@ MIT License，详见 [LICENSE](LICENSE)。
 
 A lightweight Windows tool for installing prompts and skills into AI coding tools.
 
+<p align="center">
+  <img src="docs/screenshots/main-editor.png" width="420" alt="Main Interface - Editor" />
+  <img src="docs/screenshots/inject-dialog.png" width="320" alt="Install Dialog" />
+</p>
+
 ### Legal Notice
 
 This tool is provided in compliance with applicable laws and regulations. By using this tool, you agree to the following terms:
 
-1. **Lawful Use Only**: This tool is intended solely for managing local configurations of AI coding tools that the user legally owns or has written authorization to access. Any use that violates applicable cybersecurity laws, data protection regulations, or other legal requirements is strictly prohibited.
+1. **Lawful Use Only**: This tool is intended solely for managing local configurations of AI coding tools that the user legally owns or has written authorization to access.
 
-2. **Authorization Required**: Users must obtain explicit written authorization from the relevant rights holders before conducting any security research on systems, software, or services. Unauthorized penetration testing, reverse engineering, or vulnerability exploitation may constitute criminal offenses under applicable law.
+2. **Authorization Required**: Users must obtain explicit written authorization before conducting any security research on systems, software, or services.
 
-3. **Disclaimer**: This tool is provided "as is" without warranty. The author assumes no liability for any direct or indirect damages arising from the use of this tool. Users bear full legal responsibility for their actions.
+3. **Disclaimer**: This tool is provided "as is" without warranty. The author assumes no liability for any damages arising from use. Users bear full legal responsibility for their actions.
 
-4. **Free Software**: This tool is completely free and open source. Any attempt to charge for this tool is fraudulent — please report it and request a refund immediately.
+4. **Free Software**: This tool is completely free and open source. Any attempt to charge for it is fraudulent.
 
-5. **Minor Protection**: Users under 18 years of age should use this tool under parental guidance.
+5. **Minor Protection**: Users under 18 should use this tool under parental guidance.
 
 ### Features
 
-- **15 AI coding tools** supported with one-click prompt installation
-- **CN/EN bilingual interface**
-- **Dark/Light/System theme**
-- **Auto-update check** via GitHub Releases
-- **Single exe, zero dependencies**
+| Feature | Description |
+|---------|-------------|
+| 🔧 One-Click Install | Select tool → Pick prompt → Install. Three steps. |
+| 🤖 15 AI Tools | Claude Code, Codex, Cursor, Gemini CLI, VS Code and more |
+| 🔍 Auto Detection | Automatically detects installed AI tools on your system |
+| 📝 8 Prompt Templates | Expert / Development / Writing modes |
+| 🌐 Bilingual | Full CN/EN interface and prompt support |
+| 🎨 Themes | Dark / Light / System, Win11 Mica support |
+| 🔄 Auto Update | Silent version check, one-click update |
+| 📦 Portable | Single 1 MB exe, no installer, zero dependencies |
 
 ### Usage
 
@@ -93,7 +113,7 @@ This tool is provided in compliance with applicable laws and regulations. By usi
 4. Choose a prompt template and click "Install"
 5. Restart the AI tool to apply
 
-To uninstall: select the tool and click "Remove" to restore original config.
+> 💡 To uninstall: select the tool and click "Remove" to restore original config.
 
 ### Requirements
 
