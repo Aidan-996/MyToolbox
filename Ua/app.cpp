@@ -349,7 +349,7 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM l
                 }
                 else if (hit == kHoverAboutGithub)
                 {
-                    OpenUrl(hWnd, L"https://github.com/Aidan-996/Mygogogo");
+                    OpenUrl(hWnd, L"https://github.com/Aidan-996/UaStation");
                 }
                 else if (hit == kHoverAboutUpdate)
                 {

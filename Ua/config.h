@@ -38,13 +38,13 @@ inline constexpr UINT  kMsgTray = WM_APP + 10;
 
 // 更新检查相关 URL（指向自有 fork，更新自主可控）
 inline constexpr const wchar_t* kApiHost = L"api.github.com";
-inline constexpr const wchar_t* kUpdateApiPath = L"/repos/Aidan-996/Mygogogo/releases/latest";
-inline constexpr const wchar_t* kUpdateReleaseUrl = L"https://github.com/Aidan-996/Mygogogo/releases/latest";
-inline constexpr const wchar_t* kUpdateDownloadUrl = L"https://github.com/Aidan-996/Mygogogo/releases/latest/download/Ua.exe";
+inline constexpr const wchar_t* kUpdateApiPath = L"/repos/Aidan-996/UaStation/releases/latest";
+inline constexpr const wchar_t* kUpdateReleaseUrl = L"https://github.com/Aidan-996/UaStation/releases/latest";
+inline constexpr const wchar_t* kUpdateDownloadUrl = L"https://github.com/Aidan-996/UaStation/releases/latest/download/Ua.exe";
 
 // prompts\ 同步用 GitHub Contents API（指向自有 fork）
 inline constexpr const wchar_t* kPromptsApiHost = kApiHost;
-inline constexpr const wchar_t* kPromptsApiPath = L"/repos/Aidan-996/Mygogogo/contents/prompts";
+inline constexpr const wchar_t* kPromptsApiPath = L"/repos/Aidan-996/UaStation/contents/prompts";
 
 // 配色。背景色取自系统：Win11 Mica 底色 #202020 / #F3F3F3，Win10 深浅色窗口底色 #1F1F1F / #F2F2F2
 struct Palette
@@ -392,7 +392,7 @@ inline const Item kItems[] = {
         L"doubao",    nullptr, L"\u8C46\u5305\u6CA1\u6709\u672C\u5730\u63D0\u793A\u8BCD\u6587\u4EF6" },
     { L"Skills \u7BA1\u7406",      L"\u7BA1\u7406\u5DF2\u5B89\u88C5\u7684 Skills", kGroupTools, 0, false, L"\uE8FD", L"" },     // BulletedList
     { L"\u6EE1\u8840\u4E2D\u8F6C\u7AD9",       L"API \u4E2D\u8F6C\u670D\u52A1",    kGroupTools,     0, false, L"\uE774", L"https://utlra.cc/" },     // Globe
-    { L"\u4F7F\u7528\u6559\u7A0B",         L"\u4ECE\u5B89\u88C5\u5230\u4E0A\u624B",    kGroupTools,     0, false, L"\uE82D", L"https://github.com/Aidan-996/Mygogogo#usage" },     // Dictionary
+    { L"\u4F7F\u7528\u6559\u7A0B",         L"\u4ECE\u5B89\u88C5\u5230\u4E0A\u624B",    kGroupTools,     0, false, L"\uE82D", L"https://github.com/Aidan-996/UaStation#usage" },     // Dictionary
     { L"\u4E0D\u4F1A\u7528\u70B9\u8FD9\u91CC",     L"\u5E38\u89C1\u95EE\u9898\u4E0E\u6C42\u52A9",  kGroupTools,     0, false, L"\uE897", L"https://qm.qq.com/q/3XsJIxaZde" },
     { L"\u52A0\u5165QQ\u7FA4",         L"\u4EA4\u6D41\u4E0E\u53CD\u9988",      kGroupTools,     0, false, L"\uE8BD", L"https://qm.qq.com/q/3XsJIxaZde" },     // Message
 };
