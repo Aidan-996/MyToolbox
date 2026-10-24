@@ -153,10 +153,10 @@ VS 2022 直接打开 `MyBox.slnx` 生成即可；产物在 `x64\Release\MyBox.ex
 
 ### 命令行版（Linux / macOS）
 
-Windows 版的跨平台命令行对应版本（Linux / macOS）在 [`cli/`](cli/) 目录，与 Windows 版**完全独立**，共用同一套提示词与技能数据文件。macOS 从 Releases 下载 `mybox-macos-universal`（Apple Silicon + Intel 通用），或源码编译：
+Windows 版的跨平台命令行对应版本（Linux / macOS）在 [`cli/`](cli/) 目录，与 Windows 版**完全独立**，共用同一套提示词与技能数据文件。**一键安装**（免编译免 root）：
 
 ```bash
-make -C cli && sudo make -C cli install
+curl -fsSL https://raw.githubusercontent.com/Aidan-996/MyToolbox/main/cli/install.sh | sh
 
 mybox list                           # 工具列表与注入状态
 mybox install claude                 # 注入提示词（自动备份，mybox uninstall claude 恢复）
@@ -325,10 +325,10 @@ v143 toolset, so VS 2022 opens `MyBox.slnx` and builds directly; output lands in
 
 ### CLI Version (Linux / macOS)
 
-A cross-platform CLI edition (Linux / macOS) lives in [`cli/`](cli/). It is fully independent from the Windows GUI, but shares the same prompt and skill data files. On macOS grab the `mybox-macos-universal` binary (Apple Silicon + Intel) from Releases, or build from source:
+A cross-platform CLI edition (Linux / macOS) lives in [`cli/`](cli/). It is fully independent from the Windows GUI, but shares the same prompt and skill data files. **One-line install** (no compiler, no root):
 
 ```bash
-make -C cli && sudo make -C cli install
+curl -fsSL https://raw.githubusercontent.com/Aidan-996/MyToolbox/main/cli/install.sh | sh
 
 mybox list                           # tools and install state
 mybox install claude                 # inject a prompt (auto backup; mybox uninstall claude restores)

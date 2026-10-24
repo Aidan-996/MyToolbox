@@ -67,6 +67,19 @@ jobs:
 
           echo "smoke test passed (${{ matrix.os }})"
 
+      # 用本地构建产物模拟 Release 资产，测一键安装器的完整流程
+      - name: Test install.sh (user-local, file:// stub)
+        run: |
+          set -e
+          mkdir -p reltest
+          cp cli/mybox reltest/mybox-linux-x64
+          cp cli/mybox reltest/mybox-macos-universal
+          tar -czf reltest/mybox-data.tar.gz -C shared prompts skills
+          MYBOX_BASE_URL="file://$PWD/reltest" sh cli/install.sh
+          "$HOME/.local/bin/mybox" version
+          test -d "$HOME/.local/share/mybox/skills" || test -d "$HOME/Library/Application Support/MyBox/skills"
+          echo "install.sh test passed (${{ matrix.os }})"
+
       - name: Upload binary
         uses: actions/upload-artifact@v4
         with:

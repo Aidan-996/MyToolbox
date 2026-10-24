@@ -177,7 +177,7 @@ inline const wchar_t* const kStr[][2] = {
     /* S_ABOUT_DESC */      { L"AI \u7F16\u7A0B\u5DE5\u5177\u7684\u63D0\u793A\u8BCD\u4E0E\u6280\u80FD\u5B89\u88C5\u5668", L"Prompt & skill installer for AI coding tools" },
     /* S_TUTORIAL_BTN */    { L"\u4F7F\u7528\u6559\u7A0B", L"Tutorial" },
     /* S_HELP_TITLE */      { L"\u4F7F\u7528\u5E2E\u52A9", L"Help" },
-    /* S_VERSION */         { L"1.0.7", L"1.0.7" },
+    /* S_VERSION */         { L"1.0.8", L"1.0.8" },
     /* S_ERR_NO_PROMPT_SEL */ { L"\u8BF7\u5148\u9009\u62E9\u4E00\u4E2A\u63D0\u793A\u8BCD", L"Please select a prompt first" },
     /* S_ERR_READ_PROMPT */ { L"\u8BFB\u53D6\u63D0\u793A\u8BCD\u6587\u4EF6\u5931\u8D25", L"Failed to read prompt file" },
     /* S_ERR_UTF16_PROMPT */{ L"\u63D0\u793A\u8BCD\u6587\u4EF6\u8BF7\u4FDD\u5B58\u4E3A UTF-8 \u7F16\u7801", L"Please save prompt file as UTF-8" },

@@ -15,6 +15,16 @@ Windows 图形版（`MyBox/` 目录）的跨平台命令行对应版本，同一
 
 ## 编译与安装
 
+**一键安装（推荐，免 git / 免编译 / 免 root）**
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/Aidan-996/MyToolbox/main/cli/install.sh | sh
+```
+
+装到 `~/.local/bin/mybox`（数据在平台惯例目录）；要装到 `/usr/local` 就下载脚本后 `sudo sh install.sh --system`。
+
+**源码编译**
+
 ```bash
 make                    # 编译出 ./mybox（g++ 或 clang++，C++17）
 sudo make install       # 安装到 /usr/local/bin/mybox，数据到 /usr/local/share/mybox
