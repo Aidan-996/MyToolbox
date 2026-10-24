@@ -308,7 +308,8 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM l
             (g_hover >= kHoverPrompt && g_hover < kHoverAccept) ||
             (g_hover >= kHoverSkillMgr && g_hover < kHoverSkillSearch) ||
             g_hover == kHoverSkillClose || g_hover == kHoverSkillFolder ||
-            g_hover == kHoverAboutGithub || g_hover == kHoverAboutUpdate || g_hover == kHoverAboutUpdate2))
+            g_hover == kHoverAboutGithub || g_hover == kHoverAboutTutorial ||
+            g_hover == kHoverAboutUpdate || g_hover == kHoverAboutUpdate2))
         {
             SetCursor(LoadCursor(nullptr, IDC_HAND));
             return TRUE;
@@ -349,6 +350,10 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM l
                 else if (hit == kHoverAboutGithub)
                 {
                     OpenUrl(hWnd, L"https://github.com/Aidan-996/MyToolbox");
+                }
+                else if (hit == kHoverAboutTutorial)
+                {
+                    OpenUrl(hWnd, kTutorialUrl);
                 }
                 else if (hit == kHoverAboutUpdate)
                 {

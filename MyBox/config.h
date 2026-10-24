@@ -9,12 +9,12 @@
 // ---------------------------------------------------------------------------
 // 布局常量（单位: DIP，96 DPI 下的像素）
 // ---------------------------------------------------------------------------
-inline constexpr float kW = 460.f;
-inline constexpr float kH = 524.f;
-inline constexpr float kPad = 14.f;
-inline constexpr float kTop = 68.f;            // 内容区起始 y
-inline constexpr float kCardH = 48.f;
-inline constexpr float kGap = 8.f;
+inline constexpr float kW = 520.f;
+inline constexpr float kH = 628.f;
+inline constexpr float kPad = 16.f;
+inline constexpr float kTop = 104.f;           // 内容区起始 y（头部品牌区 + 分段标签之下）
+inline constexpr float kCardH = 54.f;
+inline constexpr float kGap = 10.f;
 inline constexpr float kStatusH = 18.f;    // 底部状态栏高度
 inline constexpr UINT  kTimerToast = 1;
 inline constexpr UINT  kToastMs = 2500;        // toast 显示时长
@@ -42,6 +42,7 @@ inline constexpr const wchar_t* kApiHost = L"api.github.com";
 inline constexpr const wchar_t* kUpdateApiPath = L"/repos/Aidan-996/MyToolbox/releases/latest";
 inline constexpr const wchar_t* kUpdateReleaseUrl = L"https://github.com/Aidan-996/MyToolbox/releases/latest";
 inline constexpr const wchar_t* kUpdateDownloadUrl = L"https://github.com/Aidan-996/MyToolbox/releases/latest/download/MyBox.exe";
+inline constexpr const wchar_t* kTutorialUrl = L"https://github.com/Aidan-996/MyToolbox#usage";
 
 // prompts\ 同步用 GitHub Contents API（指向自有 fork）
 inline constexpr const wchar_t* kPromptsApiHost = kApiHost;
@@ -101,7 +102,7 @@ enum Str {
     S_TOOLS_SKILLS, S_TOOLS_SKILLS_SUB, S_TOOLS_RELAY, S_TOOLS_RELAY_SUB,
     S_TOOLS_TUTORIAL, S_TOOLS_TUTORIAL_SUB, S_TOOLS_HELP, S_TOOLS_HELP_SUB,
     S_TOOLS_QQ, S_TOOLS_QQ_SUB,
-    S_ABOUT_TEXT, S_ABOUT_LEGAL, S_VERSION,
+    S_ABOUT_TEXT, S_ABOUT_LEGAL, S_ABOUT_DESC, S_TUTORIAL_BTN, S_VERSION,
     S_ERR_NO_PROMPT_SEL, S_ERR_READ_PROMPT, S_ERR_UTF16_PROMPT, S_ERR_EMPTY_PROMPT,
     S_ERR_READ_TARGET, S_ERR_SAVE_STATE, S_ERR_WRITE_TARGET,
     S_ERR_NO_STATE, S_ERR_RESTORE, S_ERR_AUTOSTART,
@@ -171,9 +172,11 @@ inline const wchar_t* const kStr[][2] = {
     /* S_TOOLS_HELP_SUB */  { L"\u5E38\u89C1\u95EE\u9898\u4E0E\u6C42\u52A9", L"FAQ and support" },
     /* S_TOOLS_QQ */        { L"\u52A0\u5165QQ\u7FA4", L"Join QQ Group" },
     /* S_TOOLS_QQ_SUB */    { L"\u4EA4\u6D41\u4E0E\u53CD\u9988", L"Chat and feedback" },
-    /* S_ABOUT_TEXT */      { L"MyBox  \u7248\u672C ", L"MyBox  Version " },
-    /* S_ABOUT_LEGAL */     { L"\u672C\u5DE5\u5177\u4EC5\u4F9B\u5B66\u4E60\u4E0E\u6388\u6743\u5B89\u5168\u7814\u7A76\u4F7F\u7528\u3002\u7528\u6237\u5E94\u5728\u5408\u6CD5\u6388\u6743\u8303\u56F4\u5185\u4F7F\u7528\uFF0C\u4F5C\u8005\u4E0D\u627F\u62C5\u4EFB\u4F55\u6CD5\u5F8B\u8D23\u4EFB\u3002\u672C\u5DE5\u5177\u5B8C\u5168\u514D\u8D39\u4E14\u5F00\u6E90\u3002", L"For educational and authorized security research only. Users are responsible for legal compliance. The author assumes no liability. This tool is free and open source." },
-    /* S_VERSION */         { L"1.0.4", L"1.0.4" },
+    /* S_ABOUT_TEXT */      { L"\u7248\u672C ", L"Version " },
+    /* S_ABOUT_LEGAL */     { L"\u4EC5\u4F9B\u5B66\u4E60\u4E0E\u6388\u6743\u5B89\u5168\u7814\u7A76\u4F7F\u7528\u3002\u5B8C\u5168\u514D\u8D39\u5F00\u6E90\uFF08MIT\uFF09\uFF0C\u4E25\u7981\u5546\u7528\u4E0E\u5012\u5356\u3002", L"For learning and authorized security research only. Free and open source (MIT). Commercial use and resale are strictly prohibited." },
+    /* S_ABOUT_DESC */      { L"AI \u7F16\u7A0B\u5DE5\u5177\u7684\u63D0\u793A\u8BCD\u4E0E\u6280\u80FD\u5B89\u88C5\u5668", L"Prompt & skill installer for AI coding tools" },
+    /* S_TUTORIAL_BTN */    { L"\u4F7F\u7528\u6559\u7A0B", L"Tutorial" },
+    /* S_VERSION */         { L"1.0.5", L"1.0.5" },
     /* S_ERR_NO_PROMPT_SEL */ { L"\u8BF7\u5148\u9009\u62E9\u4E00\u4E2A\u63D0\u793A\u8BCD", L"Please select a prompt first" },
     /* S_ERR_READ_PROMPT */ { L"\u8BFB\u53D6\u63D0\u793A\u8BCD\u6587\u4EF6\u5931\u8D25", L"Failed to read prompt file" },
     /* S_ERR_UTF16_PROMPT */{ L"\u63D0\u793A\u8BCD\u6587\u4EF6\u8BF7\u4FDD\u5B58\u4E3A UTF-8 \u7F16\u7801", L"Please save prompt file as UTF-8" },
@@ -421,6 +424,7 @@ inline constexpr int kHoverAboutClose = 801;
 inline constexpr int kHoverAboutGithub = 802;
 inline constexpr int kHoverAboutUpdate = 803;
 inline constexpr int kHoverAboutUpdate2 = 804;  // "立即更新" 按钮
+inline constexpr int kHoverAboutTutorial = 805; // "使用教程" 按钮
 inline constexpr int kSkillMaxVisible = 10;
 
 enum DlgButton { kDlgClose, kDlgSite, kDlgUninstall, kDlgInstall, kDlgFolder, kDlgButtonCount };

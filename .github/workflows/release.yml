@@ -48,14 +48,19 @@ jobs:
         with:
           name: MyBox-windows-x64
           path: rel/
+      # 两个 CLI 产物在 artifact 内同名(mybox)，必须分别下载再重命名，否则互相覆盖
       - uses: actions/download-artifact@v4
         with:
           name: mybox-linux-x64
-          path: rel/
+          path: rel/linux
       - uses: actions/download-artifact@v4
         with:
           name: mybox-macos-universal
-          path: rel/
+          path: rel/macos
+      - name: Rename CLI binaries
+        run: |
+          mv rel/linux/mybox rel/mybox-linux-x64
+          mv rel/macos/mybox rel/mybox-macos-universal
       - name: Publish release
         uses: softprops/action-gh-release@v2
         with:

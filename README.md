@@ -17,7 +17,7 @@
 > Windows 版程序与可执行文件均已品牌化为 MyBox：界面、窗口类与产物都是 `MyBox.exe`。
 
 <p align="center">
-  <img src="docs/screenshots/main-editor.png" width="460" alt="主界面" />
+  <img src="docs/screenshots/main-editor.png" width="520" alt="主界面" />
 </p>
 
 ### ⚠️ 禁止商用声明
@@ -191,7 +191,7 @@ update checks and prompt sync point only to this repository.
 > The Windows app and binary are branded **MyBox** (`MyBox.exe`).
 
 <p align="center">
-  <img src="docs/screenshots/main-editor.png" width="460" alt="Main window" />
+  <img src="docs/screenshots/main-editor.png" width="520" alt="Main window" />
 </p>
 
 ### ⚠️ Anti-Commercial Notice

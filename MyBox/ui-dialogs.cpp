@@ -115,7 +115,7 @@ D2D1_RECT_F DiscAcceptRect()
 // ---------------------------------------------------------------------------
 D2D1_RECT_F AboutRect()
 {
-    float w = 340.f, h = 320.f;
+    float w = 360.f, h = 400.f;
     float l = (kW - w) / 2, t = (kH - h) / 2;
     return R(l, t, l + w, t + h);
 }
@@ -126,27 +126,35 @@ D2D1_RECT_F AboutCloseRect()
     return R(d.right - 38, d.top + 10, d.right - 10, d.top + 38);
 }
 
+// 底部双按钮行：左 GitHub，右教程
 D2D1_RECT_F AboutGithubRect()
 {
     D2D1_RECT_F d = AboutRect();
-    float by = d.bottom - 48;
-    return R(d.left + (340.f - 160) / 2, by, d.left + (340.f + 160) / 2, by + 32);
+    float by = d.bottom - 60;
+    return R(d.left + 24, by, d.left + 24 + 150, by + 34);
 }
 
-// 关于卡片里显示更新状态的那一行（位于版本号正下方）
+D2D1_RECT_F AboutTutorialRect()
+{
+    D2D1_RECT_F d = AboutRect();
+    float by = d.bottom - 60;
+    return R(d.right - 24 - 150, by, d.right - 24, by + 34);
+}
+
+// 关于卡片里显示更新状态的那一行（描述行下方）
 D2D1_RECT_F AboutUpdateRect()
 {
     D2D1_RECT_F d = AboutRect();
-    return R(d.left + 20, d.top + 90, d.right - 20, d.top + 108);
+    return R(d.left + 20, d.top + 138, d.right - 20, d.top + 156);
 }
 
 // "立即更新" 按钮（紧挨更新状态行下方）
 D2D1_RECT_F AboutUpdateBtnRect()
 {
     D2D1_RECT_F d = AboutRect();
-    float bw = 90.f, bh = 26.f;
+    float bw = 110.f, bh = 28.f;
     float cx = (d.left + d.right) / 2;
-    return R(cx - bw / 2, d.top + 108, cx + bw / 2, d.top + 108 + bh);
+    return R(cx - bw / 2, d.top + 160, cx + bw / 2, d.top + 160 + bh);
 }
 
 // ---------------------------------------------------------------------------
@@ -497,43 +505,32 @@ void DrawAbout()
     g_rt->FillRectangle(R(0, 0, sz.width, sz.height), g_brush.Get());
 
     D2D1_RECT_F d = AboutRect();
-    Fill(d, C(P.panel), 12.f);
-    Stroke(d, Ov(0.14f), 12.f);
+    Fill(d, C(P.panel), 14.f);
+    Stroke(d, Ov(0.14f), 14.f);
 
-    // Logo SVG (Azure shield), bigger and more distinctive
-    ID2D1SvgDocument* uaLogo = LoadSvgById(IDR_LOGO_UA);
-    if (uaLogo)
+    // Logo：居中大标（盒子描边 + M）
+    ID2D1SvgDocument* mark = LoadSvgById(IDR_LOGO_UA);
+    if (mark)
     {
-        float logoSize = 40.f;
-        DrawSvgSized(uaLogo, R(d.left + (340.f - logoSize) / 2, d.top + 10,
-            d.left + (340.f + logoSize) / 2, d.top + 10 + logoSize), 18.f);
-    }
-    else
-    {
-        Text(L"", g_fGlyph.Get(), R(d.left + (340.f - 24) / 2, d.top + 18, d.left + (340.f + 24) / 2, d.top + 44),
-            C(P.accent), DWRITE_TEXT_ALIGNMENT_CENTER);
+        float ls = 52.f;
+        DrawSvgSized(mark, R(d.left + (360.f - ls) / 2, d.top + 20, d.left + (360.f + ls) / 2, d.top + 20 + ls), 24.f);
     }
 
-    // Title
-    Text(L"MyBox", g_fTitle.Get(), R(d.left + 20, d.top + 50, d.right - 20, d.top + 68), C(P.text), DWRITE_TEXT_ALIGNMENT_CENTER);
-
-    // Version
+    // 标题 + 版本 + 一句话描述
+    Text(L"MyBox", g_fTitle.Get(), R(d.left + 20, d.top + 80, d.right - 20, d.top + 102), C(P.text), DWRITE_TEXT_ALIGNMENT_CENTER);
     std::wstring ver = std::wstring(T(S_ABOUT_TEXT)) + T(S_VERSION);
-    Text(ver, g_fLabel.Get(), R(d.left + 20, d.top + 70, d.right - 20, d.top + 86), C(P.sub), DWRITE_TEXT_ALIGNMENT_CENTER);
+    Text(ver, g_fLabel.Get(), R(d.left + 20, d.top + 104, d.right - 20, d.top + 120), C(P.sub), DWRITE_TEXT_ALIGNMENT_CENTER);
+    Text(T(S_ABOUT_DESC), g_fLabel.Get(), R(d.left + 20, d.top + 122, d.right - 20, d.top + 138), C(P.sub), DWRITE_TEXT_ALIGNMENT_CENTER);
 
-    // Update status（版本号正下方）
-    // 已检查且有新版本：蓝色、可点击打开 release 页
-    // 已检查且无新版本：灰色 "已是最新版本"
-    // 还没检查完：灰色 "检查更新中..."
+    // 更新状态（描述行下方）
     D2D1_RECT_F ur = AboutUpdateRect();
     bool checked = UpdateChecked();
     std::wstring newVer = GetUpdateVersion();
     if (!newVer.empty())
     {
         bool upHot = g_hover == kHoverAboutUpdate;
-        UINT32 accent = P.accent;
         std::wstring line = std::wstring(T(S_UPDATE_NEW)) + newVer;
-        Text(line, g_fLabel.Get(), ur, C(accent, upHot ? 0.80f : 1.f), DWRITE_TEXT_ALIGNMENT_CENTER);
+        Text(line, g_fLabel.Get(), ur, C(P.accent, upHot ? 0.80f : 1.f), DWRITE_TEXT_ALIGNMENT_CENTER);
 
         // "立即更新" 按钮
         D2D1_RECT_F ub = AboutUpdateBtnRect();
@@ -541,7 +538,7 @@ void DrawAbout()
         bool downloading = g_updateDownloading;
         if (downloading)
         {
-            Fill(ub, Ov(0.04f), 6.f);
+            Fill(ub, Ov(0.04f), 7.f);
             Text(T(S_UPDATE_DOWNLOADING), g_fTab.Get(), ub, C(P.sub, 0.65f), DWRITE_TEXT_ALIGNMENT_CENTER);
         }
         else
@@ -558,24 +555,31 @@ void DrawAbout()
 
     // Separator
     g_brush->SetColor(Ov(0.10f));
-    g_rt->DrawLine(D2D1::Point2F(d.left + 20, d.top + 140), D2D1::Point2F(d.right - 20, d.top + 140), g_brush.Get(), 1.f);
+    g_rt->DrawLine(D2D1::Point2F(d.left + 24, d.top + 212), D2D1::Point2F(d.right - 24, d.top + 212), g_brush.Get(), 1.f);
 
-    // Legal text
-    Text(T(S_ABOUT_LEGAL), g_fWrap.Get(), R(d.left + 24, d.top + 148, d.right - 24, d.bottom - 60), C(P.sub));
+    // 法律行（精简）
+    Text(T(S_ABOUT_LEGAL), g_fWrap.Get(), R(d.left + 28, d.top + 224, d.right - 28, d.bottom - 84), C(P.sub), DWRITE_TEXT_ALIGNMENT_CENTER);
 
-    // GitHub button
+    // 双按钮：GitHub / 使用教程
     D2D1_RECT_F gh = AboutGithubRect();
     bool ghHot = g_hover == kHoverAboutGithub;
-    Fill(gh, Ov(ghHot ? 0.12f : 0.07f), 6.f);
-    Stroke(gh, Ov(0.12f), 6.f);
-    Text(L"", g_fIcon.Get(), R(gh.left + 10, gh.top, gh.left + 40, gh.bottom), C(P.text), DWRITE_TEXT_ALIGNMENT_CENTER);
-    Text(T(S_GITHUB_LABEL), g_fTab.Get(), R(gh.left + 36, gh.top, gh.right - 10, gh.bottom), C(P.text), DWRITE_TEXT_ALIGNMENT_CENTER);
+    Fill(gh, Ov(ghHot ? 0.12f : 0.07f), 8.f);
+    Stroke(gh, Ov(0.12f), 8.f);
+    Text(L"", g_fIcon.Get(), R(gh.left + 12, gh.top, gh.left + 38, gh.bottom), C(P.text), DWRITE_TEXT_ALIGNMENT_CENTER);
+    Text(T(S_GITHUB_LABEL), g_fTab.Get(), R(gh.left + 36, gh.top, gh.right - 8, gh.bottom), C(P.text), DWRITE_TEXT_ALIGNMENT_CENTER);
+
+    D2D1_RECT_F tu = AboutTutorialRect();
+    bool tuHot = g_hover == kHoverAboutTutorial;
+    Fill(tu, Ov(tuHot ? 0.12f : 0.07f), 8.f);
+    Stroke(tu, Ov(0.12f), 8.f);
+    Text(L"", g_fGlyph.Get(), R(tu.left + 12, tu.top, tu.left + 38, tu.bottom), C(P.text), DWRITE_TEXT_ALIGNMENT_CENTER);   // Book? glyph
+    Text(T(S_TUTORIAL_BTN), g_fTab.Get(), R(tu.left + 36, tu.top, tu.right - 8, tu.bottom), C(P.text), DWRITE_TEXT_ALIGNMENT_CENTER);
 
     // Close button
     bool hot = g_hover == kHoverAboutClose;
     D2D1_RECT_F cr = AboutCloseRect();
     if (hot) Fill(cr, Ov(0.08f), 6.f);
-    Text(L"", g_fIcon.Get(), cr, C(hot ? P.text : P.sub), DWRITE_TEXT_ALIGNMENT_CENTER);
+    Text(L"", g_fIcon.Get(), cr, C(hot ? P.text : P.sub), DWRITE_TEXT_ALIGNMENT_CENTER);
 }
 
 // ---------------------------------------------------------------------------

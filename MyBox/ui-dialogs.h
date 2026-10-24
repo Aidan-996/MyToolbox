@@ -24,6 +24,7 @@ D2D1_RECT_F DiscAcceptRect();
 D2D1_RECT_F AboutRect();
 D2D1_RECT_F AboutCloseRect();
 D2D1_RECT_F AboutGithubRect();
+D2D1_RECT_F AboutTutorialRect();
 D2D1_RECT_F AboutUpdateRect();
 D2D1_RECT_F AboutUpdateBtnRect();
 

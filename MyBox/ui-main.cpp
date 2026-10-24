@@ -15,13 +15,11 @@ D2D1_RECT_F ButtonRect(int id)
     return R(right - 30.f, kPad + 4.f, right, kPad + 32.f);
 }
 
-static D2D1_RECT_F GearRect() { return ButtonRect(kHoverGear); }
-
+// 分段式标签（segmented control）：头部第二行，两段等宽
 static D2D1_RECT_F TabRect(int i)
 {
-    float left = kPad + 4.f, right = GearRect().left - 6.f;
-    float w = (right - left) / kTabCount;
-    return R(left + i * w, kPad + 4.f, left + (i + 1) * w, kPad + 32.f);
+    float x = kPad + 4.f + i * 108.f;
+    return R(x, 58.f, x + 104.f, 88.f);
 }
 
 struct Slot
@@ -60,6 +58,7 @@ int HitTest(float x, float y)
         if (InRect(AboutCloseRect(), x, y)) return kHoverAboutClose;
         if (!InRect(AboutRect(), x, y)) return kHoverDlgOut;
         if (InRect(AboutGithubRect(), x, y)) return kHoverAboutGithub;
+        if (InRect(AboutTutorialRect(), x, y)) return kHoverAboutTutorial;
         // 更新链接只有在真的发现新版本时才可点击
         if (UpdateAvailable() && InRect(AboutUpdateRect(), x, y)) return kHoverAboutUpdate;
         return kHoverDlgBg;
@@ -126,28 +125,34 @@ int HitTest(float x, float y)
 // ---------------------------------------------------------------------------
 // 条目卡片绘制（标签页主体内容）
 // ---------------------------------------------------------------------------
-static void DrawTabs()
+static void DrawHeader()
 {
-    D2D1_RECT_F bar = R(kPad, kPad, kW - kPad, kPad + 36.f);
-    Fill(bar, Ov(0.06f), 8.f);
+    // 品牌区：logo + MyBox 字标（此区域 HitTest 返回 -1，可拖动窗口）
+    ID2D1SvgDocument* mark = LoadSvgById(IDR_LOGO_UA);
+    D2D1_RECT_F logo = R(kPad + 2.f, 18.f, kPad + 28.f, 44.f);
+    if (mark) DrawSvgSized(mark, logo, 24.f);
+    else Text(L"M", g_fLetter.Get(), logo, C(P.accent), DWRITE_TEXT_ALIGNMENT_CENTER);
+    Text(L"MyBox", g_fTitle.Get(), R(kPad + 34.f, 16.f, kPad + 150.f, 44.f), C(P.text));
 
+    // 分段式标签容器 + 两段
+    Fill(R(kPad, 54.f, kPad + 224.f, 92.f), Ov(0.06f), 10.f);
     for (int i = 0; i < kTabCount; ++i)
     {
         D2D1_RECT_F r = TabRect(i);
         if (i == g_tab)
         {
-            // 选中标签：强调色浅底胶囊
-            Fill(R(r.left + 2, r.top, r.right - 2, r.bottom), C(P.accent, P.dark ? 0.20f : 0.14f), 7.f);
+            // 选中段：强调色浅底胶囊
+            Fill(r, C(P.accent, P.dark ? 0.22f : 0.16f), 8.f);
             Text(T(i == 0 ? S_TAB_EDITOR : S_TAB_TOOLS), g_fTabSel.Get(), r, C(P.text), DWRITE_TEXT_ALIGNMENT_CENTER);
         }
         else
         {
-            if (i == g_hover) Fill(R(r.left + 2, r.top, r.right - 2, r.bottom), Ov(0.05f), 6.f);
+            if (i == g_hover) Fill(r, Ov(0.05f), 8.f);
             Text(T(i == 0 ? S_TAB_EDITOR : S_TAB_TOOLS), g_fTab.Get(), r, C(i == g_hover ? P.text : P.sub), DWRITE_TEXT_ALIGNMENT_CENTER);
         }
     }
 
-    const wchar_t* glyphs[] = { L"", L"", L"" };     // Setting / ChromeMinimize / ChromeClose
+    const wchar_t* glyphs[] = { L"", L"", L"" };     // Setting / ChromeMinimize / ChromeClose
     for (int id = kHoverGear; id <= kHoverClose; ++id)
     {
         D2D1_RECT_F r = ButtonRect(id);
@@ -157,8 +162,9 @@ static void DrawTabs()
         Text(glyphs[id - kHoverGear], g_fIcon.Get(), r, C(closeHot ? 0xFFFFFF : hot ? P.text : P.sub), DWRITE_TEXT_ALIGNMENT_CENTER);
     }
 
-    g_brush->SetColor(Ov(0.10f));
-    g_rt->DrawLine(D2D1::Point2F(kPad, kTop - 8.f), D2D1::Point2F(kW - kPad, kTop - 8.f), g_brush.Get(), 1.f);
+    // 内容区分隔线
+    g_brush->SetColor(Ov(0.08f));
+    g_rt->DrawLine(D2D1::Point2F(kPad, kTop - 10.f), D2D1::Point2F(kW - kPad, kTop - 10.f), g_brush.Get(), 1.f);
 }
 
 // 需要暴露给 ui-dialogs.cpp 的 DrawDialog 使用（画弹窗标题的小 logo）
@@ -221,11 +227,11 @@ static void DrawCard(const Slot& s)
     D2D1_RECT_F r = s.rect;
     bool hot = g_hover == kHoverCard + s.item;
 
-    Fill(r, Ov(hot ? 0.10f : 0.05f), 8.f);
-    Stroke(r, Ov(hot ? 0.18f : 0.12f), 8.f);
+    Fill(r, Ov(hot ? 0.09f : 0.05f), 10.f);
+    Stroke(r, Ov(hot ? 0.16f : 0.10f), 10.f);
 
     float cy = (r.top + r.bottom) / 2;
-    D2D1_RECT_F tile = R(r.left + 10, cy - 14, r.left + 38, cy + 14);
+    D2D1_RECT_F tile = R(r.left + 11, cy - 17, r.left + 45, cy + 17);
     DrawIcon(s.item, tile);
 
     // 已注入：logo 右下角一个绿点，外圈柔光晕 + 底色隔离圈
@@ -243,17 +249,30 @@ static void DrawCard(const Slot& s)
         g_rt->FillEllipse(D2D1::Ellipse(ring.point, 4.5f, 4.5f), g_brush.Get());
     }
 
-    float tx = tile.right + 10, tr = r.right - 26;
-    if (it.sub[0])
+    float tx = tile.right + 12, tr = r.right - 30;
+    // 副标题行：工具页条目用自带副标题；编辑器条目显示注入状态
+    const wchar_t* sub = ItemSub(s.item);
+    if (!sub[0] && it.key)
     {
-        Text(ItemName(s.item), g_fTitle.Get(), R(tx, cy - 16, tr, cy + 1), C(P.text));
-        Text(ItemSub(s.item), g_fLabel.Get(), R(tx, cy + 2, tr, cy + 17), C(P.sub));
+        const wchar_t* st;
+        if (!Supported(s.item))                      st = T(S_NOT_SUPPORTED);
+        else if (!ToolDetected(s.item))              st = T(S_TOOL_NOT_FOUND);
+        else if (g_state[s.item] == kInstalled)      st = T(S_INJECTED);
+        else if (g_state[s.item] == kActiveNoState)  st = T(S_FILE_HAS_CONTENT);
+        else                                         st = T(S_NOT_INJECTED);
+        Text(ItemName(s.item), g_fTitle.Get(), R(tx, cy - 17, tr, cy), C(P.text));
+        Text(st, g_fLabel.Get(), R(tx, cy + 1, tr, cy + 16), C(P.sub));
+    }
+    else if (sub[0])
+    {
+        Text(ItemName(s.item), g_fTitle.Get(), R(tx, cy - 17, tr, cy), C(P.text));
+        Text(sub, g_fLabel.Get(), R(tx, cy + 1, tr, cy + 16), C(P.sub));
     }
     else
     {
-        Text(ItemName(s.item), g_fTitle.Get(), R(tx, cy - 8, tr, cy + 10), C(P.text));
+        Text(ItemName(s.item), g_fTitle.Get(), R(tx, cy - 9, tr, cy + 9), C(P.text));
     }
-    Text(L"", g_fIcon.Get(), R(tr, r.top, r.right - 8, r.bottom), C(hot ? P.text : P.sub), DWRITE_TEXT_ALIGNMENT_CENTER);   // ChevronRight
+    Text(L"", g_fIcon.Get(), R(tr, r.top, r.right - 8, r.bottom), C(hot ? P.text : P.sub), DWRITE_TEXT_ALIGNMENT_CENTER);   // ChevronRight
 }
 
 // ---------------------------------------------------------------------------
@@ -281,7 +300,7 @@ void Render(HWND hWnd)
     g_brush->SetColor(Ov(0.14f));
     g_rt->DrawRectangle(R(0.5f, 0.5f, sz.width - 0.5f, sz.height - 0.5f), g_brush.Get(), 1.f);
 
-    DrawTabs();
+    DrawHeader();
 
     std::vector<Slot> slots;
     Layout(slots);
@@ -299,13 +318,14 @@ void Render(HWND hWnd)
     if (g_disclaimer)
         DrawDisclaimer();
 
-    // 底部状态栏
+    // 底部：版本小胶囊
     {
-        D2D1_RECT_F bar = R(0, kH - kStatusH, kW, kH);
-        Fill(bar, Ov(0.04f), 0.f);
         wchar_t buf[64];
         _snwprintf_s(buf, _TRUNCATE, L"v%s", T(S_VERSION));
-        Text(buf, g_fLabel.Get(), R(kPad, kH - kStatusH, kW - kPad, kH), C(P.sub), DWRITE_TEXT_ALIGNMENT_TRAILING);
+        float w = MeasureText(buf, g_fLabel.Get()) + 22.f;
+        D2D1_RECT_F chip = R(kW - kPad - w, kH - kStatusH - 5.f, kW - kPad + 2.f, kH - 5.f);
+        Fill(chip, Ov(0.05f), 9.f);
+        Text(buf, g_fLabel.Get(), chip, C(P.sub), DWRITE_TEXT_ALIGNMENT_CENTER);
     }
 
     if (!g_toast.empty())

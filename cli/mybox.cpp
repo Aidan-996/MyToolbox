@@ -30,7 +30,7 @@
 #include <mach-o/dyld.h>     // _NSGetExecutablePath
 #endif
 
-static const char* kVersion = "1.0.4";
+static const char* kVersion = "1.0.5";
 static const char* kPromptsApiUrl =
     "https://api.github.com/repos/Aidan-996/MyToolbox/contents/prompts";
 static const size_t kMaxFile = 4 * 1024 * 1024;   // 单文件上限，与 Windows 版一致
