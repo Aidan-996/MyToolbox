@@ -152,7 +152,7 @@ static void DrawHeader()
         }
     }
 
-    const wchar_t* glyphs[] = { L"", L"", L"" };     // Setting / ChromeMinimize / ChromeClose
+    const wchar_t* glyphs[] = { L"\uE713", L"\uE921", L"\uE8BB" };     // Setting / ChromeMinimize / ChromeClose
     for (int id = kHoverGear; id <= kHoverClose; ++id)
     {
         D2D1_RECT_F r = ButtonRect(id);
@@ -272,7 +272,7 @@ static void DrawCard(const Slot& s)
     {
         Text(ItemName(s.item), g_fTitle.Get(), R(tx, cy - 9, tr, cy + 9), C(P.text));
     }
-    Text(L"", g_fIcon.Get(), R(tr, r.top, r.right - 8, r.bottom), C(hot ? P.text : P.sub), DWRITE_TEXT_ALIGNMENT_CENTER);   // ChevronRight
+    Text(L"\uE76C", g_fIcon.Get(), R(tr, r.top, r.right - 8, r.bottom), C(hot ? P.text : P.sub), DWRITE_TEXT_ALIGNMENT_CENTER);   // ChevronRight
 }
 
 // ---------------------------------------------------------------------------

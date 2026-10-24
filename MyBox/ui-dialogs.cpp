@@ -321,7 +321,7 @@ void DrawMenu()
         Text(e.glyph, g_fGlyph.Get(), R(r.left + 4, r.top, r.left + 32, r.bottom), fg, DWRITE_TEXT_ALIGNMENT_CENTER);
         Text(T(e.textId), g_fTab.Get(), R(r.left + 38, r.top, r.right - 28, r.bottom), fg);
         if (MenuChecked(e.cmd))
-            Text(L"", g_fIcon.Get(), R(r.right - 28, r.top, r.right - 6, r.bottom), fg, DWRITE_TEXT_ALIGNMENT_CENTER);  // CheckMark
+            Text(L"\uE73E", g_fIcon.Get(), R(r.right - 28, r.top, r.right - 6, r.bottom), fg, DWRITE_TEXT_ALIGNMENT_CENTER);  // CheckMark
     }
 }
 
@@ -393,7 +393,7 @@ void DrawDialog()
     bool close = g_hover == kHoverDlg + kDlgClose;
     D2D1_RECT_F cr = DlgButtonRect(kDlgClose);
     if (close) Fill(cr, Ov(0.08f), 6.f);
-    Text(L"", g_fIcon.Get(), cr, C(close ? P.text : P.sub), DWRITE_TEXT_ALIGNMENT_CENTER);
+    Text(L"\uE8BB", g_fIcon.Get(), cr, C(close ? P.text : P.sub), DWRITE_TEXT_ALIGNMENT_CENTER);
 
     // 位置 + 打开按钮
     float py = d.top + kDlgTopH;
@@ -455,9 +455,9 @@ void DrawDialog()
         if ((int)g_prompts.size() > kDlgMaxVisible)
         {
             if (g_promptScroll > 0)
-                Text(L"", g_fIcon.Get(), R(d.right - 36, DlgListTop() - 2, d.right - 14, DlgListTop() + 14), C(P.sub), DWRITE_TEXT_ALIGNMENT_CENTER);
+                Text(L"\uE70E", g_fIcon.Get(), R(d.right - 36, DlgListTop() - 2, d.right - 14, DlgListTop() + 14), C(P.sub), DWRITE_TEXT_ALIGNMENT_CENTER);
             if (g_promptScroll + kDlgMaxVisible < (int)g_prompts.size())
-                Text(L"", g_fIcon.Get(), R(d.right - 36, DlgListBottom() - 14, d.right - 14, DlgListBottom() + 2), C(P.sub), DWRITE_TEXT_ALIGNMENT_CENTER);
+                Text(L"\uE70D", g_fIcon.Get(), R(d.right - 36, DlgListBottom() - 14, d.right - 14, DlgListBottom() + 2), C(P.sub), DWRITE_TEXT_ALIGNMENT_CENTER);
         }
     }
 
@@ -482,7 +482,7 @@ void DrawDisclaimer()
     Fill(d, C(P.panel), 12.f);
     Stroke(d, Ov(0.14f), 12.f);
 
-    Text(L"", g_fGlyph.Get(), R(d.left + (kDiscW - 24) / 2, d.top + 16, d.left + (kDiscW + 24) / 2, d.top + 44),
+    Text(L"\uE7BA", g_fGlyph.Get(), R(d.left + (kDiscW - 24) / 2, d.top + 16, d.left + (kDiscW + 24) / 2, d.top + 44),
         C(P.accent), DWRITE_TEXT_ALIGNMENT_CENTER);   // Shield
 
     Text(T(S_DISCLAIMER_TITLE), g_fTitle.Get(), R(d.left + 20, d.top + 48, d.right - 20, d.top + 66), C(P.text), DWRITE_TEXT_ALIGNMENT_CENTER);
@@ -565,21 +565,21 @@ void DrawAbout()
     bool ghHot = g_hover == kHoverAboutGithub;
     Fill(gh, Ov(ghHot ? 0.12f : 0.07f), 8.f);
     Stroke(gh, Ov(0.12f), 8.f);
-    Text(L"", g_fIcon.Get(), R(gh.left + 12, gh.top, gh.left + 38, gh.bottom), C(P.text), DWRITE_TEXT_ALIGNMENT_CENTER);
+    Text(L"\uE8A7", g_fIcon.Get(), R(gh.left + 12, gh.top, gh.left + 38, gh.bottom), C(P.text), DWRITE_TEXT_ALIGNMENT_CENTER);
     Text(T(S_GITHUB_LABEL), g_fTab.Get(), R(gh.left + 36, gh.top, gh.right - 8, gh.bottom), C(P.text), DWRITE_TEXT_ALIGNMENT_CENTER);
 
     D2D1_RECT_F tu = AboutTutorialRect();
     bool tuHot = g_hover == kHoverAboutTutorial;
     Fill(tu, Ov(tuHot ? 0.12f : 0.07f), 8.f);
     Stroke(tu, Ov(0.12f), 8.f);
-    Text(L"", g_fGlyph.Get(), R(tu.left + 12, tu.top, tu.left + 38, tu.bottom), C(P.text), DWRITE_TEXT_ALIGNMENT_CENTER);   // Book? glyph
+    Text(L"\uE82D", g_fGlyph.Get(), R(tu.left + 12, tu.top, tu.left + 38, tu.bottom), C(P.text), DWRITE_TEXT_ALIGNMENT_CENTER);   // Book? glyph
     Text(T(S_TUTORIAL_BTN), g_fTab.Get(), R(tu.left + 36, tu.top, tu.right - 8, tu.bottom), C(P.text), DWRITE_TEXT_ALIGNMENT_CENTER);
 
     // Close button
     bool hot = g_hover == kHoverAboutClose;
     D2D1_RECT_F cr = AboutCloseRect();
     if (hot) Fill(cr, Ov(0.08f), 6.f);
-    Text(L"", g_fIcon.Get(), cr, C(hot ? P.text : P.sub), DWRITE_TEXT_ALIGNMENT_CENTER);
+    Text(L"\uE8BB", g_fIcon.Get(), cr, C(hot ? P.text : P.sub), DWRITE_TEXT_ALIGNMENT_CENTER);
 }
 
 // ---------------------------------------------------------------------------
@@ -610,7 +610,7 @@ void DrawSkillMgr()
     bool closeHot = g_hover == kHoverSkillClose;
     D2D1_RECT_F cr = SkillCloseRect();
     if (closeHot) Fill(cr, Ov(0.08f), 6.f);
-    Text(L"", g_fIcon.Get(), cr, C(closeHot ? P.text : P.sub), DWRITE_TEXT_ALIGNMENT_CENTER);
+    Text(L"\uE8BB", g_fIcon.Get(), cr, C(closeHot ? P.text : P.sub), DWRITE_TEXT_ALIGNMENT_CENTER);
 
     // 分类标签 pills
     D2D1_RECT_F pills[kCatCount];
@@ -638,7 +638,7 @@ void DrawSkillMgr()
     bool searchHot = g_hover == kHoverSkillSearch;
     Fill(sr, Ov(0.06f), 6.f);
     Stroke(sr, Ov(searchHot ? 0.22f : 0.14f), 6.f);
-    Text(L"", g_fIcon.Get(), R(sr.left + 6, sr.top, sr.left + 28, sr.bottom), C(P.sub), DWRITE_TEXT_ALIGNMENT_CENTER);
+    Text(L"\uE721", g_fIcon.Get(), R(sr.left + 6, sr.top, sr.left + 28, sr.bottom), C(P.sub), DWRITE_TEXT_ALIGNMENT_CENTER);
     if (g_skillFilter.empty())
     {
         Text(T(S_SKILL_SEARCH_PLACEHOLDER), g_fTab.Get(),
@@ -687,7 +687,7 @@ void DrawSkillMgr()
             D2D1_RECT_F xr = SkillRemoveRect(v);
             bool xHot = g_hover == kHoverSkillRemove + idx;
             if (xHot) Fill(xr, Ov(0.12f), 4.f);
-            Text(L"", g_fIcon.Get(), xr, C(xHot ? P.text : P.sub), DWRITE_TEXT_ALIGNMENT_CENTER);  // Cancel
+            Text(L"\uE711", g_fIcon.Get(), xr, C(xHot ? P.text : P.sub), DWRITE_TEXT_ALIGNMENT_CENTER);  // Cancel
         }
     }
     g_rt->PopAxisAlignedClip();
@@ -704,9 +704,9 @@ void DrawSkillMgr()
     if (filteredCount > kSkillMaxVisible)
     {
         if (g_skillScroll > 0)
-            Text(L"", g_fIcon.Get(), R(d.right - 36, listTop - 2, d.right - 14, listTop + 14), C(P.sub), DWRITE_TEXT_ALIGNMENT_CENTER);
+            Text(L"\uE70E", g_fIcon.Get(), R(d.right - 36, listTop - 2, d.right - 14, listTop + 14), C(P.sub), DWRITE_TEXT_ALIGNMENT_CENTER);
         if (g_skillScroll + kSkillMaxVisible < filteredCount)
-            Text(L"", g_fIcon.Get(), R(d.right - 36, listBottom - 14, d.right - 14, listBottom + 2), C(P.sub), DWRITE_TEXT_ALIGNMENT_CENTER);
+            Text(L"\uE70D", g_fIcon.Get(), R(d.right - 36, listBottom - 14, d.right - 14, listBottom + 2), C(P.sub), DWRITE_TEXT_ALIGNMENT_CENTER);
     }
 
     // 底部分隔线 + 按钮
