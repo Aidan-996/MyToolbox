@@ -1,21 +1,25 @@
-﻿# Ua Toolbox
+# MyToolbox
 
-[![Release](https://img.shields.io/github/v/release/freyrswift/UaStation?style=flat-square)](https://github.com/freyrswift/UaStation/releases)
-[![License](https://img.shields.io/github/license/freyrswift/UaStation?style=flat-square)](LICENSE)
-[![Stars](https://img.shields.io/github/stars/freyrswift/UaStation?style=flat-square)](https://github.com/freyrswift/UaStation)
-[![Downloads](https://img.shields.io/github/downloads/freyrswift/UaStation/total?style=flat-square)](https://github.com/freyrswift/UaStation/releases)
+[![Release](https://img.shields.io/github/v/release/Aidan-996/MyToolbox?style=flat-square)](https://github.com/Aidan-996/MyToolbox/releases)
+[![License](https://img.shields.io/github/license/Aidan-996/MyToolbox?style=flat-square)](LICENSE)
+[![CI](https://img.shields.io/github/actions/workflow/status/Aidan-996/MyToolbox/linux.yml?style=flat-square&label=linux%20CI)](https://github.com/Aidan-996/MyToolbox/actions)
 
-[中文](#ua-toolbox-中文) | [English](#ua-toolbox-english)
+[中文](#mytoolbox-中文) | [English](#mytoolbox-english)
 
 ---
 
-## Ua Toolbox 中文
+## MyToolbox 中文
 
-一键为 AI 编程工具安装提示词和技能的 Windows 原生工具。
+一键为 AI 编程工具安装提示词和技能的工具。**Windows 图形界面 + Linux 命令行**双版本，
+基于 [freyrswift/UaStation](https://github.com/freyrswift/UaStation)（Ua Toolbox）独立维护，
+已与上游脱钩：更新与提示词同步只指向本仓库。
+
+> Windows 版程序界面与 exe 名保持上游原名：界面叫「Ua 工具箱」，文件叫 `Ua.exe`。
 
 <p align="center">
   <img src="docs/screenshots/main-editor.png" width="460" alt="主界面" />
 </p>
+
 ### ⚠️ 禁止商用声明
 
 > **本工具完全免费、开源，禁止任何形式的商业使用。**
@@ -44,17 +48,32 @@
 | 特性 | 说明 |
 |------|------|
 | 🔧 一键安装 | 选择 AI 工具 → 选择提示词 → 点击安装，三步搞定 |
-| 🤖 15 款 AI 工具 | Claude Code、Codex、Cursor、Gemini CLI、VS Code 等主流工具全覆盖 |
+| 🤖 13+ 款 AI 工具 | Claude Code、Codex、Gemini CLI、OpenCode、Cursor、VS Code 等主流工具全覆盖 |
 | 🔍 智能检测 | 自动识别电脑中已安装的 AI 工具，未安装的自动灰显 |
 | 📝 8 套提示词模板 | 专家模式 / 开发工程 / 写作润色，按需选择 |
-| 🌐 中英双语 | 界面和提示词均支持中英文切换 |
+| 🧩 40 个内嵌技能 | 逆向 / 漏洞利用 / 内核 / 渗透等方向，随提示词一键装进各工具 |
+| 🌐 中英双语 | 界面完整双语（重构后免责声明等界面全部走翻译表） |
 | 🎨 深浅主题 | 跟随系统或手动切换，Win11 支持 Mica 效果 |
-| 🔄 自动更新 | 静默检查新版本，一键下载安装 |
+| 🔄 手动检查更新 | 出于供应链安全考虑，静默自动更新已关闭；菜单"检查更新"手动触发 |
+| 🐧 Linux 命令行版 | 同一套提示词/技能数据，`make` 一键编译，CI 端到端测试 |
 | 📦 单文件运行 | 1 MB 的 exe，无需安装，无任何依赖 |
 
-### 使用方法
+### 相比上游的改动
 
-1. 从 [Releases](https://github.com/freyrswift/UaStation/releases) 下载 `Ua.exe`
+本仓库在上游 v1.0.2 基础上做了一轮完整重构（Windows 版行为不变，只修错误路径）：
+
+- **与上游脱钩**：更新检查、下载、提示词同步地址全部指向本仓库；关闭启动时静默自动更新（改为菜单手动检查）
+- **修复真实 bug**：更新包截断下载被误判成功并覆盖真实 exe；更新器忽略写入/启动失败仍退出进程；下载标志线程时序；可点击区域缺手型光标；Skills 滚轮按未过滤数量钳制；颜色格式化溢出隐患
+- **国际化补全**：免责声明正文、技能计数、空列表提示等 5 处硬编码中文改走翻译表（英文界面不再出现中文）
+- **线程安全**：下载标志改 `std::atomic`；删除跨线程裸指针 toast hack，后台线程不再读任何 UI 状态
+- **死代码清理**：未使用的函数/字段/翻译行/VS 向导遗留资源全部移除
+- **去重**：矩形命中、按钮位置、toast、字符编码转换等 6 处重复实现各合并为一份（顺带修复非 ANSI 路径下更新批处理的编码隐患）
+- **常量收拢**：强调色/面板色收进主题 `Palette`，DWM 裸属性号改具名常量
+- **工程修正**：工具集从 v145 重定向到 v143（VS 2022 可直接编译）
+
+### 使用方法（Windows）
+
+1. 从 [Releases](https://github.com/Aidan-996/MyToolbox/releases) 下载 `Ua.exe`（或自行编译，见下文）
 2. 双击运行（无需安装、无需管理员权限）
 3. 选择 AI 编程工具（如 Claude Code）
 4. 选择提示词模板，点"安装"
@@ -72,22 +91,23 @@
 
 之后就可以用大白话向 AI 分配任务，提示词会自动触发对应的技能模板。
 
-### 系统要求
+### 系统要求（Windows）
 
 - Windows 10 1809+ / Windows 11
 - x64 架构
 
-### 构建方法
+### 构建方法（Windows）
 
 ```powershell
 msbuild Ua.slnx /p:Configuration=Release /p:Platform=x64
 ```
 
-需要 Visual Studio 2022+，含 C++ 桌面开发工作负载。
+需要 Visual Studio 2022+（含 C++ 桌面开发工作负载）。项目已重定向到 v143 工具集，
+VS 2022 直接打开 `Ua.slnx` 生成即可；产物在 `x64\Release\Ua.exe`。
 
 ### Linux 版
 
-Linux 命令行版本在 [`linux/`](linux/) 目录，与 Windows 版**完全独立**，共用同一套提示词与技能数据文件：
+Windows 版的 Linux 命令行对应版本在 [`linux/`](linux/) 目录，与 Windows 版**完全独立**，共用同一套提示词与技能数据文件：
 
 ```bash
 make -C linux && sudo make -C linux install
@@ -97,32 +117,32 @@ make -C linux && sudo make -C linux install
 
 ### Star History
 
-[![Star History Chart](https://api.star-history.com/svg?repos=freyrswift/UaStation&type=Date)](https://star-history.com/#freyrswift/UaStation&Date)
+[![Star History Chart](https://api.star-history.com/svg?repos=Aidan-996/MyToolbox&type=Date)](https://star-history.com/#Aidan-996/MyToolbox&Date)
 
-### 交流反馈
+### 反馈
 
-遇到问题或有建议？扫码加入 QQ 群：
+遇到问题或建议请[提 Issue](https://github.com/Aidan-996/MyToolbox/issues)。
 
-<p align="center">
-  <img src="docs/screenshots/qq-group.jpg" width="280" alt="QQ群：535041466" />
-</p>
+### 许可证与致谢
 
-<p align="center">
-  QQ群号：<strong>535041466</strong> | <a href="https://qm.qq.com/q/3XsJIxaZde">点击加入</a>
-</p>
-### 许可证
-
-MIT License，详见 [LICENSE](LICENSE)。
+MIT License，详见 [LICENSE](LICENSE)。基于 [freyrswift/UaStation](https://github.com/freyrswift/UaStation)（MIT）重构与扩展，
+内嵌 Skills 与提示词源自其 seep-kit 项目集，图标来自 [lobehub/lobe-icons](https://github.com/lobehub/lobe-icons) 与
+[vscode-icons](https://github.com/vscode-icons/vscode-icons)（MIT），一并致谢。
 
 ---
 
-## Ua Toolbox English
+## MyToolbox English
 
-A lightweight Windows tool for installing prompts and skills into AI coding tools.
+One-click prompt and skill installer for AI coding tools. **Windows GUI + Linux CLI**,
+independently maintained from [freyrswift/UaStation](https://github.com/freyrswift/UaStation) (Ua Toolbox) —
+update checks and prompt sync point only to this repository.
+
+> The Windows app keeps the upstream product name: the UI is "Ua Toolbox", the file is `Ua.exe`.
 
 <p align="center">
-  <img src="docs/screenshots/main-editor.png" width="460" alt="主界面" />
+  <img src="docs/screenshots/main-editor.png" width="460" alt="Main window" />
 </p>
+
 ### ⚠️ Anti-Commercial Notice
 
 > **This tool is completely free and open source. Commercial use is strictly prohibited.**
@@ -138,7 +158,7 @@ This tool is provided in compliance with applicable laws and regulations. By usi
 
 1. **Lawful Use Only**: This tool is intended solely for managing local configurations of AI coding tools that the user legally owns or has written authorization to access.
 
-2. **Authorization Required**: Users must obtain explicit written authorization before conducting any security research on systems, software, or services.
+2. **Authorization Required**: Users must obtain explicit written authorization before conducting any security research on systems, software, or services. Unauthorized penetration testing, reverse engineering or exploitation may be illegal in your jurisdiction.
 
 3. **Disclaimer**: This tool is provided "as is" without warranty. The author assumes no liability for any damages arising from use. Users bear full legal responsibility for their actions.
 
@@ -151,23 +171,38 @@ This tool is provided in compliance with applicable laws and regulations. By usi
 | Feature | Description |
 |---------|-------------|
 | 🔧 One-Click Install | Select tool → Pick prompt → Install. Three steps. |
-| 🤖 15 AI Tools | Claude Code, Codex, Cursor, Gemini CLI, VS Code and more |
+| 🤖 13+ AI Tools | Claude Code, Codex, Gemini CLI, OpenCode, Cursor, VS Code and more |
 | 🔍 Auto Detection | Automatically detects installed AI tools on your system |
 | 📝 8 Prompt Templates | Expert / Development / Writing modes |
-| 🌐 Bilingual | Full CN/EN interface and prompt support |
+| 🧩 40 Embedded Skills | Reverse engineering / exploit / kernel / pentest, installed together with prompts |
+| 🌐 Bilingual | Fully translated CN/EN interface (disclaimer etc. now use the translation table) |
 | 🎨 Themes | Dark / Light / System, Win11 Mica support |
-| 🔄 Auto Update | Silent version check, one-click update |
+| 🔄 Manual Update Check | Silent auto-update is disabled for supply-chain safety; check via menu |
+| 🐧 Linux CLI Edition | Same prompt/skill data, one `make` to build, tested end-to-end in CI |
 | 📦 Portable | Single 1 MB exe, no installer, zero dependencies |
 
-### Usage
+### What Changed from Upstream
 
-1. Download `Ua.exe` from [Releases](https://github.com/freyrswift/UaStation/releases)
+This repository is a full refactor on top of upstream v1.0.2 (Windows behavior unchanged; only error paths fixed):
+
+- **Decoupled from upstream**: update/download/prompt-sync URLs point to this repo; silent auto-update on launch removed (manual menu check only)
+- **Real bug fixes**: truncated update downloads were treated as success and could overwrite the real exe; the updater ignored write/launch failures before quitting; download-flag timing; missing hand cursors on clickable lists; skills wheel clamping; color formatting overflow
+- **i18n completion**: 5 hardcoded Chinese strings (disclaimer body, skill counts, empty lists, no-link toast) now go through the translation table
+- **Thread safety**: download flag is `std::atomic`; removed the cross-thread toast pointer hack — background threads no longer read UI state
+- **Dead code removal**: unused functions/fields/translation rows/VS-template resources
+- **Deduplication**: 6 duplicated implementations merged (rect hit-testing, button rects, toast, charset conversion — also fixes a non-ANSI path encoding hazard in the update script)
+- **Constant consolidation**: accent/panel colors moved into the theme `Palette`; DWM attribute IDs named
+- **Build fix**: toolset retargeted v145 → v143 so VS 2022 builds out of the box
+
+### Usage (Windows)
+
+1. Download `Ua.exe` from [Releases](https://github.com/Aidan-996/MyToolbox/releases) (or build it yourself, see below)
 2. Double-click to run (no installer, no admin required)
 3. Select an AI tool (e.g. Claude Code)
 4. Choose a prompt template and click "Install"
 5. Restart the AI tool to apply
 
-> 💡 To uninstall: select the tool and click "Remove" to restore original config.
+> 💡 To uninstall: select the tool and click "Remove" to restore the original config.
 
 #### Verify Installation
 
@@ -177,20 +212,19 @@ Open your AI tool and type `Ua` — if it replies **"Ua is ready and standing by
   <img src="docs/screenshots/claude-code-demo.png" width="640" alt="Ua is ready" />
 </p>
 
-After that, you can give the AI tasks in plain language — the prompt automatically routes to the right skill template.
-
-### Requirements
+### Requirements (Windows)
 
 - Windows 10 1809+ / Windows 11
 - x64
 
-### Build
+### Build (Windows)
 
 ```powershell
 msbuild Ua.slnx /p:Configuration=Release /p:Platform=x64
 ```
 
-Requires Visual Studio 2022+ with C++ Desktop Development workload.
+Requires Visual Studio 2022+ with the C++ Desktop workload. The project is retargeted to the
+v143 toolset, so VS 2022 opens `Ua.slnx` and builds directly; output lands in `x64\Release\Ua.exe`.
 
 ### Linux Version
 
@@ -204,19 +238,15 @@ Features: detect 13 AI coding tools, install/uninstall prompts (with automatic b
 
 ### Star History
 
-[![Star History Chart](https://api.star-history.com/svg?repos=freyrswift/UaStation&type=Date)](https://star-history.com/#freyrswift/UaStation&Date)
+[![Star History Chart](https://api.star-history.com/svg?repos=Aidan-996/MyToolbox&type=Date)](https://star-history.com/#Aidan-996/MyToolbox&Date)
 
-### Community
+### Feedback
 
-Questions or feedback? Join our QQ Group:
+Please [open an issue](https://github.com/Aidan-996/MyToolbox/issues) for bugs and feature requests.
 
-<p align="center">
-  <img src="docs/screenshots/qq-group.jpg" width="280" alt="QQ Group: 535041466" />
-</p>
+### License & Credits
 
-<p align="center">
-  QQ Group: <strong>535041466</strong> | <a href="https://qm.qq.com/q/3XsJIxaZde">Join</a>
-</p>
-### License
-
-MIT License. See [LICENSE](LICENSE).
+MIT License, see [LICENSE](LICENSE). Refactored and extended from
+[freyrswift/UaStation](https://github.com/freyrswift/UaStation) (MIT). Embedded skills and prompts
+come from its seep-kit collection; icons from [lobehub/lobe-icons](https://github.com/lobehub/lobe-icons)
+and [vscode-icons](https://github.com/vscode-icons/vscode-icons) (MIT). Many thanks.
