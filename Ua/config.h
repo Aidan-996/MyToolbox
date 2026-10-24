@@ -73,11 +73,6 @@ enum SkillCategory {
 // 当前语言（在 state.cpp 定义，T() 需要它）
 extern int g_lang;
 
-// prompts 同步完成时的 toast 文本覆盖（在 state.cpp 定义）。
-// 为 nullptr 时 T(S_SYNC_UPDATED) 返回默认的 "提示词已更新"；非空时返回
-// 格式化后的 "N 个提示词已更新"。缓冲区生命周期由 state.cpp 管理。
-extern const wchar_t* g_syncToastOverride;
-
 // 翻译表：[langId][stringId]
 enum Str {
     S_THEME_SYSTEM, S_THEME_DARK, S_THEME_LIGHT,
@@ -105,7 +100,7 @@ enum Str {
     S_SKILL_SEARCH_PLACEHOLDER,
     S_CAT_ALL, S_CAT_REVERSE, S_CAT_GAME, S_CAT_KERNEL, S_CAT_EXPLOIT,
     S_CAT_CRACK, S_CAT_MOBILE, S_CAT_PENTEST, S_CAT_AI, S_CAT_OTHER,
-    S_SYNC_UPDATED, S_PROMPTS_UPDATED_COUNT,
+    S_PROMPTS_UPDATED_COUNT,
     S_TRAY_SHOW, S_TRAY_TOOLTIP,
     S_UPDATE_DOWNLOADING, S_UPDATE_READY, S_UPDATE_FAILED, S_UPDATE_BTN,
     S_CONFIRM_UNINSTALL,
@@ -197,7 +192,6 @@ inline const wchar_t* const kStr[][2] = {
     /* S_CAT_PENTEST */              { L"\u6E17\u900F",           L"Pentest" },
     /* S_CAT_AI */                   { L"AI",                     L"AI" },
     /* S_CAT_OTHER */                { L"\u5176\u4ED6",           L"Other" },
-    /* S_SYNC_UPDATED */             { L"\u63D0\u793A\u8BCD\u5DF2\u66F4\u65B0",         L"Prompts updated" },
     /* S_PROMPTS_UPDATED_COUNT */    { L"%d \u4E2A\u63D0\u793A\u8BCD\u5DF2\u66F4\u65B0", L"%d prompts updated" },
     /* S_TRAY_SHOW */                { L"\u663E\u793A\u7A97\u53E3",                     L"Show Window" },
     /* S_TRAY_TOOLTIP */             { L"Ua \u5DE5\u5177\u7BB1",                     L"Ua Toolbox" },
@@ -213,9 +207,6 @@ inline const wchar_t* const kStr[][2] = {
 
 inline const wchar_t* T(Str s)
 {
-    // 后台同步发现版本变更时，S_SYNC_UPDATED 走格式化后的 "N 个提示词已更新"
-    if (s == S_SYNC_UPDATED && g_syncToastOverride)
-        return g_syncToastOverride;
     return kStr[s][g_lang];
 }
 

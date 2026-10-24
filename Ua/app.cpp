@@ -506,7 +506,13 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM l
         return 0;
     case kMsgSyncReady:
         // 后台 prompts 同步完成；wParam 为更新文件数，>0 时弹 toast
-        if (wParam > 0) ShowToast(hWnd, T(S_SYNC_UPDATED));
+        // （由 UI 线程自己格式化，同步线程不再读 g_lang）
+        if (wParam > 0)
+        {
+            wchar_t buf[64];
+            swprintf_s(buf, T(S_PROMPTS_UPDATED_COUNT), (int)wParam);
+            ShowToast(hWnd, buf);
+        }
         return 0;
     case WM_SIZE:
         ResizeTarget(LOWORD(lParam), HIWORD(lParam));

@@ -47,11 +47,6 @@ std::vector<std::wstring> g_prompts;
 int g_promptSel = -1;
 int g_promptScroll = 0;
 
-// 后台同步 prompts\ 时如发现版本变更，填入格式化后的 toast 文本并把
-// g_syncToastOverride 指向它。缓冲区在整个进程生命期内有效。
-static std::wstring g_syncToastBuffer;
-const wchar_t* g_syncToastOverride = nullptr;
-
 // ---------------------------------------------------------------------------
 // 主题
 // ---------------------------------------------------------------------------
@@ -160,7 +155,7 @@ bool g_updateChecked = false;
 static std::atomic<bool> g_updateRunning{ false };
 
 // 下载更新状态
-bool g_updateDownloading = false;
+std::atomic<bool> g_updateDownloading{ false };
 static std::atomic<bool> g_downloadRunning{ false };
 
 std::wstring GetUpdateVersion()
@@ -710,14 +705,6 @@ void SyncPrompts(HWND hWnd)
     std::thread([hWnd]()
         {
             int versionChanges = DoSyncPrompts();
-            // 发现版本变更时填充 toast 覆盖：PostMessage 之前写好，UI 线程读到才生效
-            if (versionChanges > 0)
-            {
-                wchar_t buf[128];
-                swprintf_s(buf, 128, kStr[S_PROMPTS_UPDATED_COUNT][g_lang], versionChanges);
-                g_syncToastBuffer = buf;
-                g_syncToastOverride = g_syncToastBuffer.c_str();
-            }
             g_syncRunning = false;
             if (hWnd) PostMessageW(hWnd, kMsgSyncReady, (WPARAM)versionChanges, 0);
         }).detach();

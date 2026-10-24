@@ -5,6 +5,7 @@
 
 #include "config.h"
 
+#include <atomic>
 #include <mutex>
 #include <string>
 #include <vector>
@@ -78,8 +79,8 @@ void CheckUpdates(HWND hWnd);
 void DownloadUpdate(HWND hWnd);
 bool ApplyUpdate(HWND hWnd);    // 返回 false 表示更新失败，仍留在当前版本
 
-// 下载中标记（UI 可查询来禁止重复点击）
-extern bool g_updateDownloading;
+// 下载中标记（下载线程写、UI 线程读；UI 可查询来禁止重复点击）
+extern std::atomic<bool> g_updateDownloading;
 
 // ---------------------------------------------------------------------------
 // 后台同步 prompts\ 文件夹
