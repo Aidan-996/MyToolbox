@@ -1,0 +1,55 @@
+# 推送 v* tag 时自动构建双平台二进制并发布 Release。
+# 应用内的更新检查走 /releases/latest/download/MyBox.exe，资产名必须保持 MyBox.exe。
+name: release
+
+on:
+  push:
+    tags: ["v*"]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  windows:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: microsoft/setup-msbuild@v2
+      - name: Build (x64 Release)
+        run: msbuild MyBox/MyBox.vcxproj /p:Configuration=Release /p:Platform=x64 /p:PlatformToolset=v143 /m /nologo /v:m
+      - uses: actions/upload-artifact@v4
+        with:
+          name: MyBox-windows-x64
+          path: MyBox/x64/Release/MyBox.exe
+
+  linux:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build
+        run: make -C linux CXXFLAGS="-std=c++17 -O2 -Wall -Wextra -Werror"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ua-linux-x64
+          path: linux/ua
+
+  publish:
+    needs: [windows, linux]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: MyBox-windows-x64
+          path: rel/
+      - uses: actions/download-artifact@v4
+        with:
+          name: ua-linux-x64
+          path: rel/
+      - name: Publish release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            rel/MyBox.exe
+            rel/ua
+          generate_release_notes: true

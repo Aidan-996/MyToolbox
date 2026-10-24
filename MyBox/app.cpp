@@ -333,7 +333,8 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM l
                 {
                     g_disclaimer = false;
                     InvalidateRect(hWnd, nullptr, FALSE);
-                    // 免责声明确认后只同步提示词；更新仅通过菜单"检查更新"手动触发
+                    // 免责声明确认后检查更新（源为本仓库 Releases）并同步提示词
+                    CheckUpdates(hWnd);
                     SyncPrompts(hWnd);
                 }
                 return 0;

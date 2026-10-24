@@ -54,7 +54,7 @@
 | 🧩 40 个内嵌技能 | 逆向 / 漏洞利用 / 内核 / 渗透等方向，随提示词一键装进各工具 |
 | 🌐 中英双语 | 界面完整双语（重构后免责声明等界面全部走翻译表） |
 | 🎨 深浅主题 | 跟随系统或手动切换，Win11 支持 Mica 效果 |
-| 🔄 手动检查更新 | 出于供应链安全考虑，静默自动更新已关闭；菜单"检查更新"手动触发 |
+| 🔄 自动更新 | 启动时自动检查更新，发现新版本自动下载安装（更新源为本仓库 Releases） |
 | 🐧 Linux 命令行版 | 同一套提示词/技能数据，`make` 一键编译，CI 端到端测试 |
 | 📦 单文件运行 | 1 MB 的 exe，无需安装，无任何依赖 |
 
@@ -62,7 +62,7 @@
 
 本仓库在上游 v1.0.2 基础上做了一轮完整重构（Windows 版行为不变，只修错误路径）：
 
-- **与上游脱钩**：更新检查、下载、提示词同步地址全部指向本仓库；关闭启动时静默自动更新（改为菜单手动检查）
+- **与上游脱钩**：更新检查、下载、提示词同步地址全部指向本仓库，启动时自动检查更新
 - **修复真实 bug**：更新包截断下载被误判成功并覆盖真实 exe；更新器忽略写入/启动失败仍退出进程；下载标志线程时序；可点击区域缺手型光标；Skills 滚轮按未过滤数量钳制；颜色格式化溢出隐患
 - **国际化补全**：免责声明正文、技能计数、空列表提示等 5 处硬编码中文改走翻译表（英文界面不再出现中文）
 - **线程安全**：下载标志改 `std::atomic`；删除跨线程裸指针 toast hack，后台线程不再读任何 UI 状态
@@ -178,7 +178,7 @@ This tool is provided in compliance with applicable laws and regulations. By usi
 | 🧩 40 Embedded Skills | Reverse engineering / exploit / kernel / pentest, installed together with prompts |
 | 🌐 Bilingual | Fully translated CN/EN interface (disclaimer etc. now use the translation table) |
 | 🎨 Themes | Dark / Light / System, Win11 Mica support |
-| 🔄 Manual Update Check | Silent auto-update is disabled for supply-chain safety; check via menu |
+| 🔄 Auto Update | Checks on launch and auto-installs new versions from this repo's Releases |
 | 🐧 Linux CLI Edition | Same prompt/skill data, one `make` to build, tested end-to-end in CI |
 | 📦 Portable | Single 1 MB exe, no installer, zero dependencies |
 
@@ -186,7 +186,7 @@ This tool is provided in compliance with applicable laws and regulations. By usi
 
 This repository is a full refactor on top of upstream v1.0.2 (Windows behavior unchanged; only error paths fixed):
 
-- **Decoupled from upstream**: update/download/prompt-sync URLs point to this repo; silent auto-update on launch removed (manual menu check only)
+- **Decoupled from upstream**: update/download/prompt-sync URLs point to this repo; updates are checked automatically on launch
 - **Real bug fixes**: truncated update downloads were treated as success and could overwrite the real exe; the updater ignored write/launch failures before quitting; download-flag timing; missing hand cursors on clickable lists; skills wheel clamping; color formatting overflow
 - **i18n completion**: 5 hardcoded Chinese strings (disclaimer body, skill counts, empty lists, no-link toast) now go through the translation table
 - **Thread safety**: download flag is `std::atomic`; removed the cross-thread toast pointer hack — background threads no longer read UI state
