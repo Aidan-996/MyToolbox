@@ -72,15 +72,60 @@
 - **工程修正**：工具集从 v145 重定向到 v143（VS 2022 可直接编译）
 - **目录架构重构**：Windows 源码目录 `Ua/` 更名 `MyBox/`，两个版本共用的提示词/技能数据提升到顶层 `shared/`；程序标识（exe 名、窗口类、注册表值、AppData 目录）品牌化为 MyBox
 
-### 使用方法（Windows）
+### 部署教程（Windows）
 
-1. 从 [Releases](https://github.com/Aidan-996/MyToolbox/releases) 下载 `MyBox.exe`（或自行编译，见下文）
-2. 双击运行（无需安装、无需管理员权限）
-3. 选择 AI 编程工具（如 Claude Code）
-4. 选择提示词模板，点"安装"
-5. 重启目标 AI 工具，即刻生效
+**方式一：下载现成版本（推荐）**
 
-> 💡 卸载：选中已安装的工具，点"卸载"即可恢复原始配置。
+1. 打开 [Releases](https://github.com/Aidan-996/MyToolbox/releases) 页面，下载最新版的 `MyBox.exe`
+2. 放到任意目录（如桌面）即可——单文件免安装、无需管理员权限；也可以在 [Actions](https://github.com/Aidan-996/MyToolbox/actions) 页面下载 CI 构建产物
+
+**方式二：源码编译**
+
+```powershell
+git clone https://github.com/Aidan-996/MyToolbox.git
+cd MyToolbox
+msbuild MyBox.slnx /p:Configuration=Release /p:Platform=x64
+```
+
+产物在 `x64\Release\MyBox.exe`（需要 VS 2022+，详见下文"构建方法"）。
+
+**首次启动会发生什么**
+
+1. 弹出免责声明，点"我已了解"
+2. 程序自动检查更新（更新源为本仓库），并同步最新提示词模板
+3. exe 旁边会生成 `prompts\` 文件夹（8 个提示词模板，可直接编辑，也可以放自己的 .md 进去）
+
+> 💡 配置与备份存放在 `%APPDATA%\MyBox\`（`state` 为注入状态，`backups` 为每次安装的备份）。若曾用过旧版 `Ua.exe`，旧状态在 `%APPDATA%\Ua`，不会自动迁移，对相应工具重新安装一次即可；确认无误后旧目录可手动删除。
+
+### 使用指南（Windows）
+
+主界面分两个标签：「**编辑器**」列出 15 个 AI 编程工具；「**工具**」是 Skills 管理与帮助入口。
+卡片状态：**灰色** = 未安装；**绿色圆点** = 已注入；**黄色圆点** = 文件有内容但非本工具注入；整卡灰显 = 本机未检测到该工具。
+
+**安装提示词（三步）**
+
+1. 点一张工具卡片（如 Claude Code），弹窗内显示注入目标路径（如 `~\.claude\CLAUDE.md`）与提示词列表
+2. 选择一个模板（8 个，带分类说明：专家 / 开发 / 写作），点「安装」
+3. 重启该 AI 工具即可生效
+
+安装时程序自动完成两件事：原配置文件备份（可随时还原）、40 个内嵌技能装入该工具的 skills 目录。
+
+**卸载**：打开同一工具的弹窗，点「卸载」——从备份恢复原始文件（原本没有则删除），并移除该工具装入的技能。
+
+**管理技能**：「工具」标签 →「Skills 管理」：搜索、按分类筛选、逐个 ✕ 卸载。不想让 AI 携带安全/逆向技能，在这里清空即可，不影响提示词。
+
+**更换提示词**：重新打开弹窗选择其他模板安装即可；每次安装都会对当前内容留一份滚动备份（保留最近 200 份）。
+
+**自动更新**：每次启动自动检查（也可在设置菜单里"检查更新"手动触发）。在仓库推送一个新的 `v*` 标签，CI 会自动构建双平台二进制并发布 Release，所有已安装用户下次启动时自动升级。
+
+**文件位置速查**
+
+| 内容 | 位置 |
+|------|------|
+| 注入目标 | 各工具的全局配置文件（弹窗内显示，如 `~\.claude\CLAUDE.md`） |
+| 状态与备份 | `%APPDATA%\MyBox\` |
+| 提示词模板 | exe 旁的 `prompts\` 文件夹，可自行编辑新增 |
+| 技能存放 | 各工具的 skills 目录（如 `~\.claude\skills\`） |
 
 #### 验证安装效果
 
@@ -112,6 +157,11 @@ Windows 版的 Linux 命令行对应版本在 [`linux/`](linux/) 目录，与 Wi
 
 ```bash
 make -C linux && sudo make -C linux install
+
+ua list                           # 工具列表与注入状态
+ua install claude                 # 注入提示词（自动备份，ua uninstall claude 恢复）
+ua skills install claude radare2  # 按需安装单个技能
+ua sync                           # 从 GitHub 同步新提示词模板
 ```
 
 功能：探测 13 个 AI 编程工具、注入/卸载提示词（自动备份恢复）、Skills 安装/卸载、从 GitHub 同步提示词。详见 [linux/README.md](linux/README.md)，CI 会在 ubuntu 上自动编译并做端到端冒烟测试。
@@ -196,15 +246,60 @@ This repository is a full refactor on top of upstream v1.0.2 (Windows behavior u
 - **Build fix**: toolset retargeted v145 → v143 so VS 2022 builds out of the box
 - **Directory restructure**: the Windows source dir `Ua/` is now `MyBox/`; the shared prompt/skill data moved to a top-level `shared/`; app identity (exe name, window class, registry value, AppData dir) rebranded to MyBox
 
-### Usage (Windows)
+### Deployment (Windows)
 
-1. Download `MyBox.exe` from [Releases](https://github.com/Aidan-996/MyToolbox/releases) (or build it yourself, see below)
-2. Double-click to run (no installer, no admin required)
-3. Select an AI tool (e.g. Claude Code)
-4. Choose a prompt template and click "Install"
-5. Restart the AI tool to apply
+**Option 1: download a ready build (recommended)**
 
-> 💡 To uninstall: select the tool and click "Remove" to restore the original config.
+1. Open the [Releases](https://github.com/Aidan-996/MyToolbox/releases) page and download `MyBox.exe` from the latest release
+2. Put it anywhere (e.g. the desktop) — a single portable file, no installer, no admin rights; CI artifacts are also available on the [Actions](https://github.com/Aidan-996/MyToolbox/actions) page
+
+**Option 2: build from source**
+
+```powershell
+git clone https://github.com/Aidan-996/MyToolbox.git
+cd MyToolbox
+msbuild MyBox.slnx /p:Configuration=Release /p:Platform=x64
+```
+
+Output lands in `x64\Release\MyBox.exe` (requires VS 2022+, see "Build" below).
+
+**What happens on first launch**
+
+1. A disclaimer dialog appears — click "I Understand"
+2. The app checks for updates (from this repo) and syncs the latest prompt templates
+3. A `prompts\` folder is created next to the exe (8 templates; edit them freely or drop in your own .md files)
+
+> 💡 Config and backups live in `%APPDATA%\MyBox\` (`state` = install state, `backups` = one backup per install). If you previously used the old `Ua.exe`, its state in `%APPDATA%\Ua` is not migrated — just reinstall for the affected tools, then delete the old folder.
+
+### User Guide (Windows)
+
+The main window has two tabs: 「**Editor**」 lists 15 AI coding tools; 「**Tools**」 holds the Skills manager and help entries.
+Card states: **gray** = not installed; **green dot** = injected; **yellow dot** = target file has content but wasn't injected by this tool; a fully dimmed card = tool not detected on this machine.
+
+**Install a prompt (three steps)**
+
+1. Click a tool card (e.g. Claude Code) — the dialog shows the target path (e.g. `~\.claude\CLAUDE.md`) and the prompt list
+2. Pick a template (8 available: Expert / Development / Writing) and click "Install"
+3. Restart that AI tool to apply
+
+Two things happen automatically on install: the original config file is backed up (restorable anytime), and 40 embedded skills are copied into the tool's skills directory.
+
+**Uninstall**: open the same tool's dialog and click "Remove" — the original file is restored from backup (deleted if there was none) and the installed skills are removed.
+
+**Manage skills**: 「Tools」 tab → 「Skills Manager」: search, filter by category, remove individually with ✕. If you don't want the AI to carry security/RE skills, clear them here — prompts are unaffected.
+
+**Switch prompts**: reopen the dialog and install another template; every install keeps a rolling backup of the current content (last 200 kept).
+
+**Auto update**: checked on every launch (or via menu "Check for Updates"). Pushing a new `v*` tag makes CI build and publish both binaries; every installed user upgrades automatically on next launch.
+
+**File locations**
+
+| What | Where |
+|------|-------|
+| Injection targets | Each tool's global config file (shown in the dialog, e.g. `~\.claude\CLAUDE.md`) |
+| State & backups | `%APPDATA%\MyBox\` |
+| Prompt templates | `prompts\` folder next to the exe — editable |
+| Skills | Each tool's skills directory (e.g. `~\.claude\skills\`) |
 
 #### Verify Installation
 
@@ -234,6 +329,11 @@ A separate Linux CLI edition lives in [`linux/`](linux/). It is fully independen
 
 ```bash
 make -C linux && sudo make -C linux install
+
+ua list                           # tools and install state
+ua install claude                 # inject a prompt (auto backup; ua uninstall claude restores)
+ua skills install claude radare2  # install a single skill
+ua sync                           # sync new prompt templates from GitHub
 ```
 
 Features: detect 13 AI coding tools, install/uninstall prompts (with automatic backup & restore), manage skills, sync new prompts from GitHub. See [linux/README.md](linux/README.md). CI builds it on ubuntu and runs end-to-end smoke tests on every push.
