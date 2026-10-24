@@ -1,7 +1,7 @@
-# Ua Toolbox Linux 版
+# MyBox Linux 版
 
-Windows 版（GUI，`Ua/` 目录）的 Linux 命令行对应版本。**与 Windows 版完全独立、互不影响**，
-但共用同一套数据文件：`Ua/prompts/`（8 个提示词模板）和 `Ua/skills/`（40 个安全/逆向 SKILL.md）。
+Windows 版（GUI，`MyBox/` 目录）的 Linux 命令行对应版本。**与 Windows 版完全独立、互不影响**，
+但共用同一套数据文件：`shared/prompts/`（8 个提示词模板）和 `shared/skills/`（40 个安全/逆向 SKILL.md）。
 
 > ⚠️ 同样的法律边界：仅供学习和**授权**安全研究使用；商业化被禁止。
 
@@ -19,7 +19,7 @@ make                # 编译出 ./ua（需要 g++，C++17）
 sudo make install   # 安装到 /usr/local/bin，数据到 /usr/local/share/ua
 ```
 
-不安装直接跑也可以：在仓库里 `./linux/ua list`，数据目录会自动找到 `../Ua/`。
+不安装直接跑也可以：在仓库里 `./linux/ua list`，数据目录会自动找到 `../shared/`。
 
 数据目录查找顺序（第一个存在的生效）：
 
@@ -27,7 +27,7 @@ sudo make install   # 安装到 /usr/local/bin，数据到 /usr/local/share/ua
 2. `~/.local/share/ua/`
 3. `<exe>/../share/ua/`（make install 的位置）
 4. `<exe>/data/`
-5. `<exe>/../Ua/`（仓库布局）
+5. `<exe>/../shared/`（仓库布局）
 
 ## 使用
 

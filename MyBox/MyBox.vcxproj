@@ -22,7 +22,7 @@
     <VCProjectVersion>17.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
     <ProjectGuid>{bbb0c8d5-4c9c-49d5-a7a0-ac99a976f992}</ProjectGuid>
-    <RootNamespace>Ua</RootNamespace>
+    <RootNamespace>MyBox</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -159,11 +159,11 @@
     <ClCompile Include="ui-main.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ResourceCompile Include="Ua.rc" />
+    <ResourceCompile Include="MyBox.rc" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="small.ico" />
-    <Image Include="Ua.ico" />
+    <Image Include="MyBox.ico" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

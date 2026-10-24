@@ -168,7 +168,7 @@ static void DialogCommand(HWND hWnd, int b)
         {
             if (b == kDlgUninstall)
             {
-                int result = MessageBoxW(hWnd, T(S_CONFIRM_UNINSTALL), L"Ua", MB_YESNO | MB_ICONQUESTION);
+                int result = MessageBoxW(hWnd, T(S_CONFIRM_UNINSTALL), L"MyBox", MB_YESNO | MB_ICONQUESTION);
                 if (result != IDYES) return;
             }
             bool ok = b == kDlgInstall ? Install(i, err) : Uninstall(i, err);
@@ -598,10 +598,10 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
     SetProcessDpiAwarenessContext(DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2);
 
     // 单实例：如果已经有一个在跑，激活它的窗口，自己退出
-    HANDLE hMutex = CreateMutexW(nullptr, TRUE, L"UaToolbox_SingleInstance_Mutex");
+    HANDLE hMutex = CreateMutexW(nullptr, TRUE, L"MyBox_SingleInstance_Mutex");
     if (GetLastError() == ERROR_ALREADY_EXISTS)
     {
-        HWND existing = FindWindowW(L"UaToolbox", nullptr);
+        HWND existing = FindWindowW(L"MyBox", nullptr);
         if (existing)
         {
             ShowWindow(existing, SW_SHOW);
@@ -622,7 +622,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
     bool promptsMissing = (promptsAttr == INVALID_FILE_ATTRIBUTES) || !(promptsAttr & FILE_ATTRIBUTE_DIRECTORY);
     if (promptsMissing)
     {
-        MessageBoxW(nullptr, T(S_ERR_PROMPTS_MISSING), L"Ua", MB_ICONERROR);
+        MessageBoxW(nullptr, T(S_ERR_PROMPTS_MISSING), L"MyBox", MB_ICONERROR);
         return 1;
     }
     bool promptsEmpty = ListPrompts().empty();
@@ -639,7 +639,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
     wcex.hIcon = LoadIcon(hInstance, MAKEINTRESOURCE(IDI_UA));
     wcex.hIconSm = LoadIcon(hInstance, MAKEINTRESOURCE(IDI_SMALL));
     wcex.hCursor = LoadCursor(nullptr, IDC_ARROW);
-    wcex.lpszClassName = L"UaToolbox";
+    wcex.lpszClassName = L"MyBox";
     RegisterClassExW(&wcex);
 
     HWND hWnd = CreateWindowExW(WS_EX_APPWINDOW, wcex.lpszClassName, L"Ua \u5DE5\u5177\u7BB1",
@@ -662,7 +662,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 
     // prompts\ 文件夹存在但没有 .md：提示用户但继续运行（Skills 管理等功能仍可用）
     if (promptsEmpty)
-        MessageBoxW(hWnd, T(S_WARN_PROMPTS_EMPTY), L"Ua", MB_ICONWARNING);
+        MessageBoxW(hWnd, T(S_WARN_PROMPTS_EMPTY), L"MyBox", MB_ICONWARNING);
 
     // 每次启动都弹免责声明；更新检查在用户点"我已了解"后触发
     g_disclaimer = true;

@@ -203,7 +203,7 @@ static std::wstring ParseTagName(const std::string& json)
 static std::string HttpsGet(const wchar_t* host, const wchar_t* path,
                             const wchar_t* headers, size_t maxBytes)
 {
-    HINTERNET hSession = WinHttpOpen(L"UaToolbox/1.0",
+    HINTERNET hSession = WinHttpOpen(L"MyBox/1.0",
         WINHTTP_ACCESS_TYPE_AUTOMATIC_PROXY,
         WINHTTP_NO_PROXY_NAME, WINHTTP_NO_PROXY_BYPASS, 0);
     if (!hSession) return {};
@@ -293,7 +293,7 @@ void CheckUpdates(HWND hWnd)
 }
 
 // ---------------------------------------------------------------------------
-// 下载更新 exe 到 %TEMP%\Ua-update.exe
+// 下载更新 exe 到 %TEMP%\MyBox-update.exe
 // ---------------------------------------------------------------------------
 
 // 用 WinHTTP 下载文件到磁盘。支持 302 重定向（WINHTTP_OPTION_REDIRECT_POLICY_ALWAYS）。
@@ -308,7 +308,7 @@ static bool HttpsDownloadFile(const wchar_t* url, const wchar_t* destPath)
     std::wstring host(p, slash);
     std::wstring path(slash);
 
-    HINTERNET hSession = WinHttpOpen(L"UaToolbox/1.0",
+    HINTERNET hSession = WinHttpOpen(L"MyBox/1.0",
         WINHTTP_ACCESS_TYPE_AUTOMATIC_PROXY,
         WINHTTP_NO_PROXY_NAME, WINHTTP_NO_PROXY_BYPASS, 0);
     if (!hSession) return false;
@@ -392,7 +392,7 @@ void DownloadUpdate(HWND hWnd)
 
             wchar_t tmp[MAX_PATH];
             GetTempPathW(MAX_PATH, tmp);
-            std::wstring dest = std::wstring(tmp) + L"Ua-update.exe";
+            std::wstring dest = std::wstring(tmp) + L"MyBox-update.exe";
 
             bool ok = HttpsDownloadFile(kUpdateDownloadUrl, dest.c_str());
 
@@ -408,8 +408,8 @@ bool ApplyUpdate(HWND hWnd)
     GetModuleFileNameW(nullptr, exe, MAX_PATH);
     GetTempPathW(MAX_PATH, tmp);
 
-    std::wstring newExe = std::wstring(tmp) + L"Ua-update.exe";
-    std::wstring bat = std::wstring(tmp) + L"ua-update.bat";
+    std::wstring newExe = std::wstring(tmp) + L"MyBox-update.exe";
+    std::wstring bat = std::wstring(tmp) + L"mybox-update.bat";
 
     // 写批处理：等旧进程退出 -> 覆盖 -> 启动新版 -> 删自己
     std::string script;

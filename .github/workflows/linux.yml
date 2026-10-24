@@ -4,7 +4,7 @@ name: linux-build
 on:
   push:
     branches: [main]
-    paths: ["linux/**", "Ua/prompts/**", "Ua/skills/**", ".github/workflows/linux.yml"]
+    paths: ["linux/**", "shared/prompts/**", "shared/skills/**", ".github/workflows/linux.yml"]
   pull_request:
     paths: ["linux/**", ".github/workflows/linux.yml"]
   workflow_dispatch:
@@ -25,13 +25,13 @@ jobs:
           export HOME="$(mktemp -d)"
           export UA_DATA="$HOME/.local/share/ua"
           mkdir -p "$UA_DATA"
-          cp -r ../Ua/prompts ../Ua/skills "$UA_DATA/"
+          cp -r ../shared/prompts ../shared/skills "$UA_DATA/"
 
           ./ua version
           ./ua list
 
           # 注入 -> 文件存在且非空
-          ./ua install claude ../Ua/prompts/Ua-standard-pro.md
+          ./ua install claude ../shared/prompts/Ua-standard-pro.md
           test -s "$HOME/.claude/CLAUDE.md"
 
           # 卸载 -> 原本不存在，恢复后应删除
@@ -41,7 +41,7 @@ jobs:
           # 有原文件时卸载应恢复原内容
           mkdir -p "$HOME/.codex"
           echo "original rules" > "$HOME/.codex/AGENTS.md"
-          ./ua install codex ../Ua/prompts/Ua-standard-pro.md
+          ./ua install codex ../shared/prompts/Ua-standard-pro.md
           test -s "$HOME/.codex/AGENTS.md"
           ./ua uninstall codex
           grep -q "original rules" "$HOME/.codex/AGENTS.md"

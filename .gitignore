@@ -1,12 +1,11 @@
-﻿# Build output
-Ua/x64/
-Ua/*.user
-Ua/*.vcxproj.filters
-
-# Backups
-Ua/backup-before-split/
-Ua/backup-ui-split/
-Ua/icon-build/
+# Build output
+x64/
+MyBox/x64/
+MyBox/Release/
+MyBox/Debug/
+MyBox/*.user
+MyBox/*.vcxproj.filters
+linux/ua
 
 # Temp
 *.pdb
@@ -14,17 +13,12 @@ Ua/icon-build/
 *.ipdb
 *.log
 *.tmp
-
-# VS IDE
-.vs/
-
-# Build intermediates
-Ua/Ua/
 *.obj
 *.res
 *.tlog
 *.recipe
-*.iobj
-*.ipdb
 *.lastbuildstate
 *.FileListAbsolute.txt
+
+# VS IDE
+.vs/

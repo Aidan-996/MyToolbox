@@ -510,7 +510,7 @@ bool Install(int i, std::wstring& err)
     std::string output = prompt;
     if (path.size() > 4 && _wcsicmp(path.c_str() + path.size() - 4, L".mdc") == 0)
     {
-        output = "---\ndescription: Ua 工作规范（自动注入 · 全局生效）\nglobs: \"**/*\"\nalwaysApply: true\n---\n" + prompt;
+        output = "---\ndescription: MyBox 工作规范（自动注入 · 全局生效）\nglobs: \"**/*\"\nalwaysApply: true\n---\n" + prompt;
     }
     if (!WriteAtomic(path, output))
     {

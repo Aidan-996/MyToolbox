@@ -14,7 +14,7 @@
 基于 [freyrswift/UaStation](https://github.com/freyrswift/UaStation)（Ua Toolbox）独立维护，
 已与上游脱钩：更新与提示词同步只指向本仓库。
 
-> Windows 版程序界面与 exe 名保持上游原名：界面叫「Ua 工具箱」，文件叫 `Ua.exe`。
+> Windows 版程序与可执行文件均已品牌化为 MyBox：界面、窗口类与产物都是 `MyBox.exe`。
 
 <p align="center">
   <img src="docs/screenshots/main-editor.png" width="460" alt="主界面" />
@@ -70,10 +70,11 @@
 - **去重**：矩形命中、按钮位置、toast、字符编码转换等 6 处重复实现各合并为一份（顺带修复非 ANSI 路径下更新批处理的编码隐患）
 - **常量收拢**：强调色/面板色收进主题 `Palette`，DWM 裸属性号改具名常量
 - **工程修正**：工具集从 v145 重定向到 v143（VS 2022 可直接编译）
+- **目录架构重构**：Windows 源码目录 `Ua/` 更名 `MyBox/`，两个版本共用的提示词/技能数据提升到顶层 `shared/`；程序标识（exe 名、窗口类、注册表值、AppData 目录）品牌化为 MyBox
 
 ### 使用方法（Windows）
 
-1. 从 [Releases](https://github.com/Aidan-996/MyToolbox/releases) 下载 `Ua.exe`（或自行编译，见下文）
+1. 从 [Releases](https://github.com/Aidan-996/MyToolbox/releases) 下载 `MyBox.exe`（或自行编译，见下文）
 2. 双击运行（无需安装、无需管理员权限）
 3. 选择 AI 编程工具（如 Claude Code）
 4. 选择提示词模板，点"安装"
@@ -99,11 +100,11 @@
 ### 构建方法（Windows）
 
 ```powershell
-msbuild Ua.slnx /p:Configuration=Release /p:Platform=x64
+msbuild MyBox.slnx /p:Configuration=Release /p:Platform=x64
 ```
 
 需要 Visual Studio 2022+（含 C++ 桌面开发工作负载）。项目已重定向到 v143 工具集，
-VS 2022 直接打开 `Ua.slnx` 生成即可；产物在 `x64\Release\Ua.exe`。
+VS 2022 直接打开 `MyBox.slnx` 生成即可；产物在 `x64\Release\MyBox.exe`。
 
 ### Linux 版
 
@@ -137,7 +138,7 @@ One-click prompt and skill installer for AI coding tools. **Windows GUI + Linux 
 independently maintained from [freyrswift/UaStation](https://github.com/freyrswift/UaStation) (Ua Toolbox) —
 update checks and prompt sync point only to this repository.
 
-> The Windows app keeps the upstream product name: the UI is "Ua Toolbox", the file is `Ua.exe`.
+> The Windows app and binary are branded **MyBox** (`MyBox.exe`).
 
 <p align="center">
   <img src="docs/screenshots/main-editor.png" width="460" alt="Main window" />
@@ -193,10 +194,11 @@ This repository is a full refactor on top of upstream v1.0.2 (Windows behavior u
 - **Deduplication**: 6 duplicated implementations merged (rect hit-testing, button rects, toast, charset conversion — also fixes a non-ANSI path encoding hazard in the update script)
 - **Constant consolidation**: accent/panel colors moved into the theme `Palette`; DWM attribute IDs named
 - **Build fix**: toolset retargeted v145 → v143 so VS 2022 builds out of the box
+- **Directory restructure**: the Windows source dir `Ua/` is now `MyBox/`; the shared prompt/skill data moved to a top-level `shared/`; app identity (exe name, window class, registry value, AppData dir) rebranded to MyBox
 
 ### Usage (Windows)
 
-1. Download `Ua.exe` from [Releases](https://github.com/Aidan-996/MyToolbox/releases) (or build it yourself, see below)
+1. Download `MyBox.exe` from [Releases](https://github.com/Aidan-996/MyToolbox/releases) (or build it yourself, see below)
 2. Double-click to run (no installer, no admin required)
 3. Select an AI tool (e.g. Claude Code)
 4. Choose a prompt template and click "Install"
@@ -220,11 +222,11 @@ Open your AI tool and type `Ua` — if it replies **"Ua is ready and standing by
 ### Build (Windows)
 
 ```powershell
-msbuild Ua.slnx /p:Configuration=Release /p:Platform=x64
+msbuild MyBox.slnx /p:Configuration=Release /p:Platform=x64
 ```
 
 Requires Visual Studio 2022+ with the C++ Desktop workload. The project is retargeted to the
-v143 toolset, so VS 2022 opens `Ua.slnx` and builds directly; output lands in `x64\Release\Ua.exe`.
+v143 toolset, so VS 2022 opens `MyBox.slnx` and builds directly; output lands in `x64\Release\MyBox.exe`.
 
 ### Linux Version
 

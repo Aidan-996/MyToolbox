@@ -41,7 +41,7 @@ inline constexpr UINT  kMsgTray = WM_APP + 10;
 inline constexpr const wchar_t* kApiHost = L"api.github.com";
 inline constexpr const wchar_t* kUpdateApiPath = L"/repos/Aidan-996/MyToolbox/releases/latest";
 inline constexpr const wchar_t* kUpdateReleaseUrl = L"https://github.com/Aidan-996/MyToolbox/releases/latest";
-inline constexpr const wchar_t* kUpdateDownloadUrl = L"https://github.com/Aidan-996/MyToolbox/releases/latest/download/Ua.exe";
+inline constexpr const wchar_t* kUpdateDownloadUrl = L"https://github.com/Aidan-996/MyToolbox/releases/latest/download/MyBox.exe";
 
 // prompts\ 同步用 GitHub Contents API（指向自有 fork）
 inline constexpr const wchar_t* kPromptsApiHost = kApiHost;
@@ -171,7 +171,7 @@ inline const wchar_t* const kStr[][2] = {
     /* S_TOOLS_HELP_SUB */  { L"\u5E38\u89C1\u95EE\u9898\u4E0E\u6C42\u52A9", L"FAQ and support" },
     /* S_TOOLS_QQ */        { L"\u52A0\u5165QQ\u7FA4", L"Join QQ Group" },
     /* S_TOOLS_QQ_SUB */    { L"\u4EA4\u6D41\u4E0E\u53CD\u9988", L"Chat and feedback" },
-    /* S_ABOUT_TEXT */      { L"Ua \u5DE5\u5177\u7BB1  \u7248\u672C ", L"Ua Toolbox  Version " },
+    /* S_ABOUT_TEXT */      { L"MyBox  \u7248\u672C ", L"MyBox  Version " },
     /* S_ABOUT_LEGAL */     { L"\u672C\u5DE5\u5177\u4EC5\u4F9B\u5B66\u4E60\u4E0E\u6388\u6743\u5B89\u5168\u7814\u7A76\u4F7F\u7528\u3002\u7528\u6237\u5E94\u5728\u5408\u6CD5\u6388\u6743\u8303\u56F4\u5185\u4F7F\u7528\uFF0C\u4F5C\u8005\u4E0D\u627F\u62C5\u4EFB\u4F55\u6CD5\u5F8B\u8D23\u4EFB\u3002\u672C\u5DE5\u5177\u5B8C\u5168\u514D\u8D39\u4E14\u5F00\u6E90\u3002", L"For educational and authorized security research only. Users are responsible for legal compliance. The author assumes no liability. This tool is free and open source." },
     /* S_VERSION */         { L"1.0.2", L"1.0.2" },
     /* S_ERR_NO_PROMPT_SEL */ { L"\u8BF7\u5148\u9009\u62E9\u4E00\u4E2A\u63D0\u793A\u8BCD", L"Please select a prompt first" },
@@ -205,7 +205,7 @@ inline const wchar_t* const kStr[][2] = {
     /* S_CAT_OTHER */                { L"\u5176\u4ED6",           L"Other" },
     /* S_PROMPTS_UPDATED_COUNT */    { L"%d \u4E2A\u63D0\u793A\u8BCD\u5DF2\u66F4\u65B0", L"%d prompts updated" },
     /* S_TRAY_SHOW */                { L"\u663E\u793A\u7A97\u53E3",                     L"Show Window" },
-    /* S_TRAY_TOOLTIP */             { L"Ua \u5DE5\u5177\u7BB1",                     L"Ua Toolbox" },
+    /* S_TRAY_TOOLTIP */             { L"Ua \u5DE5\u5177\u7BB1",                     L"MyBox" },
     /* S_UPDATE_DOWNLOADING */       { L"\u6B63\u5728\u4E0B\u8F7D\u66F4\u65B0...",   L"Downloading update..." },
     /* S_UPDATE_READY */             { L"\u4E0B\u8F7D\u5B8C\u6210\uFF0C\u5373\u5C06\u91CD\u542F", L"Download complete, restarting..." },
     /* S_UPDATE_FAILED */            { L"\u4E0B\u8F7D\u66F4\u65B0\u5931\u8D25",       L"Update download failed" },
@@ -460,7 +460,7 @@ inline constexpr float kMenuItemH = 32.f;
 inline constexpr float kMenuSepH = 9.f;
 
 inline constexpr const wchar_t* kRunKey = L"Software\\Microsoft\\Windows\\CurrentVersion\\Run";
-inline constexpr const wchar_t* kRunValue = L"UaToolbox";
+inline constexpr const wchar_t* kRunValue = L"MyBox";
 
 // ---------------------------------------------------------------------------
 // 注入相关常量

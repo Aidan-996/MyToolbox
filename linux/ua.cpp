@@ -1,6 +1,6 @@
 // ua.cpp : Ua Toolbox Linux 版 —— AI 编程工具提示词/Skills 一键安装命令行
 //
-// 与 Windows 版（Ua/）共用同一套 prompts/ 与 skills/ 数据文件，注入/备份/恢复
+// 与 Windows 版（MyBox/）共用 shared/ 下的同一套 prompts/ 与 skills/ 数据文件，注入/备份/恢复
 // 的行为与 Windows 版保持一致：
 //   - 注入 = 把提示词内容整体写入目标工具的全局配置文件（替换式，非追加）
 //   - 首次注入前把原文件备份到 $DATA/backups/<key>/，状态记录在 $DATA/state/<key>.dat
@@ -205,7 +205,7 @@ static std::string SelfDir()
 
 // prompts/ 和 skills/ 数据目录查找顺序：
 //   $UA_DATA → ~/.local/share/ua → <exe>/../share/ua（make install）
-//   → <exe>/data → <exe>/../Ua（仓库里直接 ./linux/ua 运行）
+//   → <exe>/data → <exe>/../shared（仓库里直接 ./linux/ua 运行）
 static bool FindDataSub(const char* sub, std::string& out)
 {
     const char* env = ::getenv("UA_DATA");
@@ -218,7 +218,7 @@ static bool FindDataSub(const char* sub, std::string& out)
     {
         cands.push_back(Join(Join(DirName(self), "share/ua"), sub));
         cands.push_back(Join(Join(self, "data"), sub));
-        cands.push_back(Join(Join(DirName(self), "Ua"), sub));
+        cands.push_back(Join(Join(DirName(self), "shared"), sub));
     }
     for (const std::string& c : cands)
         if (IsDir(c)) { out = c; return true; }
@@ -324,7 +324,7 @@ static bool InstallPrompt(const Tool& t, const std::string& promptPath, std::str
     // Cursor 的 .mdc 格式需要 YAML frontmatter（与 Windows 版一致）
     std::string targetRel = t.target;
     if (targetRel.size() > 4 && targetRel.compare(targetRel.size() - 4, 4, ".mdc") == 0)
-        prompt = "---\ndescription: Ua working rules (auto-injected, global)\nglobs: \"**/*\"\nalwaysApply: true\n---\n" + prompt;
+        prompt = "---\ndescription: MyBox working rules (auto-injected, global)\nglobs: \"**/*\"\nalwaysApply: true\n---\n" + prompt;
 
     MkdirP(DirName(target));
     if (!WriteFileAtomic(target, prompt)) { err = "failed to write " + target; return false; }

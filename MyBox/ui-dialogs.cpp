@@ -515,7 +515,7 @@ void DrawAbout()
     }
 
     // Title
-    Text(L"Ua Toolbox", g_fTitle.Get(), R(d.left + 20, d.top + 50, d.right - 20, d.top + 68), C(P.text), DWRITE_TEXT_ALIGNMENT_CENTER);
+    Text(L"MyBox", g_fTitle.Get(), R(d.left + 20, d.top + 50, d.right - 20, d.top + 68), C(P.text), DWRITE_TEXT_ALIGNMENT_CENTER);
 
     // Version
     std::wstring ver = std::wstring(T(S_ABOUT_TEXT)) + T(S_VERSION);
