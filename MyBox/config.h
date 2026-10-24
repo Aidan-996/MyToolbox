@@ -100,8 +100,9 @@ enum Str {
     S_SKILLS_TITLE, S_SKILLS_FOLDER, S_SKILLS_NEED_INJECT,
     S_SKILL_REMOVE_OK, S_SKILL_REMOVE_NONE,
     S_TOOLS_SKILLS, S_TOOLS_SKILLS_SUB, S_TOOLS_RELAY, S_TOOLS_RELAY_SUB,
-    S_TOOLS_TUTORIAL, S_TOOLS_TUTORIAL_SUB, S_TOOLS_HELP, S_TOOLS_HELP_SUB,
-    S_TOOLS_QQ, S_TOOLS_QQ_SUB,
+    S_TOOLS_TUTORIAL, S_TOOLS_TUTORIAL_SUB, S_TOOLS_PROMPTS, S_TOOLS_PROMPTS_SUB,
+    S_TOOLS_DATA, S_TOOLS_DATA_SUB, S_TOOLS_UPDATE, S_TOOLS_UPDATE_SUB,
+    S_TOOLS_REPO, S_TOOLS_REPO_SUB, S_TOOLS_ISSUES, S_TOOLS_ISSUES_SUB,
     S_ABOUT_TEXT, S_ABOUT_LEGAL, S_ABOUT_DESC, S_TUTORIAL_BTN, S_HELP_TITLE, S_VERSION,
     S_ERR_NO_PROMPT_SEL, S_ERR_READ_PROMPT, S_ERR_UTF16_PROMPT, S_ERR_EMPTY_PROMPT,
     S_ERR_READ_TARGET, S_ERR_SAVE_STATE, S_ERR_WRITE_TARGET,
@@ -167,17 +168,23 @@ inline const wchar_t* const kStr[][2] = {
     /* S_TOOLS_RELAY */     { L"\u6EE1\u8840\u4E2D\u8F6C\u7AD9", L"API Relay" },
     /* S_TOOLS_RELAY_SUB */ { L"API \u4E2D\u8F6C\u670D\u52A1", L"API relay service" },
     /* S_TOOLS_TUTORIAL */  { L"\u4F7F\u7528\u6559\u7A0B", L"Tutorial" },
-    /* S_TOOLS_TUTORIAL_SUB */ { L"\u4ECE\u5B89\u88C5\u5230\u4E0A\u624B", L"Getting started guide" },
-    /* S_TOOLS_HELP */      { L"\u4E0D\u4F1A\u7528\u70B9\u8FD9\u91CC", L"Need Help?" },
-    /* S_TOOLS_HELP_SUB */  { L"\u5E38\u89C1\u95EE\u9898\u4E0E\u6C42\u52A9", L"FAQ and support" },
-    /* S_TOOLS_QQ */        { L"\u52A0\u5165QQ\u7FA4", L"Join QQ Group" },
-    /* S_TOOLS_QQ_SUB */    { L"\u4EA4\u6D41\u4E0E\u53CD\u9988", L"Chat and feedback" },
+    /* S_TOOLS_TUTORIAL_SUB */ { L"\u5E94\u7528\u5185\u5FEB\u901F\u4E0A\u624B", L"Quick start inside the app" },
+    /* S_TOOLS_PROMPTS */   { L"\u63D0\u793A\u8BCD\u6587\u4EF6\u5939", L"Prompts Folder" },
+    /* S_TOOLS_PROMPTS_SUB */ { L"\u6253\u5F00\u6A21\u677F\u76EE\u5F55\uFF0C\u53EF\u81EA\u884C\u7F16\u8F91", L"Open templates; edit freely" },
+    /* S_TOOLS_DATA */      { L"\u6570\u636E\u76EE\u5F55", L"Data Folder" },
+    /* S_TOOLS_DATA_SUB */  { L"\u72B6\u6001\u4E0E\u5907\u4EFD\u6240\u5728\u4F4D\u7F6E", L"Where state and backups live" },
+    /* S_TOOLS_UPDATE */    { L"\u68C0\u67E5\u66F4\u65B0", L"Check Updates" },
+    /* S_TOOLS_UPDATE_SUB */{ L"\u7ACB\u5373\u68C0\u67E5\u65B0\u7248\u672C", L"Check for a new version now" },
+    /* S_TOOLS_REPO */      { L"GitHub \u4ED3\u5E93", L"GitHub Repository" },
+    /* S_TOOLS_REPO_SUB */  { L"\u6E90\u7801\u4E0E\u53D1\u5E03", L"Source and releases" },
+    /* S_TOOLS_ISSUES */    { L"\u95EE\u9898\u53CD\u9988", L"Feedback" },
+    /* S_TOOLS_ISSUES_SUB */{ L"\u63D0 Issue \u6216\u6C42\u52A9", L"Open an issue" },
     /* S_ABOUT_TEXT */      { L"\u7248\u672C ", L"Version " },
     /* S_ABOUT_LEGAL */     { L"\u4EC5\u4F9B\u5B66\u4E60\u4E0E\u6388\u6743\u5B89\u5168\u7814\u7A76\u4F7F\u7528\u3002\u5B8C\u5168\u514D\u8D39\u5F00\u6E90\uFF08MIT\uFF09\uFF0C\u4E25\u7981\u5546\u7528\u4E0E\u5012\u5356\u3002", L"For learning and authorized security research only. Free and open source (MIT). Commercial use and resale are strictly prohibited." },
     /* S_ABOUT_DESC */      { L"AI \u7F16\u7A0B\u5DE5\u5177\u7684\u63D0\u793A\u8BCD\u4E0E\u6280\u80FD\u5B89\u88C5\u5668", L"Prompt & skill installer for AI coding tools" },
     /* S_TUTORIAL_BTN */    { L"\u4F7F\u7528\u6559\u7A0B", L"Tutorial" },
     /* S_HELP_TITLE */      { L"\u4F7F\u7528\u5E2E\u52A9", L"Help" },
-    /* S_VERSION */         { L"1.0.8", L"1.0.8" },
+    /* S_VERSION */         { L"1.0.9", L"1.0.9" },
     /* S_ERR_NO_PROMPT_SEL */ { L"\u8BF7\u5148\u9009\u62E9\u4E00\u4E2A\u63D0\u793A\u8BCD", L"Please select a prompt first" },
     /* S_ERR_READ_PROMPT */ { L"\u8BFB\u53D6\u63D0\u793A\u8BCD\u6587\u4EF6\u5931\u8D25", L"Failed to read prompt file" },
     /* S_ERR_UTF16_PROMPT */{ L"\u63D0\u793A\u8BCD\u6587\u4EF6\u8BF7\u4FDD\u5B58\u4E3A UTF-8 \u7F16\u7801", L"Please save prompt file as UTF-8" },
@@ -395,15 +402,19 @@ inline const Item kItems[] = {
         L"codebuddy", L".codebuddy\\CODEBUDDY.md", nullptr, L".codebuddy\\skills" },
     { L"\u8C46\u5305",             L"", kGroupEditor, IDR_LOGO_DOUBAO,    false, nullptr, L"https://www.doubao.com",
         L"doubao",    nullptr, L"\u8C46\u5305\u6CA1\u6709\u672C\u5730\u63D0\u793A\u8BCD\u6587\u4EF6" },
-    { L"Skills \u7BA1\u7406",      L"\u7BA1\u7406\u5DF2\u5B89\u88C5\u7684 Skills", kGroupTools, 0, false, L"\uE8FD", L"" },     // BulletedList
-    { L"\u6EE1\u8840\u4E2D\u8F6C\u7AD9",       L"API \u4E2D\u8F6C\u670D\u52A1",    kGroupTools,     0, false, L"\uE774", L"https://utlra.cc/" },     // Globe
-    { L"\u4F7F\u7528\u6559\u7A0B",         L"\u4ECE\u5B89\u88C5\u5230\u4E0A\u624B",    kGroupTools,     0, false, L"\uE82D", L"https://github.com/Aidan-996/MyToolbox#usage" },     // Dictionary
-    { L"\u4E0D\u4F1A\u7528\u70B9\u8FD9\u91CC",     L"\u5E38\u89C1\u95EE\u9898\u4E0E\u6C42\u52A9",  kGroupTools,     0, false, L"\uE897", L"https://qm.qq.com/q/3XsJIxaZde" },
-    { L"\u52A0\u5165QQ\u7FA4",         L"\u4EA4\u6D41\u4E0E\u53CD\u9988",      kGroupTools,     0, false, L"\uE8BD", L"https://qm.qq.com/q/3XsJIxaZde" },     // Message
+    { L"Skills \u7BA1\u7406",  L"\u7BA1\u7406\u5DF2\u5B89\u88C5\u7684 Skills", kGroupTools, 0, false, L"\uE8FD", L"" },
+    { L"\u4F7F\u7528\u6559\u7A0B", L"\u5E94\u7528\u5185\u5FEB\u901F\u4E0A\u624B", kGroupTools, 0, false, L"\uE82D", L"" },
+    { L"\u63D0\u793A\u8BCD\u6587\u4EF6\u5939", L"\u6253\u5F00\u6A21\u677F\u76EE\u5F55\uFF0C\u53EF\u81EA\u884C\u7F16\u8F91", kGroupTools, 0, false, L"\uE838", L"" },
+    { L"\u6570\u636E\u76EE\u5F55", L"\u72B6\u6001\u4E0E\u5907\u4EFD\u6240\u5728\u4F4D\u7F6E", kGroupTools, 0, false, L"\uE8B7", L"" },
+    { L"\u68C0\u67E5\u66F4\u65B0", L"\u7ACB\u5373\u68C0\u67E5\u65B0\u7248\u672C", kGroupTools, 0, false, L"\uE117", L"" },
+    { L"\u6EE1\u8840\u4E2D\u8F6C\u7AD9", L"API \u4E2D\u8F6C\u670D\u52A1", kGroupTools, 0, false, L"\uE774", L"https://utlra.cc/" },
+    { L"GitHub \u4ED3\u5E93", L"\u6E90\u7801\u4E0E\u53D1\u5E03", kGroupTools, 0, false, L"\uE8A7", L"https://github.com/Aidan-996/MyToolbox" },
+    { L"\u95EE\u9898\u53CD\u9988", L"\u63D0 Issue \u6216\u6C42\u52A9", kGroupTools, 0, false, L"\uE8BD", L"https://github.com/Aidan-996/MyToolbox/issues" },
 };
 inline constexpr int kItemCount = ARRAYSIZE(kItems);
 
 // 悬停目标：0..kTabCount-1 为标签，kHoverGear..kHoverClose 为右上角按钮，kHoverCard + i 为第 i 个条目
+inline constexpr int kHoverHelpBtn = 99;      // 顶部帮助按钮(问号)
 inline constexpr int kHoverGear = 100;
 inline constexpr int kHoverMin = 101;
 inline constexpr int kHoverClose = 102;

@@ -119,7 +119,7 @@ int HitTest(float x, float y)
     }
     for (int i = 0; i < kTabCount; ++i)
         if (InRect(TabRect(i), x, y)) return i;
-    for (int id = kHoverGear; id <= kHoverClose; ++id)
+    for (int id = kHoverHelpBtn; id <= kHoverClose; ++id)
         if (InRect(ButtonRect(id), x, y)) return id;
     std::vector<Slot> slots;
     Layout(slots);
@@ -158,14 +158,15 @@ static void DrawHeader()
         }
     }
 
-    const wchar_t* glyphs[] = { L"\uE713", L"\uE921", L"\uE8BB" };     // Setting / ChromeMinimize / ChromeClose
-    for (int id = kHoverGear; id <= kHoverClose; ++id)
+    // 右上角窗口按钮：帮助 / 设置 / 最小化 / 关闭
+    const wchar_t* glyphs[] = { L"\uE897", L"\uE713", L"\uE921", L"\uE8BB" };
+    for (int id = kHoverHelpBtn; id <= kHoverClose; ++id)
     {
         D2D1_RECT_F r = ButtonRect(id);
         bool hot = g_hover == id || (id == kHoverGear && g_menuOpen);
         bool closeHot = hot && id == kHoverClose;
         if (hot) Fill(r, closeHot ? C(P.closeRed) : Ov(0.08f), 6.f);
-        Text(glyphs[id - kHoverGear], g_fIcon.Get(), r, C(closeHot ? 0xFFFFFF : hot ? P.text : P.sub), DWRITE_TEXT_ALIGNMENT_CENTER);
+        Text(glyphs[id - kHoverHelpBtn], g_fIcon.Get(), r, C(closeHot ? 0xFFFFFF : hot ? P.text : P.sub), DWRITE_TEXT_ALIGNMENT_CENTER);
     }
 
     // 内容区分隔线
@@ -205,11 +206,14 @@ static const wchar_t* ItemName(int i)
 {
     if (kItems[i].group == kGroupTools)
     {
-        if (wcscmp(kItems[i].name, L"Skills 管理") == 0) return T(S_TOOLS_SKILLS);
-        if (wcscmp(kItems[i].name, L"满血中转站") == 0) return T(S_TOOLS_RELAY);
-        if (wcscmp(kItems[i].name, L"使用教程") == 0) return T(S_TOOLS_TUTORIAL);
-        if (wcscmp(kItems[i].name, L"不会用点这里") == 0) return T(S_TOOLS_HELP);
-        if (wcscmp(kItems[i].name, L"加入QQ群") == 0) return T(S_TOOLS_QQ);
+        if (wcscmp(kItems[i].name, L"Skills \u7BA1\u7406") == 0) return T(S_TOOLS_SKILLS);
+        if (wcscmp(kItems[i].name, L"\u4F7F\u7528\u6559\u7A0B") == 0) return T(S_TOOLS_TUTORIAL);
+        if (wcscmp(kItems[i].name, L"\u63D0\u793A\u8BCD\u6587\u4EF6\u5939") == 0) return T(S_TOOLS_PROMPTS);
+        if (wcscmp(kItems[i].name, L"\u6570\u636E\u76EE\u5F55") == 0) return T(S_TOOLS_DATA);
+        if (wcscmp(kItems[i].name, L"\u68C0\u67E5\u66F4\u65B0") == 0) return T(S_TOOLS_UPDATE);
+        if (wcscmp(kItems[i].name, L"\u6EE1\u8840\u4E2D\u8F6C\u7AD9") == 0) return T(S_TOOLS_RELAY);
+        if (wcscmp(kItems[i].name, L"GitHub \u4ED3\u5E93") == 0) return T(S_TOOLS_REPO);
+        if (wcscmp(kItems[i].name, L"\u95EE\u9898\u53CD\u9988") == 0) return T(S_TOOLS_ISSUES);
     }
     return kItems[i].name;
 }
@@ -218,11 +222,14 @@ static const wchar_t* ItemSub(int i)
 {
     if (kItems[i].group == kGroupTools)
     {
-        if (wcscmp(kItems[i].name, L"Skills 管理") == 0) return T(S_TOOLS_SKILLS_SUB);
-        if (wcscmp(kItems[i].name, L"满血中转站") == 0) return T(S_TOOLS_RELAY_SUB);
-        if (wcscmp(kItems[i].name, L"使用教程") == 0) return T(S_TOOLS_TUTORIAL_SUB);
-        if (wcscmp(kItems[i].name, L"不会用点这里") == 0) return T(S_TOOLS_HELP_SUB);
-        if (wcscmp(kItems[i].name, L"加入QQ群") == 0) return T(S_TOOLS_QQ_SUB);
+        if (wcscmp(kItems[i].name, L"Skills \u7BA1\u7406") == 0) return T(S_TOOLS_SKILLS_SUB);
+        if (wcscmp(kItems[i].name, L"\u4F7F\u7528\u6559\u7A0B") == 0) return T(S_TOOLS_TUTORIAL_SUB);
+        if (wcscmp(kItems[i].name, L"\u63D0\u793A\u8BCD\u6587\u4EF6\u5939") == 0) return T(S_TOOLS_PROMPTS_SUB);
+        if (wcscmp(kItems[i].name, L"\u6570\u636E\u76EE\u5F55") == 0) return T(S_TOOLS_DATA_SUB);
+        if (wcscmp(kItems[i].name, L"\u68C0\u67E5\u66F4\u65B0") == 0) return T(S_TOOLS_UPDATE_SUB);
+        if (wcscmp(kItems[i].name, L"\u6EE1\u8840\u4E2D\u8F6C\u7AD9") == 0) return T(S_TOOLS_RELAY_SUB);
+        if (wcscmp(kItems[i].name, L"GitHub \u4ED3\u5E93") == 0) return T(S_TOOLS_REPO_SUB);
+        if (wcscmp(kItems[i].name, L"\u95EE\u9898\u53CD\u9988") == 0) return T(S_TOOLS_ISSUES_SUB);
     }
     return kItems[i].sub;
 }

@@ -219,6 +219,22 @@ static void Activate(HWND hWnd, int i)
         InvalidateRect(hWnd, nullptr, FALSE);
         return;
     }
+    // 提示词文件夹 / 数据目录 -> 打开资源管理器
+    if (wcscmp(it.name, L"\u63D0\u793A\u8BCD\u6587\u4EF6\u5939") == 0 || wcscmp(it.name, L"\u6570\u636E\u76EE\u5F55") == 0)
+    {
+        std::wstring dir = wcscmp(it.name, L"\u63D0\u793A\u8BCD\u6587\u4EF6\u5939") == 0 ? PromptDir() : AppDataDir();
+        SHCreateDirectoryExW(nullptr, dir.c_str(), nullptr);
+        if ((INT_PTR)ShellExecuteW(hWnd, L"open", dir.c_str(), nullptr, nullptr, SW_SHOWNORMAL) <= 32)
+            ShowToast(hWnd, T(S_ERR_OPEN_URL));
+        return;
+    }
+    // 检查更新
+    if (wcscmp(it.name, L"\u68C0\u67E5\u66F4\u65B0") == 0)
+    {
+        CheckUpdates(hWnd);
+        ShowToast(hWnd, T(S_UPDATE_CHECK));
+        return;
+    }
     if (!it.url[0])
     {
         wchar_t buf[128];
@@ -437,7 +453,12 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM l
                 SetHover(hWnd, HitTest(GET_X_LPARAM(lParam) / g_scale, GET_Y_LPARAM(lParam) / g_scale));
                 return 0;
             }
-            if (hit == kHoverGear)
+            if (hit == kHoverHelpBtn)
+            {
+                g_helpOpen = true;
+                InvalidateRect(hWnd, nullptr, FALSE);
+            }
+            else if (hit == kHoverGear)
             {
                 SetMenuOpen(hWnd, !g_menuOpen);
             }
