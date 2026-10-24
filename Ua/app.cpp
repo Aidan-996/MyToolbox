@@ -115,13 +115,6 @@ static void PlaceWindow(HWND hWnd)
     SetWindowPos(hWnd, nullptr, cx, cy, w, h, SWP_NOZORDER | SWP_NOACTIVATE);
 }
 
-static void ShowToast(HWND hWnd, const std::wstring& text)
-{
-    g_toast = text;
-    SetTimer(hWnd, kTimerToast, 2500, nullptr);
-    InvalidateRect(hWnd, nullptr, FALSE);
-}
-
 static void OpenUrl(HWND hWnd, const wchar_t* url)
 {
     if ((INT_PTR)ShellExecuteW(hWnd, L"open", url, nullptr, nullptr, SW_SHOWNORMAL) <= 32)

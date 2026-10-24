@@ -148,41 +148,39 @@ void Text(const std::wstring& s, IDWriteTextFormat* f, D2D1_RECT_F r, D2D1_COLOR
     g_rt->DrawTextLayout(D2D1::Point2F(r.left, r.top), layout.Get(), g_brush.Get(), D2D1_DRAW_TEXT_OPTIONS_CLIP);
 }
 
-// 从资源加载 SVG logo。需要 Win10 1703+ 的 ID2D1DeviceContext5，拿不到时返回 nullptr，由调用方画首字母代替
-ID2D1SvgDocument* Logo(int i)
+// 从资源加载 SVG。需要 Win10 1703+ 的 ID2D1DeviceContext5，拿不到时返回 nullptr，由调用方画首字母代替。
+// colorize 时把 SVG 内的 currentColor 替换为当前主题文字色。
+static ID2D1SvgDocument* CreateSvgFromResource(int resId, float viewBox, bool colorize,
+                                               ComPtr<ID2D1SvgDocument>& cache)
 {
-    if (g_logoTried[i]) return g_logos[i].Get();
-    g_logoTried[i] = true;
-
     ComPtr<ID2D1DeviceContext5> dc;
-    HRSRC res = FindResourceW(hInst, MAKEINTRESOURCEW(kItems[i].logo), RT_RCDATA);
+    HRSRC res = FindResourceW(hInst, MAKEINTRESOURCEW(resId), RT_RCDATA);
     HGLOBAL h = res ? LoadResource(hInst, res) : nullptr;
     if (!h || FAILED(g_rt.As(&dc)))
         return nullptr;
 
     std::string svg(static_cast<const char*>(LockResource(h)), SizeofResource(hInst, res));
-    char color[8];
-    sprintf_s(color, "#%06X", P.text & 0xFFFFFFu);   // 单色 logo 写的是 currentColor，换成当前主题的文字色
-    for (size_t p; (p = svg.find("currentColor")) != std::string::npos;)
-        svg.replace(p, 12, color);
+    if (colorize)
+    {
+        char color[8];
+        sprintf_s(color, "#%06X", P.text & 0xFFFFFFu);   // 单色 logo 写的是 currentColor，换成当前主题的文字色
+        for (size_t p; (p = svg.find("currentColor")) != std::string::npos;)
+            svg.replace(p, 12, color);
+    }
 
     ComPtr<IStream> stream;
     stream.Attach(SHCreateMemStream(reinterpret_cast<const BYTE*>(svg.data()), (UINT)svg.size()));
     if (stream)
-        dc->CreateSvgDocument(stream.Get(), D2D1::SizeF(24.f, 24.f), &g_logos[i]);
-    return g_logos[i].Get();
+        dc->CreateSvgDocument(stream.Get(), D2D1::SizeF(viewBox, viewBox), &cache);
+    return cache.Get();
 }
 
-void DrawSvg(ID2D1SvgDocument* doc, D2D1_RECT_F r)
+// kItems 条目的 logo（跟随主题重新着色，viewBox 24）
+ID2D1SvgDocument* Logo(int i)
 {
-    ComPtr<ID2D1DeviceContext5> dc;
-    if (FAILED(g_rt.As(&dc))) return;
-    D2D1_MATRIX_3X2_F old;
-    g_rt->GetTransform(&old);
-    float s = (r.right - r.left) / 24.f;
-    g_rt->SetTransform(D2D1::Matrix3x2F::Scale(s, s) * D2D1::Matrix3x2F::Translation(r.left, r.top) * old);
-    dc->DrawSvgDocument(doc);
-    g_rt->SetTransform(old);
+    if (g_logoTried[i]) return g_logos[i].Get();
+    g_logoTried[i] = true;
+    return CreateSvgFromResource(kItems[i].logo, 24.f, true, g_logos[i]);
 }
 
 // 按资源 ID 加载 SVG（独立于 kItems 的 Logo()），用于 Ua 自身的 logo
@@ -194,19 +192,12 @@ ID2D1SvgDocument* LoadSvgById(int resId)
     if (resId != IDR_LOGO_UA) return nullptr;    // 现在只支持 Ua logo
     if (g_uaLogoTried) return g_uaLogo.Get();
     g_uaLogoTried = true;
+    return CreateSvgFromResource(resId, 18.f, false, g_uaLogo);
+}
 
-    ComPtr<ID2D1DeviceContext5> dc;
-    HRSRC res = FindResourceW(hInst, MAKEINTRESOURCEW(resId), RT_RCDATA);
-    HGLOBAL h = res ? LoadResource(hInst, res) : nullptr;
-    if (!h || FAILED(g_rt.As(&dc)))
-        return nullptr;
-
-    std::string svg(static_cast<const char*>(LockResource(h)), SizeofResource(hInst, res));
-    ComPtr<IStream> stream;
-    stream.Attach(SHCreateMemStream(reinterpret_cast<const BYTE*>(svg.data()), (UINT)svg.size()));
-    if (stream)
-        dc->CreateSvgDocument(stream.Get(), D2D1::SizeF(18.f, 18.f), &g_uaLogo);
-    return g_uaLogo.Get();
+void DrawSvg(ID2D1SvgDocument* doc, D2D1_RECT_F r)
+{
+    DrawSvgSized(doc, r, 24.f);
 }
 
 void DrawSvgSized(ID2D1SvgDocument* doc, D2D1_RECT_F r, float viewBoxSize)

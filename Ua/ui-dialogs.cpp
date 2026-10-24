@@ -15,15 +15,6 @@ static bool g_skillMgrPrev = false;
 static WNDPROC g_oldWndProc = nullptr;
 
 // ---------------------------------------------------------------------------
-// 右上角按钮位置（ui-main.cpp 的 ButtonRect 本地定义；弹窗里也要用到）
-// ---------------------------------------------------------------------------
-static D2D1_RECT_F DlgButtonFromMain(int id)
-{
-    float right = kW - kPad - 4.f - (kHoverClose - id) * 32.f;
-    return R(right - 30.f, kPad + 4.f, right, kPad + 32.f);
-}
-
-// ---------------------------------------------------------------------------
 // 菜单面板
 // ---------------------------------------------------------------------------
 // 菜单面板右对齐到关闭按钮，紧贴在标签栏下方
@@ -32,7 +23,7 @@ D2D1_RECT_F MenuRect()
     float h = 12.f;
     for (const MenuEntry& e : kMenu)
         h += e.cmd ? kMenuItemH : kMenuSepH;
-    float right = DlgButtonFromMain(kHoverClose).right;
+    float right = ButtonRect(kHoverClose).right;
     float top = kPad + 38.f;
     return R(right - kMenuW, top, right, top + h);
 }
@@ -731,11 +722,6 @@ void DrawSkillMgr()
 // About 弹窗的 "立即更新" 按钮也在这里拦截（因为 ui-main.cpp 的 HitTest 不能修改）。
 // 用 SetWindowLongPtr 挂一个 WndProc 钩子（这样 ui.cpp 不需要碰 app.cpp）。
 // ---------------------------------------------------------------------------
-static bool InRect(D2D1_RECT_F r, float x, float y)
-{
-    return x >= r.left && x < r.right && y >= r.top && y < r.bottom;
-}
-
 static LRESULT CALLBACK HookWndProc(HWND hWnd, UINT msg, WPARAM wp, LPARAM lp)
 {
     // About 弹窗的 "立即更新" 按钮命中检测和点击处理
@@ -762,18 +748,15 @@ static LRESULT CALLBACK HookWndProc(HWND hWnd, UINT msg, WPARAM wp, LPARAM lp)
         {
             float x = (float)GET_X_LPARAM(lp) / g_scale;
             float y = (float)GET_Y_LPARAM(lp) / g_scale;
-            if (InRect(AboutUpdateBtnRect(), x, y))
-            {
-                if (!g_updateDownloading)
+                if (InRect(AboutUpdateBtnRect(), x, y))
                 {
-                    // 直接设置 toast（ShowToast 是 app.cpp 的 static 函数，这里重复逻辑）
-                    g_toast = T(S_UPDATE_DOWNLOADING);
-                    SetTimer(hWnd, kTimerToast, 2500, nullptr);
-                    InvalidateRect(hWnd, nullptr, FALSE);
-                    DownloadUpdate(hWnd);
+                    if (!g_updateDownloading)
+                    {
+                        ShowToast(hWnd, T(S_UPDATE_DOWNLOADING));
+                        DownloadUpdate(hWnd);
+                    }
+                    return 0;
                 }
-                return 0;
-            }
         }
     }
 

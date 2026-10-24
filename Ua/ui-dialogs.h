@@ -12,6 +12,9 @@
 D2D1_RECT_F MenuRect();
 D2D1_RECT_F MenuItemRect(int i);
 
+// 主窗口右上角按钮（定义在 ui-main.cpp，弹窗元素要与它对齐）
+D2D1_RECT_F ButtonRect(int id);
+
 D2D1_RECT_F DlgRect();
 D2D1_RECT_F DlgButtonRect(int b);
 D2D1_RECT_F DlgPromptRect(int vis);

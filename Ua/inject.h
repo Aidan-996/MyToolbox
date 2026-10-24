@@ -31,6 +31,11 @@ bool WriteAtomic(const std::wstring& path, const std::string& data);
 bool IsUtf16(const std::string& s);
 bool StripBom(std::string& s);
 
+// 编码转换（定义在 inject.cpp）
+std::wstring Utf8ToWide(const std::string& s);
+std::string WideToUtf8(const std::wstring& ws);
+std::string WideToAcp(const std::wstring& ws);   // ANSI 代码页（批处理等 ANSI 执行环境用）
+
 // ---------------------------------------------------------------------------
 // 注入状态（每个 app 一个小文件 %APPDATA%\Ua\state\<key>.dat）
 // ---------------------------------------------------------------------------

@@ -8,8 +8,8 @@
 // 布局：标签栏、右上角按钮、条目卡片
 // ---------------------------------------------------------------------------
 
-// 右上角按钮：设置 / 最小化 / 关闭，id 为 kHoverGear..kHoverClose
-static D2D1_RECT_F ButtonRect(int id)
+// 右上角按钮：设置 / 最小化 / 关闭，id 为 kHoverGear..kHoverClose（弹窗里也用，声明在 ui-dialogs.h）
+D2D1_RECT_F ButtonRect(int id)
 {
     float right = kW - kPad - 4.f - (kHoverClose - id) * 32.f;
     return R(right - 30.f, kPad + 4.f, right, kPad + 32.f);
@@ -45,8 +45,6 @@ static void Layout(std::vector<Slot>& slots)
     }
 }
 
-static bool In(D2D1_RECT_F r, float x, float y) { return x >= r.left && x < r.right && y >= r.top && y < r.bottom; }
-
 // ---------------------------------------------------------------------------
 // 命中测试
 // ---------------------------------------------------------------------------
@@ -54,31 +52,31 @@ int HitTest(float x, float y)
 {
     if (g_disclaimer)
     {
-        if (In(DiscAcceptRect(), x, y)) return kHoverAccept;
+        if (InRect(DiscAcceptRect(), x, y)) return kHoverAccept;
         return -2;  // block everything else
     }
     if (g_aboutOpen)
     {
-        if (In(AboutCloseRect(), x, y)) return kHoverAboutClose;
-        if (!In(AboutRect(), x, y)) return kHoverDlgOut;
-        if (In(AboutGithubRect(), x, y)) return kHoverAboutGithub;
+        if (InRect(AboutCloseRect(), x, y)) return kHoverAboutClose;
+        if (!InRect(AboutRect(), x, y)) return kHoverDlgOut;
+        if (InRect(AboutGithubRect(), x, y)) return kHoverAboutGithub;
         // 更新链接只有在真的发现新版本时才可点击
-        if (UpdateAvailable() && In(AboutUpdateRect(), x, y)) return kHoverAboutUpdate;
+        if (UpdateAvailable() && InRect(AboutUpdateRect(), x, y)) return kHoverAboutUpdate;
         return kHoverDlgBg;
     }
     if (g_skillMgr)
     {
         D2D1_RECT_F d = SkillDlgRect();
-        if (!In(d, x, y)) return kHoverDlgOut;
-        if (In(SkillCloseRect(), x, y)) return kHoverSkillClose;
-        if (In(SkillFolderRect(), x, y)) return kHoverSkillFolder;
+        if (!InRect(d, x, y)) return kHoverDlgOut;
+        if (InRect(SkillCloseRect(), x, y)) return kHoverSkillClose;
+        if (InRect(SkillFolderRect(), x, y)) return kHoverSkillFolder;
         // 分类标签
         D2D1_RECT_F pills[kCatCount];
         SkillCatPills(pills);
         for (int i = 0; i < kCatCount; ++i)
-            if (In(pills[i], x, y)) return kHoverSkillCat + i;
+            if (InRect(pills[i], x, y)) return kHoverSkillCat + i;
         // 搜索框（点一下不干啥，键盘输入由钩子处理）
-        if (In(SkillSearchRect(), x, y)) return kHoverSkillSearch;
+        if (InRect(SkillSearchRect(), x, y)) return kHoverSkillSearch;
         // 过滤后的 skill 列表
         std::vector<int> filtered = FilteredSkills();
         int filteredCount = (int)filtered.size();
@@ -90,8 +88,8 @@ int HitTest(float x, float y)
             int idxFilt = startIdx + v;
             if (idxFilt >= filteredCount) break;
             int idx = filtered[idxFilt];
-            if (!In(SkillItemRect(v), x, y)) continue;
-            if (In(SkillRemoveRect(v), x, y)) return kHoverSkillRemove + idx;
+            if (!InRect(SkillItemRect(v), x, y)) continue;
+            if (InRect(SkillRemoveRect(v), x, y)) return kHoverSkillRemove + idx;
             return kHoverSkillMgr + idx;
         }
         return kHoverDlgBg;
@@ -99,29 +97,29 @@ int HitTest(float x, float y)
     if (g_dlg >= 0)
     {
         D2D1_RECT_F d = DlgRect();
-        if (!In(d, x, y)) return kHoverDlgOut;
+        if (!InRect(d, x, y)) return kHoverDlgOut;
         for (int b = 0; b < kDlgButtonCount; ++b)
-            if (In(DlgButtonRect(b), x, y)) return kHoverDlg + b;
+            if (InRect(DlgButtonRect(b), x, y)) return kHoverDlg + b;
         // 提示词列表
         int visible = std::min((int)g_prompts.size(), kDlgMaxVisible);
         for (int v = 0; v < visible; ++v)
-            if (In(DlgPromptRect(v), x, y)) return kHoverPrompt + g_promptScroll + v;
+            if (InRect(DlgPromptRect(v), x, y)) return kHoverPrompt + g_promptScroll + v;
         return kHoverDlgBg;
     }
-    if (g_menuOpen && In(MenuRect(), x, y))
+    if (g_menuOpen && InRect(MenuRect(), x, y))
     {
         for (int i = 0; i < kMenuCount; ++i)
-            if (kMenu[i].cmd && In(MenuItemRect(i), x, y)) return kHoverMenu + i;
+            if (kMenu[i].cmd && InRect(MenuItemRect(i), x, y)) return kHoverMenu + i;
         return kHoverMenuBg;
     }
     for (int i = 0; i < kTabCount; ++i)
-        if (In(TabRect(i), x, y)) return i;
+        if (InRect(TabRect(i), x, y)) return i;
     for (int id = kHoverGear; id <= kHoverClose; ++id)
-        if (In(ButtonRect(id), x, y)) return id;
+        if (InRect(ButtonRect(id), x, y)) return id;
     std::vector<Slot> slots;
     Layout(slots);
     for (const Slot& s : slots)
-        if (In(s.rect, x, y)) return kHoverCard + s.item;
+        if (InRect(s.rect, x, y)) return kHoverCard + s.item;
     return -1;
 }
 

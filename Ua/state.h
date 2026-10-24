@@ -34,6 +34,9 @@ extern std::vector<std::wstring> g_prompts; // 弹窗打开时列出的提示词
 extern int g_promptSel;                     // 选中的提示词序号
 extern int g_promptScroll;                  // 列表滚动偏移（条目数）
 
+// 弹 toast：显示 kToastMs 毫秒后自动清除（定义在 state.cpp）
+void ShowToast(HWND hWnd, const std::wstring& text);
+
 // ---------------------------------------------------------------------------
 // 主题（选择保存在 HKCU\Software\Ua\Theme）
 // ---------------------------------------------------------------------------

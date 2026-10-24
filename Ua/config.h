@@ -17,6 +17,7 @@ inline constexpr float kCardH = 48.f;
 inline constexpr float kGap = 8.f;
 inline constexpr float kStatusH = 18.f;    // 底部状态栏高度
 inline constexpr UINT  kTimerToast = 1;
+inline constexpr UINT  kToastMs = 2500;        // toast 显示时长
 inline constexpr UINT  kTimerApplyUpdate = 2;
 inline constexpr int   kCmdTopmost = 1001;
 inline constexpr int   kCmdAutostart = 1002;

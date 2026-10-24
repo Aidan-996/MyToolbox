@@ -181,20 +181,21 @@ bool UpdateAvailable()
     return !g_updateVersion.empty();
 }
 
+void ShowToast(HWND hWnd, const std::wstring& text)
+{
+    g_toast = text;
+    SetTimer(hWnd, kTimerToast, kToastMs, nullptr);
+    InvalidateRect(hWnd, nullptr, FALSE);
+}
+
 // 从 JSON 响应里抠出 "tag_name":"vX.Y.Z" 的值，去掉可能的 'v' 前缀
+static std::string JsonFindString(const std::string& json, size_t from,
+                                  const char* key, size_t& next);
+
 static std::wstring ParseTagName(const std::string& json)
 {
-    const std::string key = "\"tag_name\"";
-    size_t p = json.find(key);
-    if (p == std::string::npos) return L"";
-    p += key.size();
-    while (p < json.size() && (json[p] == ' ' || json[p] == '\t' || json[p] == ':'))
-        ++p;
-    if (p >= json.size() || json[p] != '"') return L"";
-    ++p;
-    size_t end = json.find('"', p);
-    if (end == std::string::npos) return L"";
-    std::string tag = json.substr(p, end - p);
+    size_t next;
+    std::string tag = JsonFindString(json, 0, "tag_name", next);
     if (!tag.empty() && (tag[0] == 'v' || tag[0] == 'V')) tag.erase(0, 1);
     // tag_name 只含 ASCII 版本字符，直接扩宽
     std::wstring out(tag.begin(), tag.end());
@@ -299,19 +300,6 @@ void CheckUpdates(HWND hWnd)
 // ---------------------------------------------------------------------------
 // 下载更新 exe 到 %TEMP%\Ua-update.exe
 // ---------------------------------------------------------------------------
-
-// wstring → string 辅助（用 WideCharToMultiByte）
-static std::string Narrow(const std::wstring& ws)
-{
-    if (ws.empty()) return {};
-    int n = WideCharToMultiByte(CP_ACP, 0, ws.c_str(), (int)ws.size(),
-                                nullptr, 0, nullptr, nullptr);
-    if (n <= 0) return {};
-    std::string s((size_t)n, '\0');
-    WideCharToMultiByte(CP_ACP, 0, ws.c_str(), (int)ws.size(),
-                        s.data(), n, nullptr, nullptr);
-    return s;
-}
 
 // 用 WinHTTP 下载文件到磁盘。支持 302 重定向（WINHTTP_OPTION_REDIRECT_POLICY_ALWAYS）。
 // 成功返回 true。
@@ -432,8 +420,8 @@ bool ApplyUpdate(HWND hWnd)
     std::string script;
     script += "@echo off\r\n";
     script += "timeout /t 2 /nobreak >nul\r\n";
-    script += "copy /y \"" + Narrow(newExe) + "\" \"" + Narrow(std::wstring(exe)) + "\"\r\n";
-    script += "start \"\" \"" + Narrow(std::wstring(exe)) + "\"\r\n";
+    script += "copy /y \"" + WideToAcp(newExe) + "\" \"" + WideToAcp(std::wstring(exe)) + "\"\r\n";
+    script += "start \"\" \"" + WideToAcp(std::wstring(exe)) + "\"\r\n";
     script += "del \"%~f0\"\r\n";
 
     // 任一步失败都返回 false，留在当前版本，由调用方提示
@@ -590,13 +578,8 @@ static void AppendPromptsUpdateLog(const std::wstring& text)
 {
     if (text.empty()) return;
     std::wstring path = AppDataDir() + L"\\prompts-updates.txt";
-
-    int n = WideCharToMultiByte(CP_UTF8, 0, text.c_str(), (int)text.size(),
-                                 nullptr, 0, nullptr, nullptr);
-    if (n <= 0) return;
-    std::string utf8((size_t)n, '\0');
-    WideCharToMultiByte(CP_UTF8, 0, text.c_str(), (int)text.size(),
-                        utf8.data(), n, nullptr, nullptr);
+    std::string utf8 = WideToUtf8(text);
+    if (utf8.empty()) return;
 
     HANDLE h = CreateFileW(path.c_str(), FILE_APPEND_DATA,
         FILE_SHARE_READ, nullptr, OPEN_ALWAYS, FILE_ATTRIBUTE_NORMAL, nullptr);

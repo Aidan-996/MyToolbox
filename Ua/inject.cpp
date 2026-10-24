@@ -175,6 +175,33 @@ bool StripBom(std::string& s)
     return true;
 }
 
+std::wstring Utf8ToWide(const std::string& s)
+{
+    if (s.empty()) return {};
+    int need = MultiByteToWideChar(CP_UTF8, 0, s.c_str(), (int)s.size(), nullptr, 0);
+    std::wstring out(need, L'\0');
+    MultiByteToWideChar(CP_UTF8, 0, s.c_str(), (int)s.size(), out.data(), need);
+    return out;
+}
+
+std::string WideToUtf8(const std::wstring& ws)
+{
+    if (ws.empty()) return {};
+    int need = WideCharToMultiByte(CP_UTF8, 0, ws.c_str(), (int)ws.size(), nullptr, 0, nullptr, nullptr);
+    std::string out(need, '\0');
+    WideCharToMultiByte(CP_UTF8, 0, ws.c_str(), (int)ws.size(), out.data(), need, nullptr, nullptr);
+    return out;
+}
+
+std::string WideToAcp(const std::wstring& ws)
+{
+    if (ws.empty()) return {};
+    int need = WideCharToMultiByte(CP_ACP, 0, ws.c_str(), (int)ws.size(), nullptr, 0, nullptr, nullptr);
+    std::string out(need, '\0');
+    WideCharToMultiByte(CP_ACP, 0, ws.c_str(), (int)ws.size(), out.data(), need, nullptr, nullptr);
+    return out;
+}
+
 // ---------------------------------------------------------------------------
 // 状态文件 (%APPDATA%\Ua\state\<key>.dat)
 // 内容：backupFile\noriginalExisted
@@ -193,10 +220,7 @@ bool LoadState(int i, TargetState& ts)
     if (p1 == std::string::npos) return false;
     std::string line1 = raw.substr(0, p1);
     if (!line1.empty() && line1.back() == '\r') line1.pop_back();
-    // 备份路径从 UTF-8 转回 wchar_t
-    int need = MultiByteToWideChar(CP_UTF8, 0, line1.c_str(), (int)line1.size(), nullptr, 0);
-    ts.backupFile.resize(need);
-    MultiByteToWideChar(CP_UTF8, 0, line1.c_str(), (int)line1.size(), ts.backupFile.data(), need);
+    ts.backupFile = Utf8ToWide(line1);
     ts.originalExisted = p1 + 1 < raw.size() && raw[p1 + 1] == '1';
     return true;
 }
@@ -204,13 +228,9 @@ bool LoadState(int i, TargetState& ts)
 bool SaveState(int i, const TargetState& ts)
 {
     SHCreateDirectoryExW(nullptr, StateDir().c_str(), nullptr);
-    // 备份路径转 UTF-8
-    int need = WideCharToMultiByte(CP_UTF8, 0, ts.backupFile.c_str(), (int)ts.backupFile.size(), nullptr, 0, nullptr, nullptr);
-    std::string bkp(need, '\0');
-    WideCharToMultiByte(CP_UTF8, 0, ts.backupFile.c_str(), (int)ts.backupFile.size(), bkp.data(), need, nullptr, nullptr);
     char buf[16];
     int n = sprintf_s(buf, "\n%d\n", ts.originalExisted ? 1 : 0);
-    return WriteAtomic(StateFile(i), bkp + std::string(buf, n));
+    return WriteAtomic(StateFile(i), WideToUtf8(ts.backupFile) + std::string(buf, n));
 }
 
 bool DeleteState(int i)
@@ -346,10 +366,7 @@ static std::vector<std::wstring> LoadInstalledSkillNames(int i)
         if (!line.empty() && line.back() == '\r') line.pop_back();
         if (!line.empty())
         {
-            int need = MultiByteToWideChar(CP_UTF8, 0, line.c_str(), (int)line.size(), nullptr, 0);
-            std::wstring w(need, 0);
-            MultiByteToWideChar(CP_UTF8, 0, line.c_str(), (int)line.size(), w.data(), need);
-            out.push_back(w);
+            out.push_back(Utf8ToWide(line));
         }
         p = nl + 1;
     }
@@ -361,12 +378,7 @@ static bool SaveInstalledSkillNames(int i, const std::vector<std::wstring>& name
     SHCreateDirectoryExW(nullptr, StateDir().c_str(), nullptr);
     std::string data;
     for (const auto& n : names)
-    {
-        int need = WideCharToMultiByte(CP_UTF8, 0, n.c_str(), (int)n.size(), nullptr, 0, nullptr, nullptr);
-        std::string u(need, 0);
-        WideCharToMultiByte(CP_UTF8, 0, n.c_str(), (int)n.size(), u.data(), need, nullptr, nullptr);
-        data += u + "\n";
-    }
+        data += WideToUtf8(n) + "\n";
     return WriteAtomic(SkillsStateFile(i), data);
 }
 

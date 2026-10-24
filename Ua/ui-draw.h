@@ -44,6 +44,12 @@ inline D2D1_RECT_F R(float l, float t, float r, float b) { return D2D1::RectF(l,
 // 界面叠加色：深色主题用白色叠加，浅色主题用黑色叠加（同样的透明度在浅色背景上显得更重，所以打个折）
 inline D2D1_COLOR_F Ov(float a) { return P.dark ? C(0xFFFFFF, a) : C(0x000000, a * 0.6f); }
 
+// 点是否在矩形内（命中测试用）
+inline bool InRect(D2D1_RECT_F r, float x, float y)
+{
+    return x >= r.left && x < r.right && y >= r.top && y < r.bottom;
+}
+
 // ---------------------------------------------------------------------------
 // 绘图原语
 // ---------------------------------------------------------------------------
