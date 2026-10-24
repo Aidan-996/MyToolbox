@@ -310,6 +310,9 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM l
     case WM_SETCURSOR:
         if (LOWORD(lParam) == HTCLIENT && ((g_hover >= kHoverCard && g_hover < kHoverMenu) ||
             (g_hover >= kHoverDlg && g_hover < kHoverDlg + kDlgButtonCount && DlgEnabled(g_hover - kHoverDlg)) ||
+            (g_hover >= kHoverPrompt && g_hover < kHoverAccept) ||
+            (g_hover >= kHoverSkillMgr && g_hover < kHoverSkillSearch) ||
+            g_hover == kHoverSkillClose || g_hover == kHoverSkillFolder ||
             g_hover == kHoverAboutGithub || g_hover == kHoverAboutUpdate || g_hover == kHoverAboutUpdate2))
         {
             SetCursor(LoadCursor(nullptr, IDC_HAND));
@@ -480,7 +483,7 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM l
         else if (wParam == kTimerApplyUpdate)
         {
             KillTimer(hWnd, kTimerApplyUpdate);
-            ApplyUpdate(hWnd);
+            if (!ApplyUpdate(hWnd)) ShowToast(hWnd, T(S_UPDATE_FAILED));
         }
         return 0;
     case kMsgUpdateReady:
@@ -522,12 +525,16 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM l
         }
         return 0;
     case WM_MOUSEWHEEL:
-        if (g_skillMgr && kSkillCount > kSkillMaxVisible)
+        if (g_skillMgr)
         {
-            int delta = GET_WHEEL_DELTA_WPARAM(wParam);
-            int maxScroll = kSkillCount - kSkillMaxVisible;
-            g_skillScroll = std::clamp(g_skillScroll - (delta > 0 ? 1 : -1), 0, maxScroll);
-            InvalidateRect(hWnd, nullptr, FALSE);
+            int visible = (int)FilteredSkills().size();
+            if (visible > kSkillMaxVisible)
+            {
+                int delta = GET_WHEEL_DELTA_WPARAM(wParam);
+                int maxScroll = visible - kSkillMaxVisible;
+                g_skillScroll = std::clamp(g_skillScroll - (delta > 0 ? 1 : -1), 0, maxScroll);
+                InvalidateRect(hWnd, nullptr, FALSE);
+            }
         }
         else if (g_dlg >= 0 && (int)g_prompts.size() > kDlgMaxVisible)
         {

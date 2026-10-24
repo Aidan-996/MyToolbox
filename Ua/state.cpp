@@ -262,8 +262,9 @@ static std::string HttpsGet(const wchar_t* host, const wchar_t* path,
             WINHTTP_HEADER_NAME_BY_INDEX, &status, &size, WINHTTP_NO_HEADER_INDEX);
         if (status == 200)
         {
+            BOOL query = FALSE;
             DWORD avail = 0;
-            while (WinHttpQueryDataAvailable(hRequest, &avail) && avail > 0)
+            while ((query = WinHttpQueryDataAvailable(hRequest, &avail)) && avail > 0)
             {
                 size_t off = body.size();
                 body.resize(off + avail);
@@ -276,6 +277,8 @@ static std::string HttpsGet(const wchar_t* host, const wchar_t* path,
                 body.resize(off + read);
                 if (body.size() > maxBytes) { body.clear(); break; }
             }
+            // avail==0 是正常结束；中途查询失败说明响应被截断，返回空串
+            if (!query) body.clear();
         }
     }
 
@@ -387,8 +390,9 @@ static bool HttpsDownloadFile(const wchar_t* url, const wchar_t* destPath)
             if (hFile != INVALID_HANDLE_VALUE)
             {
                 success = true;
+                BOOL query = FALSE;
                 DWORD avail = 0;
-                while (WinHttpQueryDataAvailable(hRequest, &avail) && avail > 0)
+                while ((query = WinHttpQueryDataAvailable(hRequest, &avail)) && avail > 0)
                 {
                     std::vector<char> buf(avail);
                     DWORD read = 0;
@@ -404,6 +408,8 @@ static bool HttpsDownloadFile(const wchar_t* url, const wchar_t* destPath)
                         break;
                     }
                 }
+                // avail==0 才是下载完成；中途查询失败会留下截断文件，必须当作失败
+                if (success && !query) success = false;
                 CloseHandle(hFile);
                 if (!success) DeleteFileW(destPath);
             }
@@ -422,10 +428,10 @@ void DownloadUpdate(HWND hWnd)
     if (!g_downloadRunning.compare_exchange_strong(expected, true))
         return;     // 已经在跑
 
-    g_updateDownloading = true;
-
     std::thread([hWnd]()
         {
+            g_updateDownloading = true;
+
             wchar_t tmp[MAX_PATH];
             GetTempPathW(MAX_PATH, tmp);
             std::wstring dest = std::wstring(tmp) + L"Ua-update.exe";
@@ -438,7 +444,7 @@ void DownloadUpdate(HWND hWnd)
         }).detach();
 }
 
-void ApplyUpdate(HWND hWnd)
+bool ApplyUpdate(HWND hWnd)
 {
     wchar_t exe[MAX_PATH], tmp[MAX_PATH];
     GetModuleFileNameW(nullptr, exe, MAX_PATH);
@@ -455,15 +461,15 @@ void ApplyUpdate(HWND hWnd)
     script += "start \"\" \"" + Narrow(std::wstring(exe)) + "\"\r\n";
     script += "del \"%~f0\"\r\n";
 
-    WriteAtomic(bat, script);
-
-    // 启动 bat（隐藏窗口），然后自己退出
-    ShellExecuteW(nullptr, L"open", bat.c_str(), nullptr, nullptr, SW_HIDE);
+    // 任一步失败都返回 false，留在当前版本，由调用方提示
+    if (!WriteAtomic(bat, script)) return false;
+    if ((INT_PTR)ShellExecuteW(nullptr, L"open", bat.c_str(), nullptr, nullptr, SW_HIDE) <= 32) return false;
 
     // 设置真正退出标记并销毁窗口
     extern bool g_realExit;
     g_realExit = true;
     DestroyWindow(hWnd);
+    return true;
 }
 
 // ---------------------------------------------------------------------------

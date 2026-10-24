@@ -162,7 +162,7 @@ ID2D1SvgDocument* Logo(int i)
 
     std::string svg(static_cast<const char*>(LockResource(h)), SizeofResource(hInst, res));
     char color[8];
-    sprintf_s(color, "#%06X", P.text);      // 单色 logo 写的是 currentColor，换成当前主题的文字色
+    sprintf_s(color, "#%06X", P.text & 0xFFFFFFu);   // 单色 logo 写的是 currentColor，换成当前主题的文字色
     for (size_t p; (p = svg.find("currentColor")) != std::string::npos;)
         svg.replace(p, 12, color);
 
