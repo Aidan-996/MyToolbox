@@ -13,7 +13,8 @@ inline constexpr float kW = 520.f;
 inline constexpr float kH = 628.f;
 inline constexpr float kPad = 16.f;
 inline constexpr float kTop = 104.f;           // 内容区起始 y（头部品牌区 + 分段标签之下）
-inline constexpr float kCardH = 54.f;
+inline constexpr float kCardH = 54.f;         // 工具页横版卡片高度
+inline constexpr float kCardVH = 84.f;        // 编辑器页竖版卡片高度(4 列)
 inline constexpr float kGap = 10.f;
 inline constexpr float kStatusH = 18.f;    // 底部状态栏高度
 inline constexpr UINT  kTimerToast = 1;
@@ -184,7 +185,7 @@ inline const wchar_t* const kStr[][2] = {
     /* S_ABOUT_DESC */      { L"AI \u7F16\u7A0B\u5DE5\u5177\u7684\u63D0\u793A\u8BCD\u4E0E\u6280\u80FD\u5B89\u88C5\u5668", L"Prompt & skill installer for AI coding tools" },
     /* S_TUTORIAL_BTN */    { L"\u4F7F\u7528\u6559\u7A0B", L"Tutorial" },
     /* S_HELP_TITLE */      { L"\u4F7F\u7528\u5E2E\u52A9", L"Help" },
-    /* S_VERSION */         { L"1.0.9", L"1.0.9" },
+    /* S_VERSION */         { L"1.1.0", L"1.1.0" },
     /* S_ERR_NO_PROMPT_SEL */ { L"\u8BF7\u5148\u9009\u62E9\u4E00\u4E2A\u63D0\u793A\u8BCD", L"Please select a prompt first" },
     /* S_ERR_READ_PROMPT */ { L"\u8BFB\u53D6\u63D0\u793A\u8BCD\u6587\u4EF6\u5931\u8D25", L"Failed to read prompt file" },
     /* S_ERR_UTF16_PROMPT */{ L"\u63D0\u793A\u8BCD\u6587\u4EF6\u8BF7\u4FDD\u5B58\u4E3A UTF-8 \u7F16\u7801", L"Please save prompt file as UTF-8" },
@@ -376,29 +377,29 @@ inline const Item kItems[] = {
         L"claude",    L".claude\\CLAUDE.md", nullptr, L".claude\\skills" },
     { L"Codex",            L"", kGroupEditor, IDR_LOGO_CODEX,     true,  nullptr, L"https://openai.com/codex/",
         L"codex",     L".codex\\AGENTS.md", nullptr, L".codex\\skills" },
-    { L"Gemini CLI",       L"", kGroupEditor, IDR_LOGO_GEMINI,    false, nullptr, L"https://ai.google.dev/gemini-api/docs/gemini-cli",
+    { L"Gemini",           L"", kGroupEditor, IDR_LOGO_GEMINI,    false, nullptr, L"https://ai.google.dev/gemini-api/docs/gemini-cli",
         L"gemini",    L".gemini\\GEMINI.md" },
-    { L"Grok Build",       L"", kGroupEditor, IDR_LOGO_GROK,      false, nullptr, L"",
+    { L"Grok",             L"", kGroupEditor, IDR_LOGO_GROK,      false, nullptr, L"",
         L"grokbuild", L".grok\\AGENTS.md" },
     { L"ZCode",            L"", kGroupEditor, IDR_LOGO_ZAI,       false, nullptr, L"",
         L"zcode",     L".zcode\\AGENTS.md", nullptr, L".zcode\\skills" },
-    { L"DeepSeek Harness", L"", kGroupEditor, IDR_LOGO_DEEPSEEK,  false, nullptr, L"",
+    { L"DeepSeek",         L"", kGroupEditor, IDR_LOGO_DEEPSEEK,  false, nullptr, L"",
         L"deepseek",  L".dsh\\AGENTS.md", nullptr, L".dsh\\skills" },
     { L"OpenCode",         L"", kGroupEditor, IDR_LOGO_OPENCODE,  false, nullptr, L"https://opencode.ai",
         L"opencode",  L".config\\opencode\\AGENTS.md" },
     { L"Hermes",           L"", kGroupEditor, IDR_LOGO_HERMES,    false, nullptr, L"",
         L"hermes",    L".hermes\\SOUL.md" },
-    { L"MiniMax Code",     L"", kGroupEditor, IDR_LOGO_MINIMAX,   false, nullptr, L"",
+    { L"MiniMax",          L"", kGroupEditor, IDR_LOGO_MINIMAX,   false, nullptr, L"",
         L"mcode",     L".minimax\\AGENTS.md" },
     { L"Cursor",           L"", kGroupEditor, IDR_LOGO_CURSOR,    false, nullptr, L"https://cursor.com",
         L"cursor",    L".cursor\\rules\\Ua.mdc" },
     { L"VS Code",          L"", kGroupEditor, IDR_LOGO_VSCODE,    false, nullptr, L"https://code.visualstudio.com",
         L"vscode",    L".copilot\\copilot-instructions.md" },
-    { L"Devin Desktop",    L"", kGroupEditor, IDR_LOGO_DEVIN,     false, nullptr, L"https://devin.ai/desktop",
+    { L"Devin",            L"", kGroupEditor, IDR_LOGO_DEVIN,     false, nullptr, L"https://devin.ai/desktop",
         L"devin",     L".codeium\\windsurf\\memories\\global_rules.md" },
     { L"WorkBuddy",        L"", kGroupEditor, IDR_LOGO_WORKBUDDY, true,  nullptr, L"",
         L"workbuddy", nullptr, L"\u8FD8\u6CA1\u6709\u786E\u8BA4 WorkBuddy \u7684\u63D0\u793A\u8BCD\u4F4D\u7F6E" },
-    { L"WorkBuddy",        L"", kGroupEditor, IDR_LOGO_CODEBUDDY, true,  nullptr, L"",
+    { L"CodeBuddy",        L"", kGroupEditor, IDR_LOGO_CODEBUDDY, true,  nullptr, L"",
         L"codebuddy", L".codebuddy\\CODEBUDDY.md", nullptr, L".codebuddy\\skills" },
     { L"\u8C46\u5305",             L"", kGroupEditor, IDR_LOGO_DOUBAO,    false, nullptr, L"https://www.doubao.com",
         L"doubao",    nullptr, L"\u8C46\u5305\u6CA1\u6709\u672C\u5730\u63D0\u793A\u8BCD\u6587\u4EF6" },

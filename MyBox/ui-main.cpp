@@ -28,18 +28,21 @@ struct Slot
     int item;
 };
 
-// 当前标签对应分组的条目，两列排列
+// 当前标签对应分组的条目：编辑器 4 列竖版卡片，工具 2 列横版卡片
 static void Layout(std::vector<Slot>& slots)
 {
     float y = kTop;
-    float cw = (kW - 2 * kPad - kGap) / 2;
+    bool editor = Group(g_tab) == kGroupEditor;
+    int cols = editor ? 4 : 2;
+    float ch = editor ? kCardVH : kCardH;
+    float cw = (kW - 2 * kPad - (cols - 1) * kGap) / cols;
     int col = 0;
     for (int i = 0; i < kItemCount; ++i)
     {
         if (kItems[i].group != Group(g_tab)) continue;
         float x = kPad + col * (cw + kGap);
-        slots.push_back({ R(x, y, x + cw, y + kCardH), i });
-        if (++col == 2) { col = 0; y += kCardH + kGap; }
+        slots.push_back({ R(x, y, x + cw, y + ch), i });
+        if (++col == cols) { col = 0; y += ch + kGap; }
     }
 }
 
@@ -243,6 +246,43 @@ static void DrawCard(const Slot& s)
     Fill(r, Ov(hot ? 0.09f : 0.05f), 10.f);
     Stroke(r, Ov(hot ? 0.16f : 0.10f), 10.f);
 
+    // 编辑器页：竖版卡片（图标居中在上，名称 + 注入状态在下）
+    if (it.group == kGroupEditor)
+    {
+        float cw = r.right - r.left;
+        D2D1_RECT_F tile = R(r.left + (cw - 36.f) / 2, r.top + 10.f, r.left + (cw + 36.f) / 2, r.top + 46.f);
+        DrawIcon(s.item, tile);
+
+        if (it.key && g_state[s.item] == kInstalled)
+        {
+            D2D1_POINT_2F c = D2D1::Point2F(tile.right - 1, tile.bottom - 1);
+            g_brush->SetColor(C(kGreen, 0.22f));
+            g_rt->FillEllipse(D2D1::Ellipse(c, 8.5f, 8.5f), g_brush.Get());
+            D2D1_ELLIPSE ring = D2D1::Ellipse(c, 6.f, 6.f);
+            g_brush->SetColor(C(P.bg));
+            g_rt->FillEllipse(ring, g_brush.Get());
+            g_brush->SetColor(Ov(hot ? 0.10f : 0.05f));
+            g_rt->FillEllipse(ring, g_brush.Get());
+            g_brush->SetColor(C(kGreen));
+            g_rt->FillEllipse(D2D1::Ellipse(ring.point, 4.5f, 4.5f), g_brush.Get());
+        }
+
+        Text(ItemName(s.item), g_fTitle.Get(), R(r.left + 4, r.top + 50, r.right - 4, r.top + 67), C(P.text), DWRITE_TEXT_ALIGNMENT_CENTER);
+
+        if (it.key)
+        {
+            const wchar_t* st;
+            if (!Supported(s.item))                      st = T(S_NOT_SUPPORTED);
+            else if (!ToolDetected(s.item))              st = T(S_TOOL_NOT_FOUND);
+            else if (g_state[s.item] == kInstalled)      st = T(S_INJECTED);
+            else if (g_state[s.item] == kActiveNoState)  st = T(S_FILE_HAS_CONTENT);
+            else                                         st = T(S_NOT_INJECTED);
+            Text(st, g_fLabel.Get(), R(r.left + 4, r.top + 67, r.right - 4, r.top + 81), C(P.sub), DWRITE_TEXT_ALIGNMENT_CENTER);
+        }
+        return;
+    }
+
+    // 工具页：横版卡片（图标在左，名称 + 副标题在右）
     float cy = (r.top + r.bottom) / 2;
     D2D1_RECT_F tile = R(r.left + 11, cy - 17, r.left + 45, cy + 17);
     DrawIcon(s.item, tile);
@@ -263,20 +303,8 @@ static void DrawCard(const Slot& s)
     }
 
     float tx = tile.right + 12, tr = r.right - 30;
-    // 副标题行：工具页条目用自带副标题；编辑器条目显示注入状态
     const wchar_t* sub = ItemSub(s.item);
-    if (!sub[0] && it.key)
-    {
-        const wchar_t* st;
-        if (!Supported(s.item))                      st = T(S_NOT_SUPPORTED);
-        else if (!ToolDetected(s.item))              st = T(S_TOOL_NOT_FOUND);
-        else if (g_state[s.item] == kInstalled)      st = T(S_INJECTED);
-        else if (g_state[s.item] == kActiveNoState)  st = T(S_FILE_HAS_CONTENT);
-        else                                         st = T(S_NOT_INJECTED);
-        Text(ItemName(s.item), g_fTitle.Get(), R(tx, cy - 17, tr, cy), C(P.text));
-        Text(st, g_fLabel.Get(), R(tx, cy + 1, tr, cy + 16), C(P.sub));
-    }
-    else if (sub[0])
+    if (sub[0])
     {
         Text(ItemName(s.item), g_fTitle.Get(), R(tx, cy - 17, tr, cy), C(P.text));
         Text(sub, g_fLabel.Get(), R(tx, cy + 1, tr, cy + 16), C(P.sub));
