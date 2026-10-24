@@ -351,37 +351,17 @@ static void DlgButton(int b, const wchar_t* label, bool primary)
     Text(label, g_fTab.Get(), r, C(P.text), DWRITE_TEXT_ALIGNMENT_CENTER);
 }
 
-// 提示词文件名 → 分类描述（中英双语）
-static const wchar_t* PromptDescription(const std::wstring& filename)
+// 提示词文件名 → 分类描述（查 config.h 的 kPromptDescs 表；未知文件显示去掉 .md 的文件名）
+static std::wstring PromptDescription(const std::wstring& filename)
 {
-    // 专家（破甲）：Ua-* 开头
-    if (_wcsicmp(filename.c_str(), L"Ua-standard-pro.md") == 0)
-        return g_lang == kLangEN ? L"Expert · Full (routing table + scenarios)" : L"专家 · 完整版（含路由表与场景覆盖）";
-    if (_wcsicmp(filename.c_str(), L"Ua-standard-pro-en.md") == 0)
-        return g_lang == kLangEN ? L"Expert · English concise" : L"专家 · 英文精简版";
-    if (_wcsicmp(filename.c_str(), L"Ua-sol-pro.md") == 0)
-        return g_lang == kLangEN ? L"Expert · Placeholder style" : L"专家 · 占位符风格";
+    for (const auto& d : kPromptDescs)
+        if (_wcsicmp(filename.c_str(), d.file) == 0)
+            return g_lang == kLangEN ? d.en : d.cn;
 
-    // 开发：Dev-*
-    if (_wcsicmp(filename.c_str(), L"Dev-maintainer.md") == 0)
-        return g_lang == kLangEN ? L"Dev · Feature maintenance" : L"开发 · 功能维护与新增";
-    if (_wcsicmp(filename.c_str(), L"Dev-debugging.md") == 0)
-        return g_lang == kLangEN ? L"Dev · Debugging" : L"开发 · 调试与排错";
-    if (_wcsicmp(filename.c_str(), L"Dev-code-review.md") == 0)
-        return g_lang == kLangEN ? L"Dev · Code review" : L"开发 · 代码审查";
-
-    // 写作：Writing-*
-    if (_wcsicmp(filename.c_str(), L"Writing-editor.md") == 0)
-        return g_lang == kLangEN ? L"Writing · CN/EN editor" : L"写作 · 中英文润色";
-    if (_wcsicmp(filename.c_str(), L"Writing-tech-docs.md") == 0)
-        return g_lang == kLangEN ? L"Writing · Technical docs" : L"写作 · 技术文档";
-
-    // 未知文件：显示去掉 .md 的文件名（兜底）
-    static thread_local std::wstring fallback;
-    fallback = filename;
+    std::wstring fallback = filename;
     if (fallback.size() > 3 && _wcsicmp(fallback.c_str() + fallback.size() - 3, L".md") == 0)
         fallback.resize(fallback.size() - 3);
-    return fallback.c_str();
+    return fallback;
 }
 
 void DrawDialog()
@@ -508,13 +488,7 @@ void DrawDisclaimer()
 
     Text(T(S_DISCLAIMER_TITLE), g_fTitle.Get(), R(d.left + 20, d.top + 48, d.right - 20, d.top + 66), C(P.text), DWRITE_TEXT_ALIGNMENT_CENTER);
 
-    const wchar_t* body =
-        L"本工具完全免费，仅供学习和授权安全研究使用。\n\n"
-        L"1. 用户应确保在合法授权范围内使用本工具，对使用本工具所产生的一切后果自行承担责任。\n\n"
-        L"2. 本工具不收取任何费用。如果你是花钱购买的，说明你被骗了，请立即退款。\n\n"
-        L"3. 作者不对因使用本工具导致的任何直接或间接损失承担责任。\n\n"
-        L"4. 继续使用即表示你已阅读并同意以上条款。";
-    Text(body, g_fWrap.Get(), R(d.left + 24, d.top + 74, d.right - 24, d.bottom - 60), C(P.sub));
+    Text(T(S_DISCLAIMER_BODY), g_fWrap.Get(), R(d.left + 24, d.top + 74, d.right - 24, d.bottom - 60), C(P.sub));
 
     D2D1_RECT_F btn = DiscAcceptRect();
     bool hot = g_hover == kHoverAccept;
@@ -634,7 +608,8 @@ void DrawSkillMgr()
     Stroke(d, Ov(0.14f), 10.f);
 
     Text(T(S_SKILLS_TITLE), g_fTitle.Get(), R(d.left + 18, d.top + 16, d.right - 44, d.top + 34), C(P.text));
-    std::wstring sub = L"共 " + std::to_wstring(filteredCount) + L" / " + std::to_wstring(kSkillCount) + L" skill";
+    wchar_t sub[64];
+    swprintf_s(sub, T(S_SKILLS_COUNT_FMT), filteredCount, kSkillCount);
     Text(sub, g_fLabel.Get(), R(d.left + 18, d.top + 36, d.right - 44, d.top + 50), C(P.sub));
 
     bool closeHot = g_hover == kHoverSkillClose;
@@ -709,7 +684,8 @@ void DrawSkillMgr()
         if (statuses[idx].installedCount > 0)
         {
             // "N 个工具" 占据右侧中段，右边再留 26px 给 ✕ 按钮
-            std::wstring cnt = std::to_wstring(statuses[idx].installedCount) + L" 个工具";
+            wchar_t cnt[32];
+            swprintf_s(cnt, T(S_TOOLS_COUNT_FMT), statuses[idx].installedCount);
             Text(cnt, g_fLabel.Get(), R(ir.right - 86, ir.top + 2, ir.right - 30, ir.bottom - 2), C(P.sub), DWRITE_TEXT_ALIGNMENT_TRAILING);
 
             // ✕ 卸载按钮
@@ -724,10 +700,7 @@ void DrawSkillMgr()
     // 空列表提示
     if (filteredCount == 0)
     {
-        const wchar_t* none = g_lang == kLangEN
-            ? L"No matching skills"
-            : L"没有匹配的 skill";
-        Text(none, g_fLabel.Get(),
+        Text(T(S_SKILLS_NOMATCH), g_fLabel.Get(),
             R(d.left + 18, listTop + 20, d.right - 18, listTop + 40),
             C(P.sub), DWRITE_TEXT_ALIGNMENT_CENTER);
     }

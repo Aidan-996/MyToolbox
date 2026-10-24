@@ -109,6 +109,7 @@ enum Str {
     S_UPDATE_DOWNLOADING, S_UPDATE_READY, S_UPDATE_FAILED, S_UPDATE_BTN,
     S_STATUS_INSTALLED, S_STATUS_SKILLS,
     S_CONFIRM_UNINSTALL,
+    S_SKILLS_COUNT_FMT, S_TOOLS_COUNT_FMT, S_SKILLS_NOMATCH,
     S_COUNT
 };
 
@@ -148,7 +149,7 @@ inline const wchar_t* const kStr[][2] = {
     /* S_INJECT */          { L"\u5B89\u88C5",       L"Install" },
     /* S_INJECT_OK */       { L" \u5B89\u88C5\u6210\u529F",  L" installed" },
     /* S_UNINSTALL_OK */    { L" \u5DF2\u5378\u8F7D",    L" removed" },
-    /* S_NO_LINK */         { L"\u8FD8\u6CA1\u6709\u8BBE\u7F6E\u94FE\u63A5", L"No link configured" },
+    /* S_NO_LINK */         { L"\u201C%s\u201D\u8FD8\u6CA1\u6709\u8BBE\u7F6E\u94FE\u63A5", L"No link configured: %s" },
     /* S_SKILLS_TITLE */    { L"Skills \u7BA1\u7406", L"Skills Manager" },
     /* S_SKILLS_SUB */      { L"\u4E2A\u5185\u5D4C skill", L" embedded skills" },
     /* S_SKILLS_FOLDER */   { L"\u6253\u5F00 Skills \u6587\u4EF6\u5939", L"Open Skills Folder" },
@@ -209,6 +210,9 @@ inline const wchar_t* const kStr[][2] = {
     /* S_STATUS_INSTALLED */          { L"\u5DF2\u5B89\u88C5",                       L"installed" },
     /* S_STATUS_SKILLS */             { L"\u6280\u80FD",                             L"skills" },
     /* S_CONFIRM_UNINSTALL */         { L"\u786E\u8BA4\u5378\u8F7D\uFF1F\u8FD9\u5C06\u6062\u590D\u539F\u59CB\u914D\u7F6E\u6587\u4EF6\u3002", L"Confirm uninstall? This will restore the original config file." },
+    /* S_SKILLS_COUNT_FMT */          { L"\u5171 %d / %d skill",                        L"%d / %d skills" },
+    /* S_TOOLS_COUNT_FMT */           { L"%d \u4E2A\u5DE5\u5177",                       L"%d tool(s)" },
+    /* S_SKILLS_NOMATCH */            { L"\u6CA1\u6709\u5339\u914D\u7684 skill",        L"No matching skills" },
 };
 
 inline const wchar_t* T(Str s)
@@ -466,6 +470,22 @@ inline constexpr const wchar_t* kRunValue = L"UaToolbox";
 // ---------------------------------------------------------------------------
 inline constexpr size_t kMaxFile = 4 * 1024 * 1024;
 inline constexpr int kMaxBackups = 200;
+
+// 提示词文件名 → 分类描述（注入弹窗列表用，中英双语）
+struct PromptDesc { const wchar_t* file; const wchar_t* cn; const wchar_t* en; };
+inline const PromptDesc kPromptDescs[] = {
+    // 专家（破甲）：Ua-* 开头
+    { L"Ua-standard-pro.md",    L"专家 · 完整版（含路由表与场景覆盖）", L"Expert · Full (routing table + scenarios)" },
+    { L"Ua-standard-pro-en.md", L"专家 · 英文精简版",                 L"Expert · English concise" },
+    { L"Ua-sol-pro.md",         L"专家 · 占位符风格",                 L"Expert · Placeholder style" },
+    // 开发：Dev-*
+    { L"Dev-maintainer.md",     L"开发 · 功能维护与新增",             L"Dev · Feature maintenance" },
+    { L"Dev-debugging.md",      L"开发 · 调试与排错",                 L"Dev · Debugging" },
+    { L"Dev-code-review.md",    L"开发 · 代码审查",                   L"Dev · Code review" },
+    // 写作：Writing-*
+    { L"Writing-editor.md",     L"写作 · 中英文润色",                 L"Writing · CN/EN editor" },
+    { L"Writing-tech-docs.md",  L"写作 · 技术文档",                   L"Writing · Technical docs" },
+};
 
 enum InjectState { kNotInstalled = 0, kInstalled = 1, kActiveNoState = 2 };
 

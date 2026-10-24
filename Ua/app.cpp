@@ -221,7 +221,9 @@ static void Activate(HWND hWnd, int i)
     }
     if (!it.url[0])
     {
-        ShowToast(hWnd, std::wstring(L"\u201C") + it.name + L"\u201D\u8FD8\u6CA1\u6709\u8BBE\u7F6E\u94FE\u63A5");
+        wchar_t buf[128];
+        swprintf_s(buf, T(S_NO_LINK), it.name);
+        ShowToast(hWnd, buf);
         return;
     }
     OpenUrl(hWnd, it.url);
