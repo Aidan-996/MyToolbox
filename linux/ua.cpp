@@ -322,7 +322,8 @@ static bool InstallPrompt(const Tool& t, const std::string& promptPath, std::str
     }
 
     // Cursor 的 .mdc 格式需要 YAML frontmatter（与 Windows 版一致）
-    if (t.target.size() > 4 && t.target.compare(t.target.size() - 4, 4, ".mdc") == 0)
+    std::string targetRel = t.target;
+    if (targetRel.size() > 4 && targetRel.compare(targetRel.size() - 4, 4, ".mdc") == 0)
         prompt = "---\ndescription: Ua working rules (auto-injected, global)\nglobs: \"**/*\"\nalwaysApply: true\n---\n" + prompt;
 
     MkdirP(DirName(target));
@@ -333,7 +334,7 @@ static bool InstallPrompt(const Tool& t, const std::string& promptPath, std::str
 static bool UninstallPrompt(const Tool& t, std::string& err)
 {
     TargetState ts;
-    if (!LoadState(t.key, ts)) { err = "not installed via ua (no state): " + t.key; return false; }
+    if (!LoadState(t.key, ts)) { err = std::string("not installed via ua (no state): ") + t.key; return false; }
 
     std::string target = Join(HomeDir(), t.target);
     bool ok = true;
