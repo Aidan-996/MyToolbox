@@ -85,6 +85,16 @@ msbuild Ua.slnx /p:Configuration=Release /p:Platform=x64
 
 需要 Visual Studio 2022+，含 C++ 桌面开发工作负载。
 
+### Linux 版
+
+Linux 命令行版本在 [`linux/`](linux/) 目录，与 Windows 版**完全独立**，共用同一套提示词与技能数据文件：
+
+```bash
+make -C linux && sudo make -C linux install
+```
+
+功能：探测 13 个 AI 编程工具、注入/卸载提示词（自动备份恢复）、Skills 安装/卸载、从 GitHub 同步提示词。详见 [linux/README.md](linux/README.md)，CI 会在 ubuntu 上自动编译并做端到端冒烟测试。
+
 ### Star History
 
 [![Star History Chart](https://api.star-history.com/svg?repos=freyrswift/UaStation&type=Date)](https://star-history.com/#freyrswift/UaStation&Date)
@@ -181,6 +191,16 @@ msbuild Ua.slnx /p:Configuration=Release /p:Platform=x64
 ```
 
 Requires Visual Studio 2022+ with C++ Desktop Development workload.
+
+### Linux Version
+
+A separate Linux CLI edition lives in [`linux/`](linux/). It is fully independent from the Windows GUI, but shares the same prompt and skill data files:
+
+```bash
+make -C linux && sudo make -C linux install
+```
+
+Features: detect 13 AI coding tools, install/uninstall prompts (with automatic backup & restore), manage skills, sync new prompts from GitHub. See [linux/README.md](linux/README.md). CI builds it on ubuntu and runs end-to-end smoke tests on every push.
 
 ### Star History
 
