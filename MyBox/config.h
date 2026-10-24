@@ -102,7 +102,7 @@ enum Str {
     S_TOOLS_SKILLS, S_TOOLS_SKILLS_SUB, S_TOOLS_RELAY, S_TOOLS_RELAY_SUB,
     S_TOOLS_TUTORIAL, S_TOOLS_TUTORIAL_SUB, S_TOOLS_HELP, S_TOOLS_HELP_SUB,
     S_TOOLS_QQ, S_TOOLS_QQ_SUB,
-    S_ABOUT_TEXT, S_ABOUT_LEGAL, S_ABOUT_DESC, S_TUTORIAL_BTN, S_VERSION,
+    S_ABOUT_TEXT, S_ABOUT_LEGAL, S_ABOUT_DESC, S_TUTORIAL_BTN, S_HELP_TITLE, S_VERSION,
     S_ERR_NO_PROMPT_SEL, S_ERR_READ_PROMPT, S_ERR_UTF16_PROMPT, S_ERR_EMPTY_PROMPT,
     S_ERR_READ_TARGET, S_ERR_SAVE_STATE, S_ERR_WRITE_TARGET,
     S_ERR_NO_STATE, S_ERR_RESTORE, S_ERR_AUTOSTART,
@@ -176,7 +176,8 @@ inline const wchar_t* const kStr[][2] = {
     /* S_ABOUT_LEGAL */     { L"\u4EC5\u4F9B\u5B66\u4E60\u4E0E\u6388\u6743\u5B89\u5168\u7814\u7A76\u4F7F\u7528\u3002\u5B8C\u5168\u514D\u8D39\u5F00\u6E90\uFF08MIT\uFF09\uFF0C\u4E25\u7981\u5546\u7528\u4E0E\u5012\u5356\u3002", L"For learning and authorized security research only. Free and open source (MIT). Commercial use and resale are strictly prohibited." },
     /* S_ABOUT_DESC */      { L"AI \u7F16\u7A0B\u5DE5\u5177\u7684\u63D0\u793A\u8BCD\u4E0E\u6280\u80FD\u5B89\u88C5\u5668", L"Prompt & skill installer for AI coding tools" },
     /* S_TUTORIAL_BTN */    { L"\u4F7F\u7528\u6559\u7A0B", L"Tutorial" },
-    /* S_VERSION */         { L"1.0.6", L"1.0.6" },
+    /* S_HELP_TITLE */      { L"\u4F7F\u7528\u5E2E\u52A9", L"Help" },
+    /* S_VERSION */         { L"1.0.7", L"1.0.7" },
     /* S_ERR_NO_PROMPT_SEL */ { L"\u8BF7\u5148\u9009\u62E9\u4E00\u4E2A\u63D0\u793A\u8BCD", L"Please select a prompt first" },
     /* S_ERR_READ_PROMPT */ { L"\u8BFB\u53D6\u63D0\u793A\u8BCD\u6587\u4EF6\u5931\u8D25", L"Failed to read prompt file" },
     /* S_ERR_UTF16_PROMPT */{ L"\u63D0\u793A\u8BCD\u6587\u4EF6\u8BF7\u4FDD\u5B58\u4E3A UTF-8 \u7F16\u7801", L"Please save prompt file as UTF-8" },
@@ -425,6 +426,7 @@ inline constexpr int kHoverAboutGithub = 802;
 inline constexpr int kHoverAboutUpdate = 803;
 inline constexpr int kHoverAboutUpdate2 = 804;  // "立即更新" 按钮
 inline constexpr int kHoverAboutTutorial = 805; // "使用教程" 按钮
+inline constexpr int kHoverHelpClose = 806;      // 帮助弹窗关闭按钮
 inline constexpr int kSkillMaxVisible = 10;
 
 enum DlgButton { kDlgClose, kDlgSite, kDlgUninstall, kDlgInstall, kDlgFolder, kDlgButtonCount };

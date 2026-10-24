@@ -583,6 +583,82 @@ void DrawAbout()
 }
 
 // ---------------------------------------------------------------------------
+// 使用帮助
+// ---------------------------------------------------------------------------
+struct HelpLine { const wchar_t* cn; const wchar_t* en; bool header; };
+static const HelpLine kHelp[] = {
+    { L"快速上手", L"Quick Start", true },
+    { L"选工具卡片 → 选提示词模板 → 安装 → 重启目标 AI 工具，输入 Ua 验证。",
+      L"Pick a tool card, choose a template, Install, then restart the AI tool and type Ua to verify.", false },
+    { L"卡片状态", L"Card States", true },
+    { L"绿点 = 已注入；黄点 = 文件已有内容；灰点 = 未安装；整卡灰显 = 未检测到该工具。",
+      L"Green dot = injected; yellow = file already has content; gray = not installed; dimmed card = tool not detected.", false },
+    { L"备份与卸载", L"Backup & Uninstall", true },
+    { L"每次安装前自动备份原文件，卸载即恢复；状态与备份在 %APPDATA%\\MyBox。",
+      L"Every install backs up the original file; uninstall restores it. State and backups live in %APPDATA%\\MyBox.", false },
+    { L"Skills 用法", L"Using Skills", true },
+    { L"技能随提示词一起装进各工具的 skills 目录；「Skills 管理」可搜索、按分类筛选、单独卸载。",
+      L"Skills are installed into each tool's skills folder together with the prompt; search, filter and remove them in Skills Manager.", false },
+    { L"技能被拒绝时怎么办", L"When a Skill Gets Refused", true },
+    { L"技能内置授权门：首次使用会先确认目标是否已授权。明确回答（自有资产 / 已获授权 / CTF 环境）即可继续。",
+      L"Skills have a built-in authorization gate: they first ask whether the target is authorized. Answer clearly (own assets / authorized / CTF) to proceed.", false },
+    { L"若仍被拒绝，是所用模型自身的安全策略——换用对安全任务更开放的模型，或补充更明确的授权与范围说明。",
+      L"If the model still refuses, that is its own safety policy: switch to a model more open to security work, or state your authorization and scope more explicitly.", false },
+    { L"更新", L"Updates", true },
+    { L"启动时自动检查更新（设置菜单可手动检查）；提示词模板自动从仓库同步。",
+      L"Updates are checked automatically on launch (or via the settings menu); prompt templates sync from the repo.", false },
+};
+
+D2D1_RECT_F HelpRect()
+{
+    float w = 440.f, h = 520.f;
+    float l = (kW - w) / 2, t = (kH - h) / 2;
+    return R(l, t, l + w, t + h);
+}
+
+D2D1_RECT_F HelpCloseRect()
+{
+    D2D1_RECT_F d = HelpRect();
+    return R(d.right - 38, d.top + 10, d.right - 10, d.top + 38);
+}
+
+void DrawHelp()
+{
+    D2D1_SIZE_F sz = g_rt->GetSize();
+    g_brush->SetColor(C(0x000000, P.dark ? 0.50f : 0.30f));
+    g_rt->FillRectangle(R(0, 0, sz.width, sz.height), g_brush.Get());
+
+    D2D1_RECT_F d = HelpRect();
+    Fill(d, C(P.panel), 14.f);
+    Stroke(d, Ov(0.14f), 14.f);
+
+    Text(T(S_HELP_TITLE), g_fTitle.Get(), R(d.left + 20, d.top + 14, d.right - 44, d.top + 38), C(P.text));
+
+    bool hot = g_hover == kHoverHelpClose;
+    D2D1_RECT_F cr = HelpCloseRect();
+    if (hot) Fill(cr, Ov(0.08f), 6.f);
+    Text(L"\uE8BB", g_fIcon.Get(), cr, C(hot ? P.text : P.sub), DWRITE_TEXT_ALIGNMENT_CENTER);
+
+    float y = d.top + 52;
+    for (const HelpLine& hl : kHelp)
+    {
+        const wchar_t* s = g_lang == kLangEN ? hl.en : hl.cn;
+        if (hl.header)
+        {
+            // 小强调条 + 小节标题
+            Fill(R(d.left + 26, y + 4, d.left + 29.5f, y + 18), C(P.accent), 1.5f);
+            Text(s, g_fTabSel.Get(), R(d.left + 36, y, d.right - 26, y + 22), C(P.text));
+            y += 28;
+        }
+        else
+        {
+            Text(s, g_fWrap.Get(), R(d.left + 36, y, d.right - 26, y + 34), C(P.sub));
+            y += 38;
+        }
+    }
+}
+
+// ---------------------------------------------------------------------------
 // Skills 管理弹窗
 // ---------------------------------------------------------------------------
 void DrawSkillMgr()

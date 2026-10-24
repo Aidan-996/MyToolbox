@@ -35,6 +35,7 @@ bool g_disclaimer = false;
 bool g_skillMgr = false;
 int g_skillScroll = 0;
 bool g_aboutOpen = false;
+bool g_helpOpen = false;
 float g_scale = 1.f;
 int g_themeMode = kThemeSystem;
 Palette P = kDark;

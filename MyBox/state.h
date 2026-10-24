@@ -23,6 +23,7 @@ extern bool g_disclaimer;       // 免责声明弹窗
 extern bool g_skillMgr;         // Skills 管理弹窗
 extern int g_skillScroll;
 extern bool g_aboutOpen;        // 关于弹窗
+extern bool g_helpOpen;         // 使用帮助弹窗
 extern float g_scale;
 extern int g_themeMode;
 extern Palette P;

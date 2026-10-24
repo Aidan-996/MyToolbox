@@ -28,6 +28,9 @@ D2D1_RECT_F AboutTutorialRect();
 D2D1_RECT_F AboutUpdateRect();
 D2D1_RECT_F AboutUpdateBtnRect();
 
+D2D1_RECT_F HelpRect();
+D2D1_RECT_F HelpCloseRect();
+
 D2D1_RECT_F SkillDlgRect();
 D2D1_RECT_F SkillCloseRect();
 D2D1_RECT_F SkillFolderRect();
@@ -45,6 +48,7 @@ void DrawDialog();
 void DrawSkillMgr();
 void DrawDisclaimer();
 void DrawAbout();
+void DrawHelp();
 
 // Skills 管理弹窗首次打开时，重置筛选条件
 void MaybeResetSkillFilter();

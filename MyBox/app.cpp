@@ -212,6 +212,13 @@ static void Activate(HWND hWnd, int i)
         InvalidateRect(hWnd, nullptr, FALSE);
         return;
     }
+    // 使用教程 -> 应用内帮助
+    if (wcscmp(it.name, L"\u4F7F\u7528\u6559\u7A0B") == 0)
+    {
+        g_helpOpen = true;
+        InvalidateRect(hWnd, nullptr, FALSE);
+        return;
+    }
     if (!it.url[0])
     {
         wchar_t buf[128];
@@ -309,7 +316,8 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM l
             (g_hover >= kHoverSkillMgr && g_hover < kHoverSkillSearch) ||
             g_hover == kHoverSkillClose || g_hover == kHoverSkillFolder ||
             g_hover == kHoverAboutGithub || g_hover == kHoverAboutTutorial ||
-            g_hover == kHoverAboutUpdate || g_hover == kHoverAboutUpdate2))
+            g_hover == kHoverAboutUpdate || g_hover == kHoverAboutUpdate2 ||
+            g_hover == kHoverHelpClose))
         {
             SetCursor(LoadCursor(nullptr, IDC_HAND));
             return TRUE;
@@ -353,11 +361,23 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM l
                 }
                 else if (hit == kHoverAboutTutorial)
                 {
-                    OpenUrl(hWnd, kTutorialUrl);
+                    // 就地打开应用内帮助
+                    g_aboutOpen = false;
+                    g_helpOpen = true;
+                    InvalidateRect(hWnd, nullptr, FALSE);
                 }
                 else if (hit == kHoverAboutUpdate)
                 {
                     OpenUrl(hWnd, kUpdateReleaseUrl);
+                }
+                return 0;
+            }
+            if (g_helpOpen)
+            {
+                if (hit == kHoverHelpClose || hit == kHoverDlgOut)
+                {
+                    g_helpOpen = false;
+                    InvalidateRect(hWnd, nullptr, FALSE);
                 }
                 return 0;
             }
@@ -451,6 +471,7 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM l
         {
             if (g_disclaimer) { /* 免责声明不能 ESC 关 */ }
             else if (g_aboutOpen) { g_aboutOpen = false; InvalidateRect(hWnd, nullptr, FALSE); }
+            else if (g_helpOpen) { g_helpOpen = false; InvalidateRect(hWnd, nullptr, FALSE); }
             else if (g_skillMgr) { g_skillMgr = false; InvalidateRect(hWnd, nullptr, FALSE); }
             else if (g_dlg >= 0) SetDialog(hWnd, -1);
             else if (g_menuOpen) SetMenuOpen(hWnd, false);
@@ -462,6 +483,7 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM l
         {
             SetMenuOpen(hWnd, false);
             g_skillMgr = false;
+            g_helpOpen = false;
         }
         else
         {

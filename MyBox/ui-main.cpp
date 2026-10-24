@@ -63,6 +63,12 @@ int HitTest(float x, float y)
         if (UpdateAvailable() && InRect(AboutUpdateRect(), x, y)) return kHoverAboutUpdate;
         return kHoverDlgBg;
     }
+    if (g_helpOpen)
+    {
+        if (InRect(HelpCloseRect(), x, y)) return kHoverHelpClose;
+        if (!InRect(HelpRect(), x, y)) return kHoverDlgOut;
+        return kHoverDlgBg;
+    }
     if (g_skillMgr)
     {
         D2D1_RECT_F d = SkillDlgRect();
@@ -315,6 +321,8 @@ void Render(HWND hWnd)
         DrawSkillMgr();
     if (g_aboutOpen)
         DrawAbout();
+    if (g_helpOpen)
+        DrawHelp();
     if (g_disclaimer)
         DrawDisclaimer();
 
