@@ -1,0 +1,74 @@
+# 命令行版（Linux / macOS）编译与端到端冒烟测试
+# Windows 版在 MyBox/，不受此工作流影响
+name: cli-build
+
+on:
+  push:
+    branches: [main]
+    paths: ["cli/**", "shared/prompts/**", "shared/skills/**", ".github/workflows/cli.yml"]
+  pull_request:
+    paths: ["cli/**", ".github/workflows/cli.yml"]
+  workflow_dispatch:
+
+jobs:
+  build:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - { os: ubuntu-latest, artifact: mybox-linux-x64, extra: "" }
+          - { os: macos-latest, artifact: mybox-macos-universal, extra: "-arch arm64 -arch x86_64" }
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build
+        run: make -C cli CXXFLAGS="-std=c++17 -O2 -Wall -Wextra -Werror ${{ matrix.extra }}"
+
+      - name: Smoke test (fake HOME, end to end)
+        run: |
+          set -e
+          cd cli
+          export HOME="$(mktemp -d)"
+          export MYBOX_DATA="$HOME/mybox-data"
+          mkdir -p "$MYBOX_DATA"
+          cp -r ../shared/prompts ../shared/skills "$MYBOX_DATA/"
+
+          ./mybox version
+          ./mybox list
+
+          # 注入 -> 文件存在且非空
+          ./mybox install claude ../shared/prompts/Ua-standard-pro.md
+          test -s "$HOME/.claude/CLAUDE.md"
+
+          # 卸载 -> 原本不存在，恢复后应删除
+          ./mybox uninstall claude
+          test ! -e "$HOME/.claude/CLAUDE.md"
+
+          # 有原文件时卸载应恢复原内容
+          mkdir -p "$HOME/.codex"
+          echo "original rules" > "$HOME/.codex/AGENTS.md"
+          ./mybox install codex ../shared/prompts/Ua-standard-pro.md
+          test -s "$HOME/.codex/AGENTS.md"
+          ./mybox uninstall codex
+          grep -q "original rules" "$HOME/.codex/AGENTS.md"
+
+          # Skills 全装 -> 全卸
+          ./mybox skills install claude
+          test -s "$HOME/.claude/skills/radare2/SKILL.md"
+          ./mybox skills uninstall claude
+          test ! -e "$HOME/.claude/skills/radare2/SKILL.md"
+
+          # 单个技能装/卸
+          ./mybox skills install claude radare2
+          test -s "$HOME/.claude/skills/radare2/SKILL.md"
+          ./mybox skills uninstall claude radare2
+          test ! -e "$HOME/.claude/skills/radare2/SKILL.md"
+
+          echo "smoke test passed (${{ matrix.os }})"
+
+      - name: Upload binary
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.artifact }}
+          path: cli/mybox

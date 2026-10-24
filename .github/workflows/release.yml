@@ -1,4 +1,4 @@
-# 推送 v* tag 时自动构建双平台二进制并发布 Release。
+# 推送 v* tag 时自动构建三平台二进制并发布 Release。
 # 应用内的更新检查走 /releases/latest/download/MyBox.exe，资产名必须保持 MyBox.exe。
 name: release
 
@@ -23,19 +23,25 @@ jobs:
           name: MyBox-windows-x64
           path: MyBox/x64/Release/MyBox.exe
 
-  linux:
-    runs-on: ubuntu-latest
+  cli:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - { os: ubuntu-latest, artifact: mybox-linux-x64, extra: "" }
+          - { os: macos-latest, artifact: mybox-macos-universal, extra: "-arch arm64 -arch x86_64" }
+    runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v4
       - name: Build
-        run: make -C linux CXXFLAGS="-std=c++17 -O2 -Wall -Wextra -Werror"
+        run: make -C cli CXXFLAGS="-std=c++17 -O2 -Wall -Wextra -Werror ${{ matrix.extra }}"
       - uses: actions/upload-artifact@v4
         with:
-          name: ua-linux-x64
-          path: linux/ua
+          name: ${{ matrix.artifact }}
+          path: cli/mybox
 
   publish:
-    needs: [windows, linux]
+    needs: [windows, cli]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/download-artifact@v4
@@ -44,12 +50,17 @@ jobs:
           path: rel/
       - uses: actions/download-artifact@v4
         with:
-          name: ua-linux-x64
+          name: mybox-linux-x64
+          path: rel/
+      - uses: actions/download-artifact@v4
+        with:
+          name: mybox-macos-universal
           path: rel/
       - name: Publish release
         uses: softprops/action-gh-release@v2
         with:
           files: |
             rel/MyBox.exe
-            rel/ua
+            rel/mybox-linux-x64
+            rel/mybox-macos-universal
           generate_release_notes: true

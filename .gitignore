@@ -5,7 +5,7 @@ MyBox/Release/
 MyBox/Debug/
 MyBox/*.user
 MyBox/*.vcxproj.filters
-linux/ua
+cli/mybox
 
 # Temp
 *.pdb

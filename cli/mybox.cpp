@@ -1,4 +1,4 @@
-// ua.cpp : Ua Toolbox Linux 版 —— AI 编程工具提示词/Skills 一键安装命令行
+// mybox.cpp : MyBox 命令行版（Linux / macOS）—— AI 编程工具提示词/Skills 一键安装
 //
 // 与 Windows 版（MyBox/）共用 shared/ 下的同一套 prompts/ 与 skills/ 数据文件，注入/备份/恢复
 // 的行为与 Windows 版保持一致：
@@ -8,8 +8,10 @@
 //   - Skills = 把 skills/<name>/SKILL.md 复制到 <home>/<skillsDir>/<name>/SKILL.md，
 //     卸载时只删除自己记录过的名字，不碰用户自放的文件
 //
-// $DATA 默认 ~/.local/share/ua，可用环境变量 UA_DATA 覆盖。
-// 编译：g++ -std=c++17 -O2 -Wall -Wextra -o ua ua.cpp
+// $DATA 默认：macOS 为 ~/Library/Application Support/MyBox，Linux 为 ~/.local/share/mybox，
+// 可用环境变量 MYBOX_DATA 覆盖（兼容旧变量 UA_DATA）。
+// 编译：g++ -std=c++17 -O2 -Wall -Wextra -o mybox mybox.cpp
+//   macOS 通用二进制：g++ -std=c++17 -O2 -arch arm64 -arch x86_64 -o mybox mybox.cpp
 
 #include <algorithm>
 #include <cctype>
@@ -24,7 +26,11 @@
 #include <sys/types.h>
 #include <unistd.h>
 
-static const char* kVersion = "1.0.3-linux";
+#ifdef __APPLE__
+#include <mach-o/dyld.h>     // _NSGetExecutablePath
+#endif
+
+static const char* kVersion = "1.0.4";
 static const char* kPromptsApiUrl =
     "https://api.github.com/repos/Aidan-996/MyToolbox/contents/prompts";
 static const size_t kMaxFile = 4 * 1024 * 1024;   // 单文件上限，与 Windows 版一致
@@ -120,10 +126,10 @@ static bool ReadFile(const std::string& path, std::string& out)
     return ok;
 }
 
-// 原子写：写同目录 .ua.tmp -> rename 覆盖，避免半截文件
+// 原子写：写同目录 .mybox.tmp -> rename 覆盖，避免半截文件
 static bool WriteFileAtomic(const std::string& path, const std::string& data)
 {
-    std::string tmp = path + ".ua.tmp";
+    std::string tmp = path + ".mybox.tmp";
     FILE* f = ::fopen(tmp.c_str(), "wb");
     if (!f) return false;
     bool ok = data.empty() || ::fwrite(data.data(), 1, data.size(), f) == data.size();
@@ -186,37 +192,48 @@ static std::string HomeDir()
     return (h && *h) ? h : std::string();
 }
 
-// 数据目录：$UA_DATA 优先，否则 ~/.local/share/ua（XDG 惯例）
+// 数据目录：$MYBOX_DATA（兼容旧 $UA_DATA）优先；macOS 用 Application Support，Linux 用 XDG 惯例
 static std::string DataDir()
 {
-    const char* env = ::getenv("UA_DATA");
+    const char* env = ::getenv("MYBOX_DATA");
+    if (!env || !*env) env = ::getenv("UA_DATA");
     if (env && *env) return env;
-    return Join(HomeDir(), ".local/share/ua");
+#ifdef __APPLE__
+    return Join(HomeDir(), "Library/Application Support/MyBox");
+#else
+    return Join(HomeDir(), ".local/share/mybox");
+#endif
 }
 
 static std::string SelfDir()
 {
+#ifdef __APPLE__
+    char buf[4096];
+    uint32_t size = sizeof(buf);
+    if (_NSGetExecutablePath(buf, &size) == 0)
+        return DirName(buf);
+    return {};
+#else
     char buf[4096];
     ssize_t n = ::readlink("/proc/self/exe", buf, sizeof(buf) - 1);
     if (n <= 0) return {};
     buf[n] = '\0';
     return DirName(buf);
+#endif
 }
 
 // prompts/ 和 skills/ 数据目录查找顺序：
-//   $UA_DATA → ~/.local/share/ua → <exe>/../share/ua（make install）
-//   → <exe>/data → <exe>/../shared（仓库里直接 ./linux/ua 运行）
+//   $MYBOX_DATA/$UA_DATA → 平台默认数据目录 → <exe>/../share/mybox（make install）
+//   → <exe>/data → <exe>/../shared（仓库里直接 ./cli/mybox 运行）
 static bool FindDataSub(const char* sub, std::string& out)
 {
-    const char* env = ::getenv("UA_DATA");
-    std::string home = HomeDir();
     std::string self = SelfDir();
     std::vector<std::string> cands;
-    if (env && *env) cands.push_back(Join(env, sub));
-    if (!home.empty()) cands.push_back(Join(Join(home, ".local/share/ua"), sub));
+    std::string def = DataDir();
+    if (!def.empty()) cands.push_back(Join(def, sub));
     if (!self.empty())
     {
-        cands.push_back(Join(Join(DirName(self), "share/ua"), sub));
+        cands.push_back(Join(Join(DirName(self), "share/mybox"), sub));
         cands.push_back(Join(Join(self, "data"), sub));
         cands.push_back(Join(Join(DirName(self), "shared"), sub));
     }
@@ -334,7 +351,7 @@ static bool InstallPrompt(const Tool& t, const std::string& promptPath, std::str
 static bool UninstallPrompt(const Tool& t, std::string& err)
 {
     TargetState ts;
-    if (!LoadState(t.key, ts)) { err = std::string("not installed via ua (no state): ") + t.key; return false; }
+    if (!LoadState(t.key, ts)) { err = std::string("not installed via mybox (no state): ") + t.key; return false; }
 
     std::string target = Join(HomeDir(), t.target);
     bool ok = true;
@@ -393,7 +410,7 @@ static int InstallSkills(const Tool& t, const std::string* onlyOne, std::string&
 {
     if (!t.skillsDir) { err = std::string(t.name) + " does not support skills"; return -1; }
     std::string src;
-    if (!FindDataSub("skills", src)) { err = "skills data dir not found (set UA_DATA or run make install)"; return -1; }
+    if (!FindDataSub("skills", src)) { err = "skills data dir not found (set MYBOX_DATA or run make install)"; return -1; }
 
     std::vector<std::string> names;
     if (onlyOne) names.push_back(*onlyOne);
@@ -525,7 +542,7 @@ static int SyncPrompts()
     LoadShaCache(cache);
 
     std::string promptsDir;
-    if (!FindDataSub("prompts", promptsDir)) { fprintf(stderr, "prompts data dir not found (set UA_DATA)\n"); return -1; }
+    if (!FindDataSub("prompts", promptsDir)) { fprintf(stderr, "prompts data dir not found (set MYBOX_DATA)\n"); return -1; }
 
     size_t p = 0, next;
     int changes = 0;
@@ -588,7 +605,7 @@ static int CmdList()
 static int CmdInstall(const std::string& key, const std::string& fileArg)
 {
     const Tool* t = FindTool(key);
-    if (!t) { fprintf(stderr, "unknown tool: %s (see 'ua list')\n", key.c_str()); return 2; }
+    if (!t) { fprintf(stderr, "unknown tool: %s (see 'mybox list')\n", key.c_str()); return 2; }
 
     std::string promptPath = fileArg;
     if (promptPath.empty())
@@ -596,7 +613,7 @@ static int CmdInstall(const std::string& key, const std::string& fileArg)
         std::string promptsDir;
         if (!FindDataSub("prompts", promptsDir))
         {
-            fprintf(stderr, "prompts data dir not found (set UA_DATA or run make install)\n");
+            fprintf(stderr, "prompts data dir not found (set MYBOX_DATA or run make install)\n");
             return 1;
         }
         std::string own = Join(promptsDir, std::string(t->key) + ".md");
@@ -610,7 +627,7 @@ static int CmdInstall(const std::string& key, const std::string& fileArg)
         else
         {
             fprintf(stderr, "multiple prompts available, pick one:\n");
-            for (const std::string& n : mds) fprintf(stderr, "  ua install %s %s\n", key.c_str(), n.c_str());
+            for (const std::string& n : mds) fprintf(stderr, "  mybox install %s %s\n", key.c_str(), n.c_str());
             return 1;
         }
     }
@@ -623,7 +640,7 @@ static int CmdInstall(const std::string& key, const std::string& fileArg)
     std::string err;
     if (!InstallPrompt(*t, promptPath, err)) { fprintf(stderr, "install failed: %s\n", err.c_str()); return 1; }
     printf("installed to %s (%s)\n", Join(HomeDir(), t->target).c_str(), promptPath.c_str());
-    printf("uninstall anytime with: ua uninstall %s\n", key.c_str());
+    printf("uninstall anytime with: mybox uninstall %s\n", key.c_str());
     return 0;
 }
 
@@ -684,25 +701,25 @@ static int CmdSkills(const std::vector<std::string>& args)
         return 0;
     }
 
-    fprintf(stderr, "usage: ua skills list [tool] | ua skills install|uninstall <tool> [name|all]\n");
+    fprintf(stderr, "usage: mybox skills list [tool] | mybox skills install|uninstall <tool> [name|all]\n");
     return 2;
 }
 
 static void Usage()
 {
-    printf("Ua Toolbox %s — one-click prompt/skill installer for AI coding tools\n\n", kVersion);
+    printf("MyBox %s — one-click prompt/skill installer for AI coding tools\n\n", kVersion);
     printf("usage:\n");
-    printf("  ua list                          show tools, detection and install state\n");
-    printf("  ua install <tool> [prompt.md]    install prompt (backup made automatically)\n");
-    printf("  ua uninstall <tool>              restore original config\n");
-    printf("  ua skills list [tool]            available / installed skills\n");
-    printf("  ua skills install <tool> [n|all] install skills into <tool>\n");
-    printf("  ua skills uninstall <tool> [n]   remove skills\n");
-    printf("  ua sync                          pull new prompts from GitHub\n");
-    printf("  ua version                       print version\n");
+    printf("  mybox list                          show tools, detection and install state\n");
+    printf("  mybox install <tool> [prompt.md]    install prompt (backup made automatically)\n");
+    printf("  mybox uninstall <tool>              restore original config\n");
+    printf("  mybox skills list [tool]            available / installed skills\n");
+    printf("  mybox skills install <tool> [n|all] install skills into <tool>\n");
+    printf("  mybox skills uninstall <tool> [n]   remove skills\n");
+    printf("  mybox sync                          pull new prompts from GitHub\n");
+    printf("  mybox version                       print version\n");
     printf("\ntools: ");
     for (const Tool& t : kTools) printf("%s ", t.key);
-    printf("\n\ndata dir: %s (override with UA_DATA)\n", DataDir().c_str());
+    printf("\n\ndata dir: %s (override with MYBOX_DATA)\n", DataDir().c_str());
     printf("uninstall restores the original file; skills removal never touches user-added files.\n");
 }
 
@@ -710,14 +727,14 @@ int main(int argc, char** argv)
 {
     std::vector<std::string> args(argv + 1, argv + argc);
     if (args.empty() || args[0] == "help" || args[0] == "--help" || args[0] == "-h") { Usage(); return 0; }
-    if (args[0] == "version" || args[0] == "--version") { printf("ua %s\n", kVersion); return 0; }
+    if (args[0] == "version" || args[0] == "--version") { printf("mybox %s\n", kVersion); return 0; }
     if (HomeDir().empty()) { fprintf(stderr, "HOME is not set\n"); return 1; }
 
     const std::string& cmd = args[0];
     if (cmd == "list") return CmdList();
     if (cmd == "install" || cmd == "uninstall")
     {
-        if (args.size() < 2) { fprintf(stderr, "usage: ua %s <tool>\n", cmd.c_str()); return 2; }
+        if (args.size() < 2) { fprintf(stderr, "usage: mybox %s <tool>\n", cmd.c_str()); return 2; }
         return cmd == "install" ? CmdInstall(args[1], args.size() >= 3 ? args[2] : "")
                                 : CmdUninstall(args[1]);
     }
@@ -730,6 +747,6 @@ int main(int argc, char** argv)
         return 0;
     }
 
-    fprintf(stderr, "unknown command: %s (see 'ua help')\n", cmd.c_str());
+    fprintf(stderr, "unknown command: %s (see 'mybox help')\n", cmd.c_str());
     return 2;
 }

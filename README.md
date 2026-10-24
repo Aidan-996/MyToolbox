@@ -2,7 +2,7 @@
 
 [![Release](https://img.shields.io/github/v/release/Aidan-996/MyToolbox?style=flat-square)](https://github.com/Aidan-996/MyToolbox/releases)
 [![License](https://img.shields.io/github/license/Aidan-996/MyToolbox?style=flat-square)](LICENSE)
-[![CI](https://img.shields.io/github/actions/workflow/status/Aidan-996/MyToolbox/linux.yml?style=flat-square&label=linux%20CI)](https://github.com/Aidan-996/MyToolbox/actions)
+[![CI](https://img.shields.io/github/actions/workflow/status/Aidan-996/MyToolbox/cli.yml?style=flat-squarelinux.yml?style=flat-square&label=linux%20CIlabel=CLI%20CI)](https://github.com/Aidan-996/MyToolbox/actions)
 
 [中文](#mytoolbox-中文) | [English](#mytoolbox-english)
 
@@ -10,7 +10,7 @@
 
 ## MyToolbox 中文
 
-一键为 AI 编程工具安装提示词和技能的工具。**Windows 图形界面 + Linux 命令行**双版本，
+一键为 AI 编程工具安装提示词和技能的工具。**Windows 图形界面 + Linux/macOS 命令行**双版本，
 基于 [freyrswift/UaStation](https://github.com/freyrswift/UaStation)（Ua Toolbox）独立维护，
 已与上游脱钩：更新与提示词同步只指向本仓库。
 
@@ -55,7 +55,7 @@
 | 🌐 中英双语 | 界面完整双语（重构后免责声明等界面全部走翻译表） |
 | 🎨 深浅主题 | 跟随系统或手动切换，Win11 支持 Mica 效果 |
 | 🔄 自动更新 | 启动时自动检查更新，发现新版本自动下载安装（更新源为本仓库 Releases） |
-| 🐧 Linux 命令行版 | 同一套提示词/技能数据，`make` 一键编译，CI 端到端测试 |
+| 🐧 Linux/macOS 命令行版 | 同一套提示词/技能数据，`make` 一键编译，CI 双系统端到端测试 |
 | 📦 单文件运行 | 1 MB 的 exe，无需安装，无任何依赖 |
 
 ### 相比上游的改动
@@ -151,20 +151,20 @@ msbuild MyBox.slnx /p:Configuration=Release /p:Platform=x64
 需要 Visual Studio 2022+（含 C++ 桌面开发工作负载）。项目已重定向到 v143 工具集，
 VS 2022 直接打开 `MyBox.slnx` 生成即可；产物在 `x64\Release\MyBox.exe`。
 
-### Linux 版
+### 命令行版（Linux / macOS）
 
-Windows 版的 Linux 命令行对应版本在 [`linux/`](linux/) 目录，与 Windows 版**完全独立**，共用同一套提示词与技能数据文件：
+Windows 版的跨平台命令行对应版本（Linux / macOS）在 [`cli/`](cli/) 目录，与 Windows 版**完全独立**，共用同一套提示词与技能数据文件。macOS 从 Releases 下载 `mybox-macos-universal`（Apple Silicon + Intel 通用），或源码编译：
 
 ```bash
-make -C linux && sudo make -C linux install
+make -C cli && sudo make -C cli install
 
-ua list                           # 工具列表与注入状态
-ua install claude                 # 注入提示词（自动备份，ua uninstall claude 恢复）
-ua skills install claude radare2  # 按需安装单个技能
-ua sync                           # 从 GitHub 同步新提示词模板
+mybox list                           # 工具列表与注入状态
+mybox install claude                 # 注入提示词（自动备份，mybox uninstall claude 恢复）
+mybox skills install claude radare2  # 按需安装单个技能
+mybox sync                           # 从 GitHub 同步新提示词模板
 ```
 
-功能：探测 13 个 AI 编程工具、注入/卸载提示词（自动备份恢复）、Skills 安装/卸载、从 GitHub 同步提示词。详见 [linux/README.md](linux/README.md)，CI 会在 ubuntu 上自动编译并做端到端冒烟测试。
+功能：探测 13 个 AI 编程工具、注入/卸载提示词（自动备份恢复）、Skills 安装/卸载、从 GitHub 同步提示词。详见 [cli/README.md](cli/README.md)，CI 会在 ubuntu + macOS 上自动编译并做端到端冒烟测试。
 
 ### Star History
 
@@ -184,7 +184,7 @@ MIT License，详见 [LICENSE](LICENSE)。基于 [freyrswift/UaStation](https://
 
 ## MyToolbox English
 
-One-click prompt and skill installer for AI coding tools. **Windows GUI + Linux CLI**,
+One-click prompt and skill installer for AI coding tools. **Windows GUI + Linux/macOS CLI**,
 independently maintained from [freyrswift/UaStation](https://github.com/freyrswift/UaStation) (Ua Toolbox) —
 update checks and prompt sync point only to this repository.
 
@@ -229,7 +229,7 @@ This tool is provided in compliance with applicable laws and regulations. By usi
 | 🌐 Bilingual | Fully translated CN/EN interface (disclaimer etc. now use the translation table) |
 | 🎨 Themes | Dark / Light / System, Win11 Mica support |
 | 🔄 Auto Update | Checks on launch and auto-installs new versions from this repo's Releases |
-| 🐧 Linux CLI Edition | Same prompt/skill data, one `make` to build, tested end-to-end in CI |
+| 🐧 Linux/macOS CLI Edition | Same prompt/skill data, one `make` to build, tested on both OSes in CI |
 | 📦 Portable | Single 1 MB exe, no installer, zero dependencies |
 
 ### What Changed from Upstream
@@ -323,20 +323,20 @@ msbuild MyBox.slnx /p:Configuration=Release /p:Platform=x64
 Requires Visual Studio 2022+ with the C++ Desktop workload. The project is retargeted to the
 v143 toolset, so VS 2022 opens `MyBox.slnx` and builds directly; output lands in `x64\Release\MyBox.exe`.
 
-### Linux Version
+### CLI Version (Linux / macOS)
 
-A separate Linux CLI edition lives in [`linux/`](linux/). It is fully independent from the Windows GUI, but shares the same prompt and skill data files:
+A cross-platform CLI edition (Linux / macOS) lives in [`cli/`](cli/). It is fully independent from the Windows GUI, but shares the same prompt and skill data files. On macOS grab the `mybox-macos-universal` binary (Apple Silicon + Intel) from Releases, or build from source:
 
 ```bash
-make -C linux && sudo make -C linux install
+make -C cli && sudo make -C cli install
 
-ua list                           # tools and install state
-ua install claude                 # inject a prompt (auto backup; ua uninstall claude restores)
-ua skills install claude radare2  # install a single skill
-ua sync                           # sync new prompt templates from GitHub
+mybox list                           # tools and install state
+mybox install claude                 # inject a prompt (auto backup; mybox uninstall claude restores)
+mybox skills install claude radare2  # install a single skill
+mybox sync                           # sync new prompt templates from GitHub
 ```
 
-Features: detect 13 AI coding tools, install/uninstall prompts (with automatic backup & restore), manage skills, sync new prompts from GitHub. See [linux/README.md](linux/README.md). CI builds it on ubuntu and runs end-to-end smoke tests on every push.
+Features: detect 13 AI coding tools, install/uninstall prompts (with automatic backup & restore), manage skills, sync new prompts from GitHub. See [cli/README.md](cli/README.md). CI builds it on ubuntu and macOS and runs end-to-end smoke tests on every push.
 
 ### Star History
 
