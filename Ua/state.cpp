@@ -71,11 +71,6 @@ bool IsWindows11()
     return fn && fn(&v) == 0 && v.dwBuildNumber >= 22000;
 }
 
-bool IsMicaActive()
-{
-    return g_micaActive;
-}
-
 void ApplyTheme(HWND hWnd)
 {
     bool light = g_themeMode == kThemeLight || (g_themeMode == kThemeSystem && SystemUsesLightTheme());
@@ -152,26 +147,6 @@ bool SetAutostart(bool on)
     std::wstring cmd = L"\"" + std::wstring(exe) + L"\"";
     return RegSetKeyValueW(HKEY_CURRENT_USER, kRunKey, kRunValue, REG_SZ, cmd.c_str(),
         DWORD((cmd.size() + 1) * sizeof(wchar_t))) == ERROR_SUCCESS;
-}
-
-// ---------------------------------------------------------------------------
-// 免责声明接受状态
-// ---------------------------------------------------------------------------
-bool DisclaimerAccepted()
-{
-    DWORD v = 0, size = sizeof(v);
-    return RegGetValueW(HKEY_CURRENT_USER, L"Software\\Ua", L"Accepted", RRF_RT_REG_DWORD, nullptr, &v, &size) == ERROR_SUCCESS && v;
-}
-
-void AcceptDisclaimer()
-{
-    HKEY key;
-    if (RegCreateKeyExW(HKEY_CURRENT_USER, L"Software\\Ua", 0, nullptr, 0, KEY_SET_VALUE, nullptr, &key, nullptr) == ERROR_SUCCESS)
-    {
-        DWORD v = 1;
-        RegSetValueExW(key, L"Accepted", 0, REG_DWORD, reinterpret_cast<const BYTE*>(&v), sizeof(v));
-        RegCloseKey(key);
-    }
 }
 
 // ---------------------------------------------------------------------------
@@ -584,7 +559,7 @@ static bool SaveSyncCache(const std::wstring& path,
 
 // 从 .md 文件首行解析 <!-- Ua-Prompt-Version: X.Y.Z -->。
 // 只扫描第一行；兼容 LF 和 CRLF。版本号只允许 ASCII，直接扩宽成 wstring。
-std::wstring ParsePromptVersion(const std::string& content)
+static std::wstring ParsePromptVersion(const std::string& content)
 {
     size_t end = content.find('\n');
     if (end == std::string::npos) end = content.size();

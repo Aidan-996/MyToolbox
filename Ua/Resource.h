@@ -2,17 +2,8 @@
 // Microsoft Visual C++ 生成的包含文件。
 // 使用者 Ua.rc
 
-#define IDS_APP_TITLE			103
-
-#define IDR_MAINFRAME			128
-#define IDD_UA_DIALOG	102
-#define IDD_ABOUTBOX			103
-#define IDM_ABOUT				104
-#define IDM_EXIT				105
 #define IDI_UA			107
 #define IDI_SMALL				108
-#define IDC_UA			109
-#define IDC_MYICON				2
 
 // 产品 logo（SVG，来自 lobehub/lobe-icons，MIT）
 #define IDR_LOGO_CLAUDE			201

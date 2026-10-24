@@ -76,24 +76,6 @@ std::vector<std::wstring> ListPrompts()
     return out;
 }
 
-// 先找 prompts\<key>.md，没有就用 prompts\default.md；shown 返回给界面显示的相对路径
-std::wstring PromptPath(int i, std::wstring* shown)
-{
-    std::wstring own = std::wstring(kItems[i].key) + L".md";
-    for (const std::wstring& name : { own, std::wstring(L"default.md") })
-    {
-        std::wstring p = PromptDir() + L"\\" + name;
-        DWORD a = GetFileAttributesW(p.c_str());
-        if (a != INVALID_FILE_ATTRIBUTES && !(a & FILE_ATTRIBUTE_DIRECTORY))
-        {
-            if (shown) *shown = L"prompts\\" + name;
-            return p;
-        }
-    }
-    if (shown) *shown = L"prompts\\" + own;
-    return std::wstring();
-}
-
 // ---------------------------------------------------------------------------
 // 内嵌提示词释放
 // ---------------------------------------------------------------------------
@@ -195,7 +177,8 @@ bool StripBom(std::string& s)
 
 // ---------------------------------------------------------------------------
 // 状态文件 (%APPDATA%\Ua\state\<key>.dat)
-// 内容：backupFile\noriginalExisted\ninstalledAt
+// 内容：backupFile\noriginalExisted
+// 旧版文件还有第三行 installedAt（从未被读取），新文件不再写入，读取时忽略
 // ---------------------------------------------------------------------------
 static std::wstring StateDir() { return AppDataDir() + L"\\state"; }
 
@@ -205,17 +188,16 @@ bool LoadState(int i, TargetState& ts)
 {
     std::string raw;
     if (ReadBytes(StateFile(i), raw) != kReadOk) return false;
-    // 三行：backupFile, originalExisted (0/1), installedAt
-    size_t p1 = raw.find('\n'), p2 = raw.find('\n', p1 + 1);
-    if (p1 == std::string::npos || p2 == std::string::npos) return false;
+    // 两行：backupFile, originalExisted (0/1)
+    size_t p1 = raw.find('\n');
+    if (p1 == std::string::npos) return false;
     std::string line1 = raw.substr(0, p1);
     if (!line1.empty() && line1.back() == '\r') line1.pop_back();
     // 备份路径从 UTF-8 转回 wchar_t
     int need = MultiByteToWideChar(CP_UTF8, 0, line1.c_str(), (int)line1.size(), nullptr, 0);
     ts.backupFile.resize(need);
     MultiByteToWideChar(CP_UTF8, 0, line1.c_str(), (int)line1.size(), ts.backupFile.data(), need);
-    ts.originalExisted = raw[p1 + 1] == '1';
-    ts.installedAt = strtoull(raw.c_str() + p2 + 1, nullptr, 10);
+    ts.originalExisted = p1 + 1 < raw.size() && raw[p1 + 1] == '1';
     return true;
 }
 
@@ -226,8 +208,8 @@ bool SaveState(int i, const TargetState& ts)
     int need = WideCharToMultiByte(CP_UTF8, 0, ts.backupFile.c_str(), (int)ts.backupFile.size(), nullptr, 0, nullptr, nullptr);
     std::string bkp(need, '\0');
     WideCharToMultiByte(CP_UTF8, 0, ts.backupFile.c_str(), (int)ts.backupFile.size(), bkp.data(), need, nullptr, nullptr);
-    char buf[32];
-    int n = sprintf_s(buf, "\n%d\n%llu\n", ts.originalExisted ? 1 : 0, ts.installedAt);
+    char buf[16];
+    int n = sprintf_s(buf, "\n%d\n", ts.originalExisted ? 1 : 0);
     return WriteAtomic(StateFile(i), bkp + std::string(buf, n));
 }
 
@@ -310,8 +292,7 @@ int ScanState(int i)
         for (char c : doc) if (c != ' ' && c != '\t' && c != '\r' && c != '\n') { fileHasContent = true; break; }
     }
 
-    if (hasState && fileHasContent) return kInstalled;          // 绿色：已注入且生效
-    if (hasState && !fileHasContent) return kInstalled;         // 有状态但文件空了（用户手动清了）
+    if (hasState) return kInstalled;                            // 绿色：已注入（文件空了也算，用户可能手动清了）
     if (!hasState && fileHasContent) return kActiveNoState;     // 黄色：文件有内容但不是我们注入的
     return kNotInstalled;                                       // 灰色
 }
@@ -507,7 +488,6 @@ bool Install(int i, std::wstring& err)
         TargetState ts;
         ts.backupFile = existed ? backupFile : L"";
         ts.originalExisted = existed;
-        ts.installedAt = GetTickCount64();
         if (!SaveState(i, ts)) { err = T(S_ERR_SAVE_STATE); return false; }
     }
 

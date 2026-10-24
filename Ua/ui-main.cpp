@@ -271,7 +271,7 @@ void Render(HWND hWnd)
 
     D2D1_SIZE_F sz = g_rt->GetSize();
     // Mica 模式下窗口背景由 DWM 绘制，这里保持透明；否则用主题色填不透明底
-    if (!IsMicaActive())
+    if (!g_micaActive)
     {
         g_brush->SetColor(C(P.bg));
         g_rt->FillRectangle(R(0, 0, sz.width, sz.height), g_brush.Get());

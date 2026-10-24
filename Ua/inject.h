@@ -20,7 +20,6 @@ bool ToolDetected(int i);           // AI 工具的主目录是否存在
 std::wstring TargetPath(int i);
 std::wstring PromptDir();
 std::vector<std::wstring> ListPrompts();
-std::wstring PromptPath(int i, std::wstring* shown);
 void ExtractEmbeddedPrompts();      // 首次启动时从 exe 资源释放 prompts
 
 // ---------------------------------------------------------------------------
@@ -39,7 +38,6 @@ struct TargetState
 {
     std::wstring backupFile;        // 备份文件的完整路径（首次注入时的备份）
     bool originalExisted = false;
-    ULONGLONG installedAt = 0;
 };
 
 bool LoadState(int i, TargetState& ts);

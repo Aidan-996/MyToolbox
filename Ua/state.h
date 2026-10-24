@@ -45,7 +45,6 @@ void SetThemeMode(HWND hWnd, int mode);
 
 // Win11 Mica 效果开关：由 app.cpp 的 SetupFrame 在 Win11 上设置 DWMWA_SYSTEMBACKDROP_TYPE 成功后置 true
 extern bool g_micaActive;
-bool IsMicaActive();
 
 // ---------------------------------------------------------------------------
 // 语言
@@ -58,12 +57,6 @@ void SetLang(HWND hWnd, int lang);
 // ---------------------------------------------------------------------------
 bool AutostartEnabled();
 bool SetAutostart(bool on);
-
-// ---------------------------------------------------------------------------
-// 免责声明接受状态
-// ---------------------------------------------------------------------------
-bool DisclaimerAccepted();
-void AcceptDisclaimer();
 
 // ---------------------------------------------------------------------------
 // 自动更新检查
@@ -91,7 +84,3 @@ extern bool g_updateDownloading;
 // prompts\ 目录。失败静默。完成后 PostMessage(kMsgSyncReady, updated, 0)。
 // ---------------------------------------------------------------------------
 void SyncPrompts(HWND hWnd);
-
-// 从 .md 文件首行解析 <!-- Ua-Prompt-Version: X.Y.Z -->。
-// 找不到返回空字符串。
-std::wstring ParsePromptVersion(const std::string& content);

@@ -89,7 +89,7 @@ enum Str {
     S_LOCATION, S_OPEN, S_SELECT_PROMPT, S_NO_PROMPTS,
     S_WEBSITE, S_UNINSTALL, S_INJECT,
     S_INJECT_OK, S_UNINSTALL_OK, S_NO_LINK,
-    S_SKILLS_TITLE, S_SKILLS_SUB, S_SKILLS_FOLDER, S_SKILLS_NEED_INJECT,
+    S_SKILLS_TITLE, S_SKILLS_FOLDER, S_SKILLS_NEED_INJECT,
     S_SKILL_REMOVE_OK, S_SKILL_REMOVE_NONE,
     S_TOOLS_SKILLS, S_TOOLS_SKILLS_SUB, S_TOOLS_RELAY, S_TOOLS_RELAY_SUB,
     S_TOOLS_TUTORIAL, S_TOOLS_TUTORIAL_SUB, S_TOOLS_HELP, S_TOOLS_HELP_SUB,
@@ -104,10 +104,9 @@ enum Str {
     S_SKILL_SEARCH_PLACEHOLDER,
     S_CAT_ALL, S_CAT_REVERSE, S_CAT_GAME, S_CAT_KERNEL, S_CAT_EXPLOIT,
     S_CAT_CRACK, S_CAT_MOBILE, S_CAT_PENTEST, S_CAT_AI, S_CAT_OTHER,
-    S_SYNC_CHECKING, S_SYNC_UPDATED, S_PROMPTS_UPDATED_COUNT,
+    S_SYNC_UPDATED, S_PROMPTS_UPDATED_COUNT,
     S_TRAY_SHOW, S_TRAY_TOOLTIP,
     S_UPDATE_DOWNLOADING, S_UPDATE_READY, S_UPDATE_FAILED, S_UPDATE_BTN,
-    S_STATUS_INSTALLED, S_STATUS_SKILLS,
     S_CONFIRM_UNINSTALL,
     S_SKILLS_COUNT_FMT, S_TOOLS_COUNT_FMT, S_SKILLS_NOMATCH,
     S_COUNT
@@ -151,7 +150,6 @@ inline const wchar_t* const kStr[][2] = {
     /* S_UNINSTALL_OK */    { L" \u5DF2\u5378\u8F7D",    L" removed" },
     /* S_NO_LINK */         { L"\u201C%s\u201D\u8FD8\u6CA1\u6709\u8BBE\u7F6E\u94FE\u63A5", L"No link configured: %s" },
     /* S_SKILLS_TITLE */    { L"Skills \u7BA1\u7406", L"Skills Manager" },
-    /* S_SKILLS_SUB */      { L"\u4E2A\u5185\u5D4C skill", L" embedded skills" },
     /* S_SKILLS_FOLDER */   { L"\u6253\u5F00 Skills \u6587\u4EF6\u5939", L"Open Skills Folder" },
     /* S_SKILLS_NEED_INJECT */ { L"\u8BF7\u5148\u5B89\u88C5\u63D0\u793A\u8BCD\u540E\u518D\u67E5\u770B", L"Please install a prompt first" },
     /* S_SKILL_REMOVE_OK */ { L"\u5DF2\u4ECE\u6240\u6709\u5DE5\u5177\u4E2D\u79FB\u9664", L"Removed from all tools" },
@@ -198,7 +196,6 @@ inline const wchar_t* const kStr[][2] = {
     /* S_CAT_PENTEST */              { L"\u6E17\u900F",           L"Pentest" },
     /* S_CAT_AI */                   { L"AI",                     L"AI" },
     /* S_CAT_OTHER */                { L"\u5176\u4ED6",           L"Other" },
-    /* S_SYNC_CHECKING */            { L"\u6B63\u5728\u540C\u6B65\u63D0\u793A\u8BCD...", L"Syncing prompts..." },
     /* S_SYNC_UPDATED */             { L"\u63D0\u793A\u8BCD\u5DF2\u66F4\u65B0",         L"Prompts updated" },
     /* S_PROMPTS_UPDATED_COUNT */    { L"%d \u4E2A\u63D0\u793A\u8BCD\u5DF2\u66F4\u65B0", L"%d prompts updated" },
     /* S_TRAY_SHOW */                { L"\u663E\u793A\u7A97\u53E3",                     L"Show Window" },
@@ -207,8 +204,6 @@ inline const wchar_t* const kStr[][2] = {
     /* S_UPDATE_READY */             { L"\u4E0B\u8F7D\u5B8C\u6210\uFF0C\u5373\u5C06\u91CD\u542F", L"Download complete, restarting..." },
     /* S_UPDATE_FAILED */            { L"\u4E0B\u8F7D\u66F4\u65B0\u5931\u8D25",       L"Update download failed" },
     /* S_UPDATE_BTN */               { L"\u7ACB\u5373\u66F4\u65B0",                   L"Update Now" },
-    /* S_STATUS_INSTALLED */          { L"\u5DF2\u5B89\u88C5",                       L"installed" },
-    /* S_STATUS_SKILLS */             { L"\u6280\u80FD",                             L"skills" },
     /* S_CONFIRM_UNINSTALL */         { L"\u786E\u8BA4\u5378\u8F7D\uFF1F\u8FD9\u5C06\u6062\u590D\u539F\u59CB\u914D\u7F6E\u6587\u4EF6\u3002", L"Confirm uninstall? This will restore the original config file." },
     /* S_SKILLS_COUNT_FMT */          { L"\u5171 %d / %d skill",                        L"%d / %d skills" },
     /* S_TOOLS_COUNT_FMT */           { L"%d \u4E2A\u5DE5\u5177",                       L"%d tool(s)" },
@@ -233,8 +228,7 @@ inline constexpr const wchar_t* kIconFamily = L"Segoe MDL2 Assets";
 // ---------------------------------------------------------------------------
 enum Group { kGroupEditor, kGroupTools };
 
-inline const wchar_t* const kTabs[] = { L"\u7F16\u8F91\u5668", L"\u5DE5\u5177" };
-inline constexpr int kTabCount = ARRAYSIZE(kTabs);    // 第 i 个标签对应 Group(i)
+inline constexpr int kTabCount = 2;    // 编辑器 / 工具，第 i 个标签对应 Group(i)
 
 struct Item
 {
