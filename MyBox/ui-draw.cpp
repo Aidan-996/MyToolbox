@@ -118,6 +118,33 @@ void Stroke(D2D1_RECT_F r, D2D1_COLOR_F c, float radius)
     g_rt->DrawRoundedRectangle(D2D1::RoundedRect(b, radius, radius), g_brush.Get(), 1.f);
 }
 
+// 把 RGB 各通道乘一个系数(做暗一档的强调色)
+static UINT32 Darken(UINT32 rgb, float f)
+{
+    UINT32 r = (UINT32)(((rgb >> 16) & 0xFF) * f);
+    UINT32 g = (UINT32)(((rgb >> 8) & 0xFF) * f);
+    UINT32 b = (UINT32)((rgb & 0xFF) * f);
+    return (r << 16) | (g << 8) | b;
+}
+
+// 垂直渐变圆角填充(主按钮用)：顶部原色 -> 底部暗 18%，带立体感
+void FillGradientV(D2D1_RECT_F r, UINT32 rgb, float alpha, float radius)
+{
+    D2D1_GRADIENT_STOP stops[2] = {
+        { 0.f, C(rgb, alpha) },
+        { 1.f, C(Darken(rgb, 0.82f), alpha) },
+    };
+    ComPtr<ID2D1GradientStopCollection> coll;
+    ComPtr<ID2D1LinearGradientBrush> gb;
+    if (SUCCEEDED(g_rt->CreateGradientStopCollection(stops, 2, &coll)) &&
+        SUCCEEDED(g_rt->CreateLinearGradientBrush(
+            D2D1::LinearGradientBrushProperties(D2D1::Point2F(0.f, r.top), D2D1::Point2F(0.f, r.bottom)),
+            coll.Get(), &gb)))
+        g_rt->FillRoundedRectangle(D2D1::RoundedRect(r, radius, radius), gb.Get());
+    else
+        Fill(r, C(rgb, alpha), radius);
+}
+
 static bool IsCjk(wchar_t ch)
 {
     return (ch >= 0x2E80 && ch <= 0x9FFF) || (ch >= 0xF900 && ch <= 0xFAFF) || (ch >= 0xFF00 && ch <= 0xFFEF);

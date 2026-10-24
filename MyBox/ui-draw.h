@@ -55,6 +55,7 @@ inline bool InRect(D2D1_RECT_F r, float x, float y)
 // ---------------------------------------------------------------------------
 void Fill(D2D1_RECT_F r, D2D1_COLOR_F c, float radius);
 void Stroke(D2D1_RECT_F r, D2D1_COLOR_F c, float radius);
+void FillGradientV(D2D1_RECT_F r, UINT32 rgb, float alpha, float radius);   // 垂直渐变填充(主按钮)
 void Text(const std::wstring& s, IDWriteTextFormat* f, D2D1_RECT_F r, D2D1_COLOR_F c,
     DWRITE_TEXT_ALIGNMENT align = DWRITE_TEXT_ALIGNMENT_LEADING);
 ID2D1SvgDocument* Logo(int i);

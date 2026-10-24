@@ -643,7 +643,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
     wcex.lpszClassName = L"MyBox";
     RegisterClassExW(&wcex);
 
-    HWND hWnd = CreateWindowExW(WS_EX_APPWINDOW, wcex.lpszClassName, L"Ua \u5DE5\u5177\u7BB1",
+    HWND hWnd = CreateWindowExW(WS_EX_APPWINDOW, wcex.lpszClassName, L"MyBox",
         WS_POPUP | WS_SYSMENU | WS_MINIMIZEBOX, 0, 0, 100, 100, nullptr, nullptr, hInstance, nullptr);
     if (!hWnd)
         return 1;

@@ -82,7 +82,7 @@ void ApplyTheme(HWND hWnd)
 void LoadThemeSetting()
 {
     DWORD mode = kThemeSystem, size = sizeof(mode);
-    if (RegGetValueW(HKEY_CURRENT_USER, L"Software\\Ua", L"Theme", RRF_RT_REG_DWORD, nullptr, &mode, &size) == ERROR_SUCCESS &&
+    if (RegGetValueW(HKEY_CURRENT_USER, L"Software\\MyBox", L"Theme", RRF_RT_REG_DWORD, nullptr, &mode, &size) == ERROR_SUCCESS &&
         mode <= kThemeLight)
         g_themeMode = (int)mode;
 }
@@ -90,7 +90,7 @@ void LoadThemeSetting()
 void LoadLangSetting()
 {
     DWORD lang = kLangCN, size = sizeof(lang);
-    if (RegGetValueW(HKEY_CURRENT_USER, L"Software\\Ua", L"Lang", RRF_RT_REG_DWORD, nullptr, &lang, &size) == ERROR_SUCCESS &&
+    if (RegGetValueW(HKEY_CURRENT_USER, L"Software\\MyBox", L"Lang", RRF_RT_REG_DWORD, nullptr, &lang, &size) == ERROR_SUCCESS &&
         lang <= kLangEN)
         g_lang = (int)lang;
 }
@@ -99,7 +99,7 @@ void SetLang(HWND hWnd, int lang)
 {
     g_lang = lang;
     HKEY key;
-    if (RegCreateKeyExW(HKEY_CURRENT_USER, L"Software\\Ua", 0, nullptr, 0, KEY_SET_VALUE, nullptr, &key, nullptr) == ERROR_SUCCESS)
+    if (RegCreateKeyExW(HKEY_CURRENT_USER, L"Software\\MyBox", 0, nullptr, 0, KEY_SET_VALUE, nullptr, &key, nullptr) == ERROR_SUCCESS)
     {
         DWORD v = (DWORD)lang;
         RegSetValueExW(key, L"Lang", 0, REG_DWORD, reinterpret_cast<const BYTE*>(&v), sizeof(v));
@@ -112,7 +112,7 @@ void SetThemeMode(HWND hWnd, int mode)
 {
     g_themeMode = mode;
     HKEY key;
-    if (RegCreateKeyExW(HKEY_CURRENT_USER, L"Software\\Ua", 0, nullptr, 0, KEY_SET_VALUE, nullptr, &key, nullptr) == ERROR_SUCCESS)
+    if (RegCreateKeyExW(HKEY_CURRENT_USER, L"Software\\MyBox", 0, nullptr, 0, KEY_SET_VALUE, nullptr, &key, nullptr) == ERROR_SUCCESS)
     {
         DWORD v = (DWORD)mode;
         RegSetValueExW(key, L"Theme", 0, REG_DWORD, reinterpret_cast<const BYTE*>(&v), sizeof(v));

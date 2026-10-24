@@ -136,7 +136,8 @@ static void DrawTabs()
         D2D1_RECT_F r = TabRect(i);
         if (i == g_tab)
         {
-            Fill(R(r.left + 2, r.top, r.right - 2, r.bottom), Ov(0.11f), 6.f);
+            // 选中标签：强调色浅底胶囊
+            Fill(R(r.left + 2, r.top, r.right - 2, r.bottom), C(P.accent, P.dark ? 0.20f : 0.14f), 7.f);
             Text(T(i == 0 ? S_TAB_EDITOR : S_TAB_TOOLS), g_fTabSel.Get(), r, C(P.text), DWRITE_TEXT_ALIGNMENT_CENTER);
         }
         else
@@ -227,10 +228,13 @@ static void DrawCard(const Slot& s)
     D2D1_RECT_F tile = R(r.left + 10, cy - 14, r.left + 38, cy + 14);
     DrawIcon(s.item, tile);
 
-    // 已注入：logo 右下角一个绿点，外面套一圈底色把它和 logo 隔开
+    // 已注入：logo 右下角一个绿点，外圈柔光晕 + 底色隔离圈
     if (it.key && g_state[s.item] == kInstalled)
     {
-        D2D1_ELLIPSE ring = D2D1::Ellipse(D2D1::Point2F(tile.right - 1, tile.bottom - 1), 6.f, 6.f);
+        D2D1_POINT_2F c = D2D1::Point2F(tile.right - 1, tile.bottom - 1);
+        g_brush->SetColor(C(kGreen, 0.22f));
+        g_rt->FillEllipse(D2D1::Ellipse(c, 8.5f, 8.5f), g_brush.Get());
+        D2D1_ELLIPSE ring = D2D1::Ellipse(c, 6.f, 6.f);
         g_brush->SetColor(C(P.bg));
         g_rt->FillEllipse(ring, g_brush.Get());
         g_brush->SetColor(Ov(hot ? 0.10f : 0.05f));
@@ -309,6 +313,8 @@ void Render(HWND hWnd)
         D2D1_RECT_F t = R(kPad + 40, kH - kPad - 40, kW - kPad - 40, kH - kPad - 8);
         Fill(t, C(P.panel, 0.98f), 16.f);
         Stroke(t, Ov(0.18f), 16.f);
+        // 左侧强调色竖条，给出视觉锚点
+        Fill(R(t.left + 12, t.top + 10, t.left + 15.5f, t.bottom - 10), C(P.accent), 2.f);
         Text(g_toast, g_fTab.Get(), t, C(P.text), DWRITE_TEXT_ALIGNMENT_CENTER);
     }
 

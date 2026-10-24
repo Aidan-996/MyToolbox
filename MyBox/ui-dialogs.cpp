@@ -332,8 +332,8 @@ static void DlgButton(int b, const wchar_t* label, bool primary)
     }
     if (primary)
     {
-        // Win11 强调色按钮：深色主题 #60CDFF + 黑字，浅色主题 #005FB8 + 白字
-        Fill(r, C(P.accent, hot ? 0.88f : 1.f), 6.f);
+        // 主按钮：强调色垂直渐变，比纯色更有立体感
+        FillGradientV(r, P.accent, hot ? 0.88f : 1.f, 8.f);
         Text(label, g_fTabSel.Get(), r, C(P.onAccent), DWRITE_TEXT_ALIGNMENT_CENTER);
         return;
     }
@@ -363,8 +363,8 @@ void DrawDialog()
     g_rt->FillRectangle(R(0, 0, sz.width, sz.height), g_brush.Get());
 
     D2D1_RECT_F d = DlgRect();
-    Fill(d, C(P.panel), 10.f);
-    Stroke(d, Ov(0.14f), 10.f);
+    Fill(d, C(P.panel), 12.f);
+    Stroke(d, Ov(0.14f), 12.f);
 
     // 标题：logo + 名称 + 状态
     D2D1_RECT_F tile = R(d.left + 18, d.top + 14, d.left + 48, d.top + 44);
@@ -483,7 +483,7 @@ void DrawDisclaimer()
 
     D2D1_RECT_F btn = DiscAcceptRect();
     bool hot = g_hover == kHoverAccept;
-    Fill(btn, C(P.accent, hot ? 0.88f : 1.f), 6.f);
+    FillGradientV(btn, P.accent, hot ? 0.88f : 1.f, 8.f);
     Text(T(S_DISCLAIMER_BTN), g_fTabSel.Get(), btn, C(P.onAccent), DWRITE_TEXT_ALIGNMENT_CENTER);
 }
 
@@ -546,7 +546,7 @@ void DrawAbout()
         }
         else
         {
-            Fill(ub, C(accent, ubHot ? 0.88f : 1.f), 6.f);
+            FillGradientV(ub, P.accent, ubHot ? 0.88f : 1.f, 8.f);
             Text(T(S_UPDATE_BTN), g_fTabSel.Get(), ub, C(P.onAccent), DWRITE_TEXT_ALIGNMENT_CENTER);
         }
     }
@@ -595,8 +595,8 @@ void DrawSkillMgr()
     g_rt->FillRectangle(R(0, 0, sz.width, sz.height), g_brush.Get());
 
     D2D1_RECT_F d = SkillDlgRect();
-    Fill(d, C(P.panel), 10.f);
-    Stroke(d, Ov(0.14f), 10.f);
+    Fill(d, C(P.panel), 12.f);
+    Stroke(d, Ov(0.14f), 12.f);
 
     Text(T(S_SKILLS_TITLE), g_fTitle.Get(), R(d.left + 18, d.top + 16, d.right - 44, d.top + 34), C(P.text));
     wchar_t sub[64];
