@@ -63,7 +63,6 @@ static const Tool kTools[] = {
     { "devin",     "Devin Desktop (Windsurf)",   ".codeium/windsurf/memories/global_rules.md", nullptr            },
     { "codebuddy", "CodeBuddy Code",             ".codebuddy/CODEBUDDY.md",                    ".codebuddy/skills" },
 };
-static const int kToolCount = (int)(sizeof(kTools) / sizeof(kTools[0]));
 
 static const Tool* FindTool(const std::string& key)
 {
