@@ -26,7 +26,7 @@
 
 static const char* kVersion = "1.0.2-linux";
 static const char* kPromptsApiUrl =
-    "https://api.github.com/repos/Aidan-996/UaStation/contents/prompts";
+    "https://api.github.com/repos/Aidan-996/MyToolbox/contents/prompts";
 static const size_t kMaxFile = 4 * 1024 * 1024;   // 单文件上限，与 Windows 版一致
 static const int kMaxBackups = 200;
 

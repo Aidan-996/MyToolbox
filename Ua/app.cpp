@@ -347,7 +347,7 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM l
                 }
                 else if (hit == kHoverAboutGithub)
                 {
-                    OpenUrl(hWnd, L"https://github.com/Aidan-996/UaStation");
+                    OpenUrl(hWnd, L"https://github.com/Aidan-996/MyToolbox");
                 }
                 else if (hit == kHoverAboutUpdate)
                 {
