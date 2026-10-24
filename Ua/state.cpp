@@ -288,7 +288,7 @@ static std::string HttpsGet(const wchar_t* host, const wchar_t* path,
 // 用 WinHTTP 抓 GitHub Releases API，返回原始 JSON（UTF-8）；失败返回空串
 static std::string FetchLatestReleaseJson()
 {
-    return HttpsGet(L"api.github.com", L"/repos/freyrswift/UaStation/releases/latest",
+    return HttpsGet(kApiHost, kUpdateApiPath,
         L"Accept: application/vnd.github+json\r\n", 512 * 1024);
 }
 

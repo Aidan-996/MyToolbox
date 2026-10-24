@@ -335,8 +335,7 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM l
                 {
                     g_disclaimer = false;
                     InvalidateRect(hWnd, nullptr, FALSE);
-                    // 免责声明确认后才检查更新和同步
-                    CheckUpdates(hWnd);
+                    // 免责声明确认后只同步提示词；更新仅通过菜单"检查更新"手动触发
                     SyncPrompts(hWnd);
                 }
                 return 0;
@@ -350,7 +349,7 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM l
                 }
                 else if (hit == kHoverAboutGithub)
                 {
-                    OpenUrl(hWnd, L"https://github.com/freyrswift/UaStation");
+                    OpenUrl(hWnd, L"https://github.com/Aidan-996/Mygogogo");
                 }
                 else if (hit == kHoverAboutUpdate)
                 {
