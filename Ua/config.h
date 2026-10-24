@@ -47,16 +47,27 @@ inline constexpr const wchar_t* kUpdateDownloadUrl = L"https://github.com/Aidan-
 inline constexpr const wchar_t* kPromptsApiHost = kApiHost;
 inline constexpr const wchar_t* kPromptsApiPath = L"/repos/Aidan-996/UaStation/contents/prompts";
 
+// DWM 窗口属性（部分旧 SDK 头文件没有具名常量，这里自行定义）
+inline constexpr DWORD kDwmUseImmersiveDarkMode = 20;      // DWMWA_USE_IMMERSIVE_DARK_MODE
+inline constexpr DWORD kDwmWindowCornerPreference = 33;    // DWMWA_WINDOW_CORNER_PREFERENCE
+inline constexpr DWORD kDwmSystemBackdropType = 38;        // DWMWA_SYSTEMBACKDROP_TYPE
+inline constexpr DWORD kDwmCornerRound = 2;                // DWMWCP_ROUND
+inline constexpr DWORD kDwmBackdropMica = 2;               // DWMSBT_MAINWINDOW
+
 // 配色。背景色取自系统：Win11 Mica 底色 #202020 / #F3F3F3，Win10 深浅色窗口底色 #1F1F1F / #F2F2F2
 struct Palette
 {
     bool dark;
     UINT32 bg, text, sub;
+    UINT32 accent;      // 强调色（按钮、选中、链接）
+    UINT32 onAccent;    // 强调色上的文字/图形
+    UINT32 panel;       // 弹窗/菜单/toast 面板底色
+    UINT32 closeRed;    // 关闭按钮悬停红
 };
 
 inline constexpr UINT32 kGreen = 0x2EBD59;     // 已注入的绿点
-inline constexpr Palette kDark = { true, 0x202020, 0xFFFFFF, 0xC5C5C5 };
-inline constexpr Palette kLight = { false, 0xF3F3F3, 0x1A1A1A, 0x5F5F5F };
+inline constexpr Palette kDark = { true, 0x202020, 0xFFFFFF, 0xC5C5C5, 0x60CDFF, 0x000000, 0x2C2C2C, 0xC42B1C };
+inline constexpr Palette kLight = { false, 0xF3F3F3, 0x1A1A1A, 0x5F5F5F, 0x005FB8, 0xFFFFFF, 0xFFFFFF, 0xC42B1C };
 
 enum ThemeMode { kThemeSystem = 0, kThemeDark = 1, kThemeLight = 2 };
 

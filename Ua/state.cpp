@@ -74,7 +74,7 @@ void ApplyTheme(HWND hWnd)
         P.bg = light ? 0xF2F2F2 : 0x1F1F1F;
 
     BOOL dark = !light;     // 让系统菜单、阴影等也用对应的深浅色
-    DwmSetWindowAttribute(hWnd, 20 /* DWMWA_USE_IMMERSIVE_DARK_MODE */, &dark, sizeof(dark));
+    DwmSetWindowAttribute(hWnd, kDwmUseImmersiveDarkMode, &dark, sizeof(dark));
     ResetLogos();
     InvalidateRect(hWnd, nullptr, FALSE);
 }

@@ -291,7 +291,7 @@ void DrawMenu()
     // 简单的投影：往下偏移几层半透明圆角矩形
     for (int k = 3; k >= 1; --k)
         Fill(R(m.left - k, m.top + k, m.right + k, m.bottom + 2 * k), C(0x000000, P.dark ? 0.10f : 0.04f), 8.f + k);
-    Fill(m, C(P.dark ? 0x2C2C2C : 0xFFFFFF), 8.f);
+    Fill(m, C(P.panel), 8.f);
     Stroke(m, Ov(0.14f), 8.f);
 
     for (int i = 0; i < kMenuCount; ++i)
@@ -307,7 +307,7 @@ void DrawMenu()
         }
 
         bool hot = g_hover == kHoverMenu + i;
-        if (hot) Fill(r, e.cmd == kCmdExit ? C(0xC42B1C) : Ov(0.08f), 5.f);
+        if (hot) Fill(r, e.cmd == kCmdExit ? C(P.closeRed) : Ov(0.08f), 5.f);
         D2D1_COLOR_F fg = hot && e.cmd == kCmdExit ? C(0xFFFFFF) : C(P.text);
 
         Text(e.glyph, g_fGlyph.Get(), R(r.left + 4, r.top, r.left + 32, r.bottom), fg, DWRITE_TEXT_ALIGNMENT_CENTER);
@@ -333,8 +333,8 @@ static void DlgButton(int b, const wchar_t* label, bool primary)
     if (primary)
     {
         // Win11 强调色按钮：深色主题 #60CDFF + 黑字，浅色主题 #005FB8 + 白字
-        Fill(r, C(P.dark ? 0x60CDFF : 0x005FB8, hot ? 0.88f : 1.f), 6.f);
-        Text(label, g_fTabSel.Get(), r, C(P.dark ? 0x000000 : 0xFFFFFF), DWRITE_TEXT_ALIGNMENT_CENTER);
+        Fill(r, C(P.accent, hot ? 0.88f : 1.f), 6.f);
+        Text(label, g_fTabSel.Get(), r, C(P.onAccent), DWRITE_TEXT_ALIGNMENT_CENTER);
         return;
     }
     Fill(r, Ov(hot ? 0.12f : 0.07f), 6.f);
@@ -363,7 +363,7 @@ void DrawDialog()
     g_rt->FillRectangle(R(0, 0, sz.width, sz.height), g_brush.Get());
 
     D2D1_RECT_F d = DlgRect();
-    Fill(d, C(P.dark ? 0x2C2C2C : 0xFFFFFF), 10.f);
+    Fill(d, C(P.panel), 10.f);
     Stroke(d, Ov(0.14f), 10.f);
 
     // 标题：logo + 名称 + 状态
@@ -395,7 +395,7 @@ void DrawDialog()
     D2D1_RECT_F fr = DlgButtonRect(kDlgFolder);
     bool fhot = g_hover == kHoverDlg + kDlgFolder;
     if (fhot) Fill(fr, Ov(0.08f), 5.f);
-    Text(T(S_OPEN), g_fTab.Get(), fr, C(P.dark ? 0x60CDFF : 0x005FB8), DWRITE_TEXT_ALIGNMENT_CENTER);
+    Text(T(S_OPEN), g_fTab.Get(), fr, C(P.accent), DWRITE_TEXT_ALIGNMENT_CENTER);
 
     // 分隔线
     g_brush->SetColor(Ov(0.10f));
@@ -428,9 +428,9 @@ void DrawDialog()
             D2D1_ELLIPSE circle = D2D1::Ellipse(D2D1::Point2F(pr.left + 14, (pr.top + pr.bottom) / 2), 7.f, 7.f);
             if (sel)
             {
-                g_brush->SetColor(C(P.dark ? 0x60CDFF : 0x005FB8));
+                g_brush->SetColor(C(P.accent));
                 g_rt->FillEllipse(circle, g_brush.Get());
-                g_brush->SetColor(C(P.dark ? 0x2C2C2C : 0xFFFFFF));
+                g_brush->SetColor(C(P.panel));
                 g_rt->FillEllipse(D2D1::Ellipse(circle.point, 3.f, 3.f), g_brush.Get());
             }
             else
@@ -471,11 +471,11 @@ void DrawDisclaimer()
     g_rt->FillRectangle(R(0, 0, sz.width, sz.height), g_brush.Get());
 
     D2D1_RECT_F d = DiscRect();
-    Fill(d, C(P.dark ? 0x2C2C2C : 0xFFFFFF), 12.f);
+    Fill(d, C(P.panel), 12.f);
     Stroke(d, Ov(0.14f), 12.f);
 
     Text(L"", g_fGlyph.Get(), R(d.left + (kDiscW - 24) / 2, d.top + 16, d.left + (kDiscW + 24) / 2, d.top + 44),
-        C(P.dark ? 0x60CDFF : 0x005FB8), DWRITE_TEXT_ALIGNMENT_CENTER);   // Shield
+        C(P.accent), DWRITE_TEXT_ALIGNMENT_CENTER);   // Shield
 
     Text(T(S_DISCLAIMER_TITLE), g_fTitle.Get(), R(d.left + 20, d.top + 48, d.right - 20, d.top + 66), C(P.text), DWRITE_TEXT_ALIGNMENT_CENTER);
 
@@ -483,8 +483,8 @@ void DrawDisclaimer()
 
     D2D1_RECT_F btn = DiscAcceptRect();
     bool hot = g_hover == kHoverAccept;
-    Fill(btn, C(P.dark ? 0x60CDFF : 0x005FB8, hot ? 0.88f : 1.f), 6.f);
-    Text(T(S_DISCLAIMER_BTN), g_fTabSel.Get(), btn, C(P.dark ? 0x000000 : 0xFFFFFF), DWRITE_TEXT_ALIGNMENT_CENTER);
+    Fill(btn, C(P.accent, hot ? 0.88f : 1.f), 6.f);
+    Text(T(S_DISCLAIMER_BTN), g_fTabSel.Get(), btn, C(P.onAccent), DWRITE_TEXT_ALIGNMENT_CENTER);
 }
 
 // ---------------------------------------------------------------------------
@@ -497,7 +497,7 @@ void DrawAbout()
     g_rt->FillRectangle(R(0, 0, sz.width, sz.height), g_brush.Get());
 
     D2D1_RECT_F d = AboutRect();
-    Fill(d, C(P.dark ? 0x2C2C2C : 0xFFFFFF), 12.f);
+    Fill(d, C(P.panel), 12.f);
     Stroke(d, Ov(0.14f), 12.f);
 
     // Logo SVG (Azure shield), bigger and more distinctive
@@ -511,7 +511,7 @@ void DrawAbout()
     else
     {
         Text(L"", g_fGlyph.Get(), R(d.left + (340.f - 24) / 2, d.top + 18, d.left + (340.f + 24) / 2, d.top + 44),
-            C(P.dark ? 0x60CDFF : 0x005FB8), DWRITE_TEXT_ALIGNMENT_CENTER);
+            C(P.accent), DWRITE_TEXT_ALIGNMENT_CENTER);
     }
 
     // Title
@@ -531,7 +531,7 @@ void DrawAbout()
     if (!newVer.empty())
     {
         bool upHot = g_hover == kHoverAboutUpdate;
-        UINT32 accent = P.dark ? 0x60CDFF : 0x005FB8;
+        UINT32 accent = P.accent;
         std::wstring line = std::wstring(T(S_UPDATE_NEW)) + newVer;
         Text(line, g_fLabel.Get(), ur, C(accent, upHot ? 0.80f : 1.f), DWRITE_TEXT_ALIGNMENT_CENTER);
 
@@ -547,7 +547,7 @@ void DrawAbout()
         else
         {
             Fill(ub, C(accent, ubHot ? 0.88f : 1.f), 6.f);
-            Text(T(S_UPDATE_BTN), g_fTabSel.Get(), ub, C(P.dark ? 0x000000 : 0xFFFFFF), DWRITE_TEXT_ALIGNMENT_CENTER);
+            Text(T(S_UPDATE_BTN), g_fTabSel.Get(), ub, C(P.onAccent), DWRITE_TEXT_ALIGNMENT_CENTER);
         }
     }
     else
@@ -595,7 +595,7 @@ void DrawSkillMgr()
     g_rt->FillRectangle(R(0, 0, sz.width, sz.height), g_brush.Get());
 
     D2D1_RECT_F d = SkillDlgRect();
-    Fill(d, C(P.dark ? 0x2C2C2C : 0xFFFFFF), 10.f);
+    Fill(d, C(P.panel), 10.f);
     Stroke(d, Ov(0.14f), 10.f);
 
     Text(T(S_SKILLS_TITLE), g_fTitle.Get(), R(d.left + 18, d.top + 16, d.right - 44, d.top + 34), C(P.text));
@@ -617,9 +617,9 @@ void DrawSkillMgr()
         bool hotCat = g_hover == kHoverSkillCat + ci;
         if (selCat)
         {
-            Fill(pills[ci], C(P.dark ? 0x60CDFF : 0x005FB8, hotCat ? 0.88f : 1.f), 11.f);
+            Fill(pills[ci], C(P.accent, hotCat ? 0.88f : 1.f), 11.f);
             Text(T((Str)(S_CAT_ALL + ci)), g_fTab.Get(), pills[ci],
-                C(P.dark ? 0x000000 : 0xFFFFFF), DWRITE_TEXT_ALIGNMENT_CENTER);
+                C(P.onAccent), DWRITE_TEXT_ALIGNMENT_CENTER);
         }
         else
         {

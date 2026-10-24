@@ -84,15 +84,15 @@ static void ShowTrayMenu(HWND hWnd)
 // 圆角和系统阴影
 static void SetupFrame(HWND hWnd)
 {
-    DWORD corner = 2;   // DWMWCP_ROUND，仅 Win11 生效
-    DwmSetWindowAttribute(hWnd, 33 /* DWMWA_WINDOW_CORNER_PREFERENCE */, &corner, sizeof(corner));
+    DWORD corner = kDwmCornerRound;
+    DwmSetWindowAttribute(hWnd, kDwmWindowCornerPreference, &corner, sizeof(corner));
 
     // Win11 22H2+ 请求 Mica 系统背景效果。DWM 调用成功后置 g_micaActive，
     // ui-main.cpp 的 Render 会据此跳过不透明背景填充，让 Mica 真正可见
     if (IsWindows11())
     {
-        DWORD backdrop = 2;   // DWMSBT_MAINWINDOW (Mica)
-        if (SUCCEEDED(DwmSetWindowAttribute(hWnd, 38 /* DWMWA_SYSTEMBACKDROP_TYPE */, &backdrop, sizeof(backdrop))))
+        DWORD backdrop = kDwmBackdropMica;
+        if (SUCCEEDED(DwmSetWindowAttribute(hWnd, kDwmSystemBackdropType, &backdrop, sizeof(backdrop))))
             g_micaActive = true;
     }
 

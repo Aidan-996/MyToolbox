@@ -152,7 +152,7 @@ static void DrawTabs()
         D2D1_RECT_F r = ButtonRect(id);
         bool hot = g_hover == id || (id == kHoverGear && g_menuOpen);
         bool closeHot = hot && id == kHoverClose;
-        if (hot) Fill(r, closeHot ? C(0xC42B1C) : Ov(0.08f), 6.f);
+        if (hot) Fill(r, closeHot ? C(P.closeRed) : Ov(0.08f), 6.f);
         Text(glyphs[id - kHoverGear], g_fIcon.Get(), r, C(closeHot ? 0xFFFFFF : hot ? P.text : P.sub), DWRITE_TEXT_ALIGNMENT_CENTER);
     }
 
@@ -307,7 +307,7 @@ void Render(HWND hWnd)
     if (!g_toast.empty())
     {
         D2D1_RECT_F t = R(kPad + 40, kH - kPad - 40, kW - kPad - 40, kH - kPad - 8);
-        Fill(t, P.dark ? C(0x2C2C2C, 0.98f) : C(0xFFFFFF, 0.98f), 16.f);
+        Fill(t, C(P.panel, 0.98f), 16.f);
         Stroke(t, Ov(0.18f), 16.f);
         Text(g_toast, g_fTab.Get(), t, C(P.text), DWRITE_TEXT_ALIGNMENT_CENTER);
     }
